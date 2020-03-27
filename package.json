@@ -4,6 +4,8 @@
 	"description": "An authentication and wrapper for the OpenText Content Server REST API.",
 	"main": "src/index.js",
 	"browser": "src/index.js",
+	"repository": "https://github.com/chriscdn/cs-rest",
+	"author": "Christopher Meyer",
 	"license": "MIT",
 	"dependencies": {
 		"axios": "^0.19.2",
