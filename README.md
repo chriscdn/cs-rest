@@ -4,7 +4,7 @@ Simplified authentication and REST calls for OpenText Content Server.
 
 ## Features
 
-- Provides a simplified interfacing for authenticating for REST API calls
+- Provides a simplified interface for managing authentication with the OpenText Content Server REST API
 - Automatically adds the `OTCSTicket` header to each subsequent request
 - Refreshes the `OTCSTicket` token automatically (minimising token expiration errors)
 - Based on the [axios](https://github.com/axios/axios) HTTP client
