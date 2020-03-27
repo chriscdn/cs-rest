@@ -105,7 +105,7 @@ The `session` can be used in a similar manner to `csAxios` for performing GET, P
 const response = await session.get('/api/v1/nodes/2000')
 ```
 
-It also adds `postForm`, `putForm`, and `patchForm` methods to convert the request into a `FormData` object and submit it as `multipart/form-data`.
+It also adds `postForm`, `putForm`, and `patchForm` methods to convert the payload into a `FormData` object and submit it as `multipart/form-data`.
 
 For example, to create a folder:
 
@@ -118,4 +118,21 @@ const response = await session.postForm('api/v2/nodes', {
 ```
 
 ## Thin Wrapper
+
+The `Session` class provides a few convenience methods for performing commonly used REST requests.  By no means is this complete, and it's also possible the API will change in the future.
+
+Example:
+
+```js
+const response = await session.nodes.addFolder(2000, 'My New Folder')
+````
+
+See the `src/` directory for more examples.
+
+## Credits
+
+## License
+
+[MIT](LICENSE)
+
 
