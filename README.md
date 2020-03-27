@@ -2,7 +2,7 @@
 
 ## Motivation
 
-This module assists in three areas when developing with the OpenText Content Server REST API.  It uses [axios](https://github.com/axios/axios) library for XMLHttpRequest requests and is compatible with the browser and Node.js.
+This module assists in three areas when developing with the OpenText Content Server REST API.  It uses [axios](https://github.com/axios/axios) for XMLHttpRequest requests and is compatible with the browser and Node.js.
 
 ### Authentication
 
@@ -18,9 +18,9 @@ This module simplifies the process of authentication (using a username and passw
 
 ### POST, PUT, and PATCH Requests
 
-The Content Server REST API doesn't understand requests with the `Content-Type` header being `application/json`.  This usually causes problems with POST, PUT, and PATCH requests.
+The Content Server REST API doesn't understand requests with the `Content-Type` header set to `application/json`.  This usually causes problems with POST, PUT, and PATCH requests.
 
-This module provides a small wrapper for converting a JavaScript object into a format that can be submitted with the `Content-Type` header `multipart/form-data`, which Content Server can understand.
+This module provides a small wrapper to convert a JavaScript object into a format that can be submitted as `multipart/form-data`, which Content Server understands.
 
 ### Thin Wrapper
 
@@ -50,7 +50,7 @@ Start by importing the `auth` function into your module.
 const {auth} = require('@chriscdn/cs-rest')
 ```
 
-This returns a function than can be used for creating an authenticated `axios` instance.
+This returns a function than can be used to create an authenticated `axios` instance.
 
 **Authentication with a username and password:**
 
@@ -77,35 +77,45 @@ Examples:
 
 ```js
 // Fetch information about the node with dataid 2000
-const response = await cs.get('/api/v1/nodes/2000')
+const response = await csAxios.get('/api/v1/nodes/2000')
 
 // Fetch the children of the node with dataid 2000
-const response = await cs.get('/api/v1/nodes/2000/nodes')
+const response = await csAxios.get('/api/v1/nodes/2000/nodes')
 ````
 
 ### Sessions
 
 A `Session` object is a small wrapper around `auth` and adds some convenience methods.
 
-Start by importing the `Session` class into your project and initiating it:
+Start by importing the `Session` class into your project and instantiating it:
 
 ```js
 const {Session} = require('@chriscdn/cs-rest')
 
 const session = new Session({
-	// same valid options passed to auth
+	// same options as auth
 })
 
 ```
 
-The `session` can be used in the same manner as the `csAxios` instance for performing GET requests:
+The `session` can be used in a similar manner to `csAxios` for performing GET, POST, PUT, DELETE, OPTIONS, and PATCH requests:
 
 ```js
 // Fetch information about the node with dataid 2000
 const response = await session.get('/api/v1/nodes/2000')
 ```
 
+It also adds `postForm`, `putForm`, and `patchForm` methods to convert the request into a `FormData` object and submit it as `multipart/form-data`.
 
+For example, to create a folder:
 
+```js
+const response = await session.postForm('api/v2/nodes', {
+	type: 0, // 0 is the folder subtype
+	parent_id: 2000,
+	name: 'My New Folder', 
+})
+```
 
+## Thin Wrapper
 

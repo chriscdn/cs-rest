@@ -92,6 +92,14 @@ module.exports = class Session {
 			this.post(url, formData)
 	}
 
+	patchForm(url, params) {
+		const formData = this._objectToForm(params)
+
+		return isNode ?
+			this.patch(url, formData.getBuffer(), { headers: formData.getHeaders() }) :
+			this.patch(url, formData)
+	}
+
 	post(...args) {
 		return this.axios.post(...args)
 	}
