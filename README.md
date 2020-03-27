@@ -33,20 +33,20 @@ const {Session} = require('@chriscdn/cs-rest')
 
 // session wraps an axios instance
 const session = new Session({
-	baseURL: 'https://...cs.exe',
+	baseURL: 'https://.../cs.exe',
 	username: 'Admin',
 	password: '******'
 })
 
-// session can issue authenticated requests to Content Server
+// a Session instance can issue authenticated requests to Content Server
 const response = await session.get('/api/v1/nodes/2000')
 ```
 
-Authenticating with an `OTCSTicket`:
+Authenticate with an `OTCSTicket`:
 
 ```js
 const session = auth({
-	baseURL: 'https://...cs.exe',
+	baseURL: 'https://.../cs.exe',
 	otcsticket: '<token>'
 })
 ```
@@ -55,11 +55,11 @@ const session = auth({
 
 Requests can be made with the `get`, `post`, `put`, `patch`, `delete`, and `options` methods on the `Session` instance.  These have the same interface as the respective methods in [axios](https://github.com/axios/axios).
 
-Content Server returns a fresh `OTCSTicket` with each successful API call.  The `Session` instance will automatically use that token for the subsequent request.
+Content Server returns a fresh `OTCSTicket` with each successful API call.  The `Session` instance will automatically retain it for the subsequent request.
 
 #### POST, PUT, & PATCH
 
-The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type.  This means POST, PUT, & PATCH requests need to use a content type of `multipart/form-data`, which makes writing the request a little more verbose.  For example, to create a new folder:
+The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type.  This means POST, PUT, & PATCH requests need to use a content type of `multipart/form-data`, which makes writing the request a little verbose.  For example, to create a new folder:
 
 ```js
 const formData = new FormData()
@@ -70,7 +70,7 @@ formDAta.append('name', 'My New Folder')
 const response = await session.post('api/v2/nodes', formData)
 ```
 
-The `Session` class provies a `postForm` (and similarily `putForm` and `patchForm`) method to simplify the above to:
+The `Session` class provides a `postForm` (also `putForm` and `patchForm`) method to simplify this to:
 
 ```js
 const response = await session.postForm('api/v2/nodes', {
@@ -90,7 +90,7 @@ const axios = session.axios
 
 #### Thin Wrapper
 
-The `Session` class provides a few convenience methods for performing commonly used REST requests.  By no means is this complete, and it's also possible the API will change in the future.
+The `Session` class provides a few convenience methods for performing commonly used REST requests.  By no means is this complete, and it's possible the API will change in the future.
 
 For example, there is a method for creating a new folder:
 
@@ -98,9 +98,9 @@ For example, there is a method for creating a new folder:
 const response = await session.nodes.addFolder(2000, 'My New Folder')
 ```
 
-A convenient method exists for uploading a document, where `file` is either:
+A method also exists for uploading a document, where `file` is either:
 
-- a browser File object (e.g,. from drag and drop); or
+- a browser [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object (e.g,. from drag and drop); or
 - a Node.js file (e.g., `const file = fs.readFileSync('<file path>')`
 
 ```js
