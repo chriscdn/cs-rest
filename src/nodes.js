@@ -1,3 +1,5 @@
+const FormDataFactory = require('./form-data-factory')
+
 module.exports = session => ({
 
 	addablenodetypes(dataid) {
@@ -5,28 +7,25 @@ module.exports = session => ({
 	},
 
 	uploadDocument(parent_id, name, file) {
-		const url = `/api/v1/nodes`
+
+		const url = '/api/v1/nodes'
+
 		const body = {
 			name,
 			type: 144, // document
 			parent_id
 		}
-		if (typeof window === 'undefined') {
+
+		const formData = FormDataFactory.createFormData()
+		formData.append('body', JSON.stringify(body))
+		formData.append('file', file, name)
+
+		if (FormDataFactory.isNode) {
 			// node.js
 			// file = fs.readFileSync('C:/lorem.pdf')
-			const FormDataNode = require('form-data')
-			const formData = new FormDataNode()
-			formData.append('body', JSON.stringify(body))
-			formData.append('file', file, name)
-			// formData.append('file', ' c:/windows/../lorem.pdf')
-			return session.post(url, formData.getBuffer(), {
-				headers: formData.getHeaders()
-			})
+			return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
 		} else {
 			// browser
-			const formData = new FormData()
-			formData.append('body', JSON.stringify(body))
-			formData.append('file', file, name)
 			return session.post(url, formData)
 		}
 	},
@@ -35,7 +34,7 @@ module.exports = session => ({
 		return session.postForm('api/v2/nodes', {
 			type,
 			parent_id,
-			name, 
+			name,
 			...more
 		})
 	},

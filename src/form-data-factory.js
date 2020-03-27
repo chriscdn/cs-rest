@@ -1,4 +1,4 @@
-const a = {
+module.exports = {
 
 	get isNode() {
 		return (typeof window === 'undefined')
@@ -8,8 +8,8 @@ const a = {
 		return !this.isNode
 	},
 
-	formDataFactory() {
-		if (a.isNode) {
+	createFormData() {
+		if (this.isNode) {
 			const klass = require('form-data')
 			return new klass
 		} else {
@@ -18,6 +18,3 @@ const a = {
 	}
 
 }
-
-
-module.exports = a

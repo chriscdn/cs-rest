@@ -3,7 +3,7 @@ const nodes = require('./nodes')
 const workflow = require('./workflow')
 const rhcore = require('./rhcore')
 const members = require('./members')
-const { formDataFactory, isNode } = require('./formDataFactory')
+const FormDataFactory = require('./form-data-factory')
 
 module.exports = class Session {
 
@@ -47,18 +47,13 @@ module.exports = class Session {
 		return this._members
 	}
 
-	get FormDataClass() {
-		return (typeof window === 'undefined') ? require('form-data') : window.FormData
-	}
-
-
 	_isObject(value) {
-		return value && typeof value === 'object' && value.constructor === Object;
+		return value && typeof value === 'object' && value.constructor === Object
 	}
 
 	_objectToForm(obj) {
 
-		const formData = formDataFactory()
+		const formData = FormDataFactory.createFormData()
 
 		for (let [key, value] of Object.entries(obj)) {
 			if (Array.isArray(value) || this._isObject(value)) {
@@ -75,11 +70,10 @@ module.exports = class Session {
 		return this.axios.get(...args)
 	}
 
-
 	putForm(url, params) {
 		const formData = this._objectToForm(params)
 
-		return isNode ?
+		return FormDataFactory.isNode ?
 			this.put(url, formData.getBuffer(), { headers: formData.getHeaders() }) :
 			this.put(url, formData)
 	}
@@ -87,7 +81,7 @@ module.exports = class Session {
 	postForm(url, params) {
 		const formData = this._objectToForm(params)
 
-		return isNode ?
+		return FormDataFactory.isNode ?
 			this.post(url, formData.getBuffer(), { headers: formData.getHeaders() }) :
 			this.post(url, formData)
 	}
@@ -95,7 +89,7 @@ module.exports = class Session {
 	patchForm(url, params) {
 		const formData = this._objectToForm(params)
 
-		return isNode ?
+		return FormDataFactory.isNode ?
 			this.patch(url, formData.getBuffer(), { headers: formData.getHeaders() }) :
 			this.patch(url, formData)
 	}

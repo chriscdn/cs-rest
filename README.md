@@ -1,30 +1,14 @@
 # @chriscdn/cs-rest
 
-## Motivation
+Simplified authentication and REST calls for OpenText Content Server.
 
-This module assists in three areas when developing with the OpenText Content Server REST API.  It uses [axios](https://github.com/axios/axios) for XMLHttpRequest requests and is compatible with the browser and Node.js.
+## Features
 
-### Authentication
-
-Every Content Server REST API call (with the exception of authentication) requires an `OTCSTicket` header with a valid token.  Tokens can be retrieved in one of three ways:
-
-- a request to `/api/v1/auth/` with the username and password;
-- by rendering a page in the context of a user and embedding the token in the page; and
-- by fetching the `otcsticket` header value on authenticated REST requests.
-
-Tokens expire according to the policy defined in the "Configure Security Parameters" administration page.  This can of often will be a fixed amount of time after the token was issued (e.g., 30 minutes).  The token must be updated and managed to maintain the session.
-
-This module simplifies the process of authentication (using a username and password or `OTCSTicket` value), adds the token to the header, and updates the token when a new one is retrieved in the headers of a request.
-
-### POST, PUT, and PATCH Requests
-
-The Content Server REST API doesn't understand requests with the `Content-Type` header set to `application/json`.  This usually causes problems with POST, PUT, and PATCH requests.
-
-This module provides a small wrapper to convert a JavaScript object into a format that can be submitted as `multipart/form-data`, which Content Server understands.
-
-### Thin Wrapper
-
-The module also provides a thin wrapper for some commonly used API calls.  This is still a work in progress and the final interface is still to be determined.
+- Provides a simplified interfacing for authenticating for REST API calls
+- Automatically adds the `OTCSTicket` header to each subsequent request
+- Refreshes the `OTCSTicket` token automatically (minimising token expiration errors)
+- Based on the [axios](https://github.com/axios/axios) HTTP client
+- Works with Node.js and the browser
 
 ## Installing
 
@@ -40,96 +24,95 @@ Using yarn:
 $ yarn add @chriscdn/cs-rest
 ```
 
-## Usage
+## Example
 
-### Authentication and Requests
-
-Start by importing the `auth` function into your module.
+Authenticate with a username and password and get the details of a node:
 
 ```js
-const {auth} = require('@chriscdn/cs-rest')
-```
+const {Session} = require('@chriscdn/cs-rest')
 
-This returns a function than can be used to create an authenticated `axios` instance.
-
-**Authentication with a username and password:**
-
-```js
-const csAxios = auth({
+// session wraps an axios instance
+const session = new Session({
 	baseURL: 'https://...cs.exe',
 	username: 'Admin',
 	password: '******'
 })
+
+// session can issue authenticated requests to Content Server
+const response = await session.get('/api/v1/nodes/2000')
 ```
 
-**Authentication with an OTCSTicket:**
+Authenticating with an `OTCSTicket`:
 
 ```js
-const csAxios = auth({
+const session = auth({
 	baseURL: 'https://...cs.exe',
 	otcsticket: '<token>'
 })
 ```
 
-The `csAxios` variable is an instance of `axios` with the `baseURL` set to the Content Server CGI path.  See the [axios documentation](https://github.com/axios/axios) to learn how to make basic requests.
+## cs-rest API
 
-Examples:
+Requests can be made with the `get`, `post`, `put`, `patch`, `delete`, and `options` methods on the `Session` instance.  These have the same interface as the respective methods in [axios](https://github.com/axios/axios).
 
-```js
-// Fetch information about the node with dataid 2000
-const response = await csAxios.get('/api/v1/nodes/2000')
+Content Server returns a fresh `OTCSTicket` with each successful API call.  The `Session` instance will automatically use that token for the subsequent request.
 
-// Fetch the children of the node with dataid 2000
-const response = await csAxios.get('/api/v1/nodes/2000/nodes')
-````
+#### POST, PUT, & PATCH
 
-### Sessions
-
-A `Session` object is a small wrapper around `auth` and adds some convenience methods.
-
-Start by importing the `Session` class into your project and instantiating it:
+The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type.  This means POST, PUT, & PATCH requests need to use a content type of `multipart/form-data`, which makes writing the request a little more verbose.  For example, to create a new folder:
 
 ```js
-const {Session} = require('@chriscdn/cs-rest')
+const formData = new FormData()
+formData.append('type', 0)
+formData.append('parent_id', 2000)
+formDAta.append('name', 'My New Folder')
 
-const session = new Session({
-	// same options as auth
-})
-
+const response = await session.post('api/v2/nodes', formData)
 ```
 
-The `session` can be used in a similar manner to `csAxios` for performing GET, POST, PUT, DELETE, OPTIONS, and PATCH requests:
-
-```js
-// Fetch information about the node with dataid 2000
-const response = await session.get('/api/v1/nodes/2000')
-```
-
-It also adds `postForm`, `putForm`, and `patchForm` methods to convert the payload into a `FormData` object and submit it as `multipart/form-data`.
-
-For example, to create a folder:
+The `Session` class provies a `postForm` (and similarily `putForm` and `patchForm`) method to simplify the above to:
 
 ```js
 const response = await session.postForm('api/v2/nodes', {
-	type: 0, // 0 is the folder subtype
+	type: 0,
 	parent_id: 2000,
-	name: 'My New Folder', 
+	name: 'My New Folder'
 })
 ```
 
-## Thin Wrapper
+#### axios instance
+
+The underlying `axios` instance is available if these methods don't suffice:
+
+```js
+const axios = session.axios
+```
+
+#### Thin Wrapper
 
 The `Session` class provides a few convenience methods for performing commonly used REST requests.  By no means is this complete, and it's also possible the API will change in the future.
 
-Example:
+For example, there is a method for creating a new folder:
 
 ```js
 const response = await session.nodes.addFolder(2000, 'My New Folder')
-````
+```
+
+A convenient method exists for uploading a document, where `file` is either:
+
+- a browser File object (e.g,. from drag and drop); or
+- a Node.js file (e.g., `const file = fs.readFileSync('<file path>')`
+
+```js
+const response = await session.nodes.uploadDocument(2000, "My New File", file)
+```
 
 See the `src/` directory for more examples.
 
 ## Credits
+
+- [OpenText Content Server REST API](https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s&tab=501)
+- [kwe.li GmbH](https://kwe.li/)
 
 ## License
 

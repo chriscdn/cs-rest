@@ -1,10 +1,10 @@
 const axios = require('axios')
 const get = require('lodash.get')
-const {formDataFactory, isNode} = require('./formDataFactory')
+const FormDataFactory = require('./form-data-factory')
 
 function getInstance(baseURL) {
 
-	let instance = axios.create({
+	const instance = axios.create({
 		baseURL
 	})
 
@@ -23,11 +23,11 @@ function getInstance(baseURL) {
 }
 
 function axiosFactory(options) {
-	let instance = getInstance(options.baseURL)
+	const instance = getInstance(options.baseURL)
 
-	let username = get(options, 'username')
-	let password = get(options, 'password')
-	let otcsticket = get(options, 'otcsticket')
+	const username = get(options, 'username')
+	const password = get(options, 'password')
+	const otcsticket = get(options, 'otcsticket')
 
 	if (otcsticket) {
 
@@ -43,33 +43,21 @@ function axiosFactory(options) {
 
 			} else {
 
-				const formData = formDataFactory()
+				const formData = FormDataFactory.createFormData()
 
 				formData.append('username', username)
 				formData.append('password', password)
 
-				// return axios.post(`${options.baseURL}/api/v1/auth/`, formData)
-
-				let response = isNode 
+				let response = FormDataFactory.isNode 
 					? await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), {headers: formData.getHeaders()})
 					: await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
 
 				request.headers.common['OTCSTicket'] = get(response, 'data.ticket')
 
 				return request
-
-
-				// return axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), {
-				// 		headers: formData.getHeaders()
-				// 	})
-				// 	.then(response => {
-				// 		request.headers.common['OTCSTicket'] = get(response, 'data.ticket')
-				// 		return request
-				// 	})
 			}
 		})
 	} else {
-		// return Promise.reject('You must provide an otcsticket or username and password.')
 		throw 'You must provide an otcsticket or username and password.'
 	}
 
