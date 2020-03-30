@@ -27,8 +27,9 @@ $ yarn add @chriscdn/cs-rest
 Using unpkg CDN:
 
 ```html
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://unpkg.com/browse/@chriscdn/cs-rest/lib/index.min.js"></script>
+<script src="https://unpkg.com/@chriscdn/cs-rest/lib/index.min.js"></script>
 ```
 
 ## Example
@@ -36,10 +37,10 @@ Using unpkg CDN:
 Authenticate with a username and password and get the details of a node:
 
 ```js
-const {Session} = require('@chriscdn/cs-rest')
+const CSREST = require('@chriscdn/cs-rest')
 
 // session wraps an axios instance
-const session = new Session({
+const session = new CSREST.Session({
 	baseURL: 'https://.../cs.exe',
 	username: 'Admin',
 	password: '******'
@@ -52,7 +53,7 @@ const response = await session.get('/api/v1/nodes/2000')
 Authenticate with an `OTCSTicket`:
 
 ```js
-const session = auth({
+const session = new CSREST.Session({
 	baseURL: 'https://.../cs.exe',
 	otcsticket: '<token>'
 })
@@ -66,7 +67,7 @@ Content Server returns a fresh `OTCSTicket` with each successful API call.  The 
 
 #### POST, PUT, & PATCH
 
-The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type.  This means POST, PUT, & PATCH requests need to use a content type of `multipart/form-data`, which makes writing the request a little verbose.  For example, to create a new folder:
+The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type.  This means post, put, & patch requests need to use a content type of `multipart/form-data`, which makes writing the request a little more verbose.  For example, to create a new folder:
 
 ```js
 const formData = new FormData()
@@ -124,5 +125,3 @@ See the `src/` directory for more examples.
 ## License
 
 [MIT](LICENSE)
-
-

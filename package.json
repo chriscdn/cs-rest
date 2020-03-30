@@ -1,23 +1,22 @@
 {
 	"name": "@chriscdn/cs-rest",
-	"version": "1.0.3",
-	"description": "An authentication and wrapper for the OpenText Content Server REST API.",
+	"version": "1.0.4",
+	"description": "Simplified authentication and REST calls for OpenText Content Server.",
 	"main": "lib/index.cjs.js",
 	"module": "lib/index.es.js",
 	"unpkg": "lib/index.min.js",
 	"repository": "https://github.com/chriscdn/cs-rest",
 	"author": "Christopher Meyer",
 	"license": "MIT",
+	"scripts": {
+		"build": "rollup -c"
+	},
 	"dependencies": {
 		"@babel/runtime-corejs3": "^7.9.2",
 		"axios": "^0.19.2",
 		"form-data": "^3.0.0",
 		"lodash.get": "^4.4.2"
 	},
-	"keywords": [
-		"opentext",
-		"content server"
-	],
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
 		"@babel/preset-env": "^7.9.0",
@@ -26,5 +25,11 @@
 		"@rollup/plugin-replace": "^2.3.1",
 		"rollup-plugin-babel": "^4.4.0",
 		"rollup-plugin-terser": "^5.3.0"
-	}
+	},
+	"keywords": [
+		"opentext",
+		"content-server",
+		"rest",
+		"axios"
+	]
 }
