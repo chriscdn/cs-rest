@@ -1,14 +1,15 @@
 {
 	"name": "@chriscdn/cs-rest",
-	"version": "1.0.1",
+	"version": "1.0.3",
 	"description": "An authentication and wrapper for the OpenText Content Server REST API.",
-	"main": "dist/index.cjs.js",
-	"module": "dist/index.es.js",
-	"unpkg": "dist/index.min.js",
+	"main": "lib/index.cjs.js",
+	"module": "lib/index.es.js",
+	"unpkg": "lib/index.min.js",
 	"repository": "https://github.com/chriscdn/cs-rest",
 	"author": "Christopher Meyer",
 	"license": "MIT",
 	"dependencies": {
+		"@babel/runtime-corejs3": "^7.9.2",
 		"axios": "^0.19.2",
 		"form-data": "^3.0.0",
 		"lodash.get": "^4.4.2"

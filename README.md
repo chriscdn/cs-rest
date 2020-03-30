@@ -24,6 +24,13 @@ Using yarn:
 $ yarn add @chriscdn/cs-rest
 ```
 
+Using unpkg CDN:
+
+```html
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/browse/@chriscdn/cs-rest/lib/index.min.js"></script>
+```
+
 ## Example
 
 Authenticate with a username and password and get the details of a node:
