@@ -72,19 +72,16 @@ module.exports = class Session {
 
 	putForm(url, params) {
 		const formData = this._objectToForm(params)
-
 		return process.node ? this.put(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.put(url, formData)
 	}
 
 	postForm(url, params) {
 		const formData = this._objectToForm(params)
-
 		return process.node ? this.post(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.post(url, formData)
 	}
 
 	patchForm(url, params) {
 		const formData = this._objectToForm(params)
-
 		return process.node ? this.patch(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.patch(url, formData)
 	}
 

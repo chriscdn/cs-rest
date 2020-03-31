@@ -1,12 +1,12 @@
 {
-	"name": "@chriscdn/cs-rest",
-	"version": "1.0.4",
-	"description": "Simplified authentication and REST calls for OpenText Content Server.",
+	"name": "@kweli/cs-rest",
+	"version": "1.0.5",
+	"description": "Simple authentication and REST calls for OpenText Content Server.",
 	"main": "lib/index.cjs.js",
 	"module": "lib/index.es.js",
 	"unpkg": "lib/index.min.js",
 	"repository": "https://github.com/chriscdn/cs-rest",
-	"author": "Christopher Meyer",
+	"author": "Christopher Meyer <chris.meyer@kwe.li> (https://kwe.li/)",
 	"license": "MIT",
 	"scripts": {
 		"build": "rollup -c"

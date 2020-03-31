@@ -5,8 +5,6 @@ module.exports = {
 			return new klass
 		} else {
 			return new FormData()
-		}
-		
+		}		
 	}
-
 }
