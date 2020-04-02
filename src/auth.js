@@ -1,6 +1,6 @@
 const axios = require('axios')
 const get = require('lodash.get')
-const FormDataFactory = require('./form-data-factory')
+const FormDataFactory = require('./handlers/form-data-factory')
 
 function getInstance(baseURL) {
 

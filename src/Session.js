@@ -1,10 +1,11 @@
 const auth = require('./auth')
-const nodes = require('./nodes')
-const workflow = require('./workflow')
-const rhcore = require('./rhcore')
-const members = require('./members')
-const versions = require('./versions')
-const FormDataFactory = require('./form-data-factory')
+const nodes = require('./handlers/nodes')
+const workflow = require('./handlers/workflow')
+const rhcore = require('./handlers/rhcore')
+const members = require('./handlers/members')
+const versions = require('./handlers/versions')
+const webreports = require('./handlers/webreports')
+const FormDataFactory = require('./handlers/form-data-factory')
 
 module.exports = class Session {
 
@@ -46,6 +47,15 @@ module.exports = class Session {
 		}
 
 		return this._members
+	}
+
+	get webreports() {
+		// this creates a circular reference.. bad?
+		if (this._webreports == null) {
+			this._webreports = webreports(this)
+		}
+
+		return this._webreports
 	}
 
 	get versions() {
