@@ -110,10 +110,10 @@ const response = await session.nodes.addFolder(2000, 'My New Folder')
 A method also exists for uploading a document, where `file` is either:
 
 - a browser [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object (e.g,. from drag and drop); or
-- a Node.js file (e.g., `const file = fs.readFileSync('<file path>')`.
+- a local file path, when using Node.js (e.g., `c:/temp/file.pdf`.
 
 ```js
-const response = await session.nodes.uploadDocument(2000, "My New File", file)
+const response = await session.nodes.addDocument(2000, file)
 ```
 
 See the `src/` directory for more examples.

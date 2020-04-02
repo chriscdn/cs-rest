@@ -27,8 +27,10 @@ export default [{
 	],
 	plugins: [
 		replace(replaceStrings(false)),
-		resolve(),
-		commonjs(),
+		resolve({
+			preferBuiltins: true
+		}),
+		commonjs()
 	]
 }, {
 	input: 'src/index.js',
@@ -43,7 +45,7 @@ export default [{
 	plugins: [
 		replace(replaceStrings(true)),
 		resolve(),
-		commonjs(),
+		commonjs()
 		// babel()
 	]
 }, {

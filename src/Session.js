@@ -3,6 +3,7 @@ const nodes = require('./nodes')
 const workflow = require('./workflow')
 const rhcore = require('./rhcore')
 const members = require('./members')
+const versions = require('./versions')
 const FormDataFactory = require('./form-data-factory')
 
 module.exports = class Session {
@@ -45,6 +46,15 @@ module.exports = class Session {
 		}
 
 		return this._members
+	}
+
+	get versions() {
+		// this creates a circular reference.. bad?
+		if (this._versions == null) {
+			this._versions = versions(this)
+		}
+
+		return this._versions
 	}
 
 	_isObject(value) {

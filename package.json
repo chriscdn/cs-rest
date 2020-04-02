@@ -1,6 +1,6 @@
 {
 	"name": "@kweli/cs-rest",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Simple authentication and REST calls for OpenText Content Server.",
 	"main": "lib/index.cjs.js",
 	"module": "lib/index.es.js",
@@ -9,7 +9,8 @@
 	"author": "Christopher Meyer <chris.meyer@kwe.li> (https://kwe.li/)",
 	"license": "MIT",
 	"scripts": {
-		"build": "rollup -c"
+		"build": "rollup -c",
+		"watch": "rollup -c --watch"
 	},
 	"dependencies": {
 		"@babel/runtime-corejs3": "^7.9.2",

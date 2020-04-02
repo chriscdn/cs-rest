@@ -1,53 +1,67 @@
 const FormDataFactory = require('./form-data-factory')
 
+const SubTypes = {
+	FOLDER: 0,
+	DOCUMENT: 144
+}
+
 module.exports = session => ({
 
 	addablenodetypes(dataid) {
 		return session.get(`/api/v1/nodes/${dataid}/addablenodetypes`)
 	},
 
-	uploadDocument(parent_id, name, file) {
+	async addDocument(parent_id, fileHandler, fileName = null) {
 
 		const url = '/api/v1/nodes'
 
-		const body = {
-			name,
-			type: 144, // document
-			parent_id
-		}
-
 		const formData = FormDataFactory.createFormData()
-		formData.append('body', JSON.stringify(body))
-		formData.append('file', file, name)
 
-		if (FormDataFactory.isNode) {
+		formData.append('type', SubTypes.DOCUMENT)
+		formData.append('parent_id', parent_id)
+
+		if (process.node) {
 			// node.js
-			// file = fs.readFileSync('C:/lorem.pdf')
+
+			const fsp = require('fs').promises
+			const path = require('path')
+
+			let f = await fsp.readFile(fileHandler)
+			let name = fileName || path.basename(fileHandler)
+
+			formData.append('file', f, name)
+			formData.append('name', name)
+
 			return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
+
 		} else {
 			// browser
+
+			let name = fileName || fileHandler.name
+
+			formData.append('file', fileHandler, name)
+			formData.append('name', name)
+
 			return session.post(url, formData)
 		}
 	},
 
-	addItem(type, parent_id, name, more = {}) {
+	addItem(type, parent_id, name, params = {}) {
 		return session.postForm('api/v2/nodes', {
 			type,
 			parent_id,
 			name,
-			...more
+			...params
 		})
 	},
 
-	addFolder(parent_id, name, more = {}) {
-		return this.addItem(0, parent_id, name, more)
+	addFolder(parent_id, name, params = {}) {
+		return this.addItem(SubTypes.FOLDER, parent_id, name, params)
 	},
 
 	children(dataid, params = {}) {
 		// https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
-		return session.get(`/api/v1/nodes/${dataid}/nodes/`, {}, {
-			params
-		})
+		return session.get(`/api/v2/nodes/${dataid}/nodes/`, { params })
 	},
 
 	delete(dataid) {
