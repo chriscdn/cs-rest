@@ -12,11 +12,11 @@ module.exports = session => ({
 			...options
 		}
 
-		return session.get(`/api/v2/members`, {params})
+		return session.get(`api/v2/members`, {params})
 	},
 
 	member(id) {
-		return session.get(`/api/v2/members/${id}`)
+		return session.get(`api/v2/members/${id}`)
 	}
 
 })

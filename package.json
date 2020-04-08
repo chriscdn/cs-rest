@@ -1,6 +1,6 @@
 {
 	"name": "@kweli/cs-rest",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"description": "Simple authentication and REST calls for OpenText Content Server.",
 	"main": "lib/index.cjs.js",
 	"module": "lib/index.es.js",

@@ -8,12 +8,12 @@ const SubTypes = {
 module.exports = session => ({
 
 	addablenodetypes(dataid) {
-		return session.get(`/api/v1/nodes/${dataid}/addablenodetypes`)
+		return session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
 	},
 
 	async addDocument(parent_id, fileHandler, fileName = null) {
 
-		const url = '/api/v1/nodes'
+		const url = 'api/v1/nodes'
 
 		const formData = FormDataFactory.createFormData()
 
@@ -55,17 +55,33 @@ module.exports = session => ({
 		})
 	},
 
+	node(dataid, params = {}) {
+		return session.get(`api/v2/nodes/${dataid}`, { params })
+	},
+
+	ancestors(dataid, params = {}) {
+		return session.get(`api/v1/nodes/${dataid}/ancestors`, { params })
+	},
+
+	volumeInfo(objType) {
+		return session.get(`api/v1/volumes/${objType}`)
+	},
+
+	volumes() {
+		return session.get('api/v2/volumes')
+	},
+
 	addFolder(parent_id, name, params = {}) {
 		return this.addItem(SubTypes.FOLDER, parent_id, name, params)
 	},
 
 	children(dataid, params = {}) {
 		// https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
-		return session.get(`/api/v2/nodes/${dataid}/nodes/`, { params })
+		return session.get(`api/v2/nodes/${dataid}/nodes`, { params })
 	},
 
 	delete(dataid) {
-		return session.delete(`/api/v1/nodes/${dataid}/`)
+		return session.delete(`api/v1/nodes/${dataid}`)
 	}
 
 })

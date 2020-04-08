@@ -3,8 +3,11 @@ const FormDataFactory = require('./form-data-factory')
 module.exports = session => ({
 
 	async addVersion(dataid, fileHandler, fileName = null) {
+		// ERROR: This seemed to only upload the first 2500 characters when the file extension
+		// was .lxe (e.g., and unknown mimetype).  Must look into this.
 
-		const url = `/api/v1/nodes/${dataid}/versions`
+
+		const url = `api/v1/nodes/${dataid}/versions`
 
 		const formData = FormDataFactory.createFormData()
 

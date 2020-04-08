@@ -9,7 +9,7 @@ function getInstance(baseURL) {
 	})
 
 	instance.interceptors.response.use(response => {
-		let otcsticket = get(response, 'headers.otcsticket')
+		const otcsticket = get(response, 'headers.otcsticket')
 
 		if (otcsticket) {
 			instance.defaults.headers.common['OTCSTicket'] = otcsticket
