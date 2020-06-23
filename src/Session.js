@@ -6,6 +6,7 @@ const members = require('./handlers/members')
 const versions = require('./handlers/versions')
 const webreports = require('./handlers/webreports')
 const FormDataFactory = require('./handlers/form-data-factory')
+const isnil = require('lodash.isnil')
 
 module.exports = class Session {
 
@@ -76,9 +77,12 @@ module.exports = class Session {
 		const formData = FormDataFactory.createFormData()
 
 		for (let [key, value] of Object.entries(obj)) {
-			if (Array.isArray(value) || this._isObject(value)) {
+			if (value && value.name && value.file) {
+				formData.append(key, value.file, value.name)
+			} else if (Array.isArray(value) || this._isObject(value)) {
 				formData.append(key, JSON.stringify(value))
-			} else {
+			} else if (!isnil(value)) {
+				// should empty strings be sent?
 				formData.append(key, value)
 			}
 		}

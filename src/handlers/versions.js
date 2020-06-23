@@ -2,14 +2,11 @@ const FormDataFactory = require('./form-data-factory')
 
 module.exports = session => ({
 
-	async addVersion(dataid, fileHandler, fileName = null) {
-		// ERROR: This seemed to only upload the first 2500 characters when the file extension
-		// was .lxe (e.g., and unknown mimetype).  Must look into this.
-
+	async addVersion(dataid, fileHandler, options = {}) {
 
 		const url = `api/v1/nodes/${dataid}/versions`
 
-		const formData = FormDataFactory.createFormData()
+		// const formData = FormDataFactory.createFormData()
 
 		if (process.node) {
 			// node.js
@@ -17,23 +14,43 @@ module.exports = session => ({
 			const path = require('path')
 
 			let f = await fsp.readFile(fileHandler)
-			let name = fileName || path.basename(fileHandler)
+			// let name = fileName || path.basename(fileHandler)
 
-			formData.append('file', f, name)
-			// formData.append('name', name)
+			const params = {
+				file: {
+					file: f,
+					name: path.basename(fileHandler)
+				},
+				...options
+			}
 
-			return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
+			// formData.append('file', f, name)
+			// return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
+			
+			return session.postForm(url, params)
 
 		} else {
 			// browser
-			// 
+			// let name = fileName || fileHandler.name
 
-			let name = fileName || fileHandler.name
+			const params = {
+				file: {
+					file: fileHandler,
+					name: fileHandler.name
+				},
+				...options
+			}
 
-			formData.append('file', fileHandler, name)
-			// formData.append('name', fileHandler.name)
-			return session.post(url, formData)
+			return session.postForm(url, params)
+
+			// formData.append('file', fileHandler, name)
+			// return session.post(url, formData)
 		}
 	},
+
+	async list(dataid) {
+		const url = `api/v1/nodes/${dataid}/versions`
+		return session.get(url)
+	}
 
 })
