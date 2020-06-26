@@ -8,6 +8,13 @@ const webreports = require('./handlers/webreports')
 const FormDataFactory = require('./handlers/form-data-factory')
 const isnil = require('lodash.isnil')
 
+const sha1 = require('sha1')
+
+const Semaphore = require('@chriscdn/promise-semaphore')
+const semaphore = new Semaphore()
+
+let getCache = {}
+
 module.exports = class Session {
 
 	constructor(options) {
@@ -94,19 +101,41 @@ module.exports = class Session {
 		return this.axios.get(...args)
 	}
 
+	async getCached(...args) {
+		const key = sha1(JSON.stringify(args))
+
+		try {
+			await semaphore.acquire(key)
+
+			if (!getCache[key]) {
+				getCache[key] = this.get(...args)
+			}
+		} finally {
+			semaphore.release(key)
+		}
+
+		return getCache[key]
+	}
+
 	putForm(url, params) {
 		const formData = this._objectToForm(params)
-		return process.node ? this.put(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.put(url, formData)
+		return process.node ? this.put(url, formData.getBuffer(), {
+			headers: formData.getHeaders()
+		}) : this.put(url, formData)
 	}
 
 	postForm(url, params) {
 		const formData = this._objectToForm(params)
-		return process.node ? this.post(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.post(url, formData)
+		return process.node ? this.post(url, formData.getBuffer(), {
+			headers: formData.getHeaders()
+		}) : this.post(url, formData)
 	}
 
 	patchForm(url, params) {
 		const formData = this._objectToForm(params)
-		return process.node ? this.patch(url, formData.getBuffer(), { headers: formData.getHeaders() }) : this.patch(url, formData)
+		return process.node ? this.patch(url, formData.getBuffer(), {
+			headers: formData.getHeaders()
+		}) : this.patch(url, formData)
 	}
 
 	post(...args) {
