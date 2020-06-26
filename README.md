@@ -5,7 +5,6 @@ Simple authentication and REST calls for OpenText Content Server.
 ## Features
 
 - Provides a simplified interface for managing authentication with the OpenText Content Server REST API
-- Automatically adds the `OTCSTicket` header to each subsequent request
 - Refreshes the `OTCSTicket` token automatically (minimising token expiration errors)
 - Simplifies POST, PUT, & PATCH requests (since Content Server doesn't support the `application/json` content type)
 - Based on the [axios](https://github.com/axios/axios) HTTP client
@@ -38,10 +37,10 @@ Using unpkg CDN:
 Authenticate with a username and password and get the details of a node:
 
 ```js
-const CSREST = require('@kweli/cs-rest')
+const { Session } = require('@kweli/cs-rest')
 
 // session wraps an axios instance
-const session = new CSREST.Session({
+const session = new Session({
 	baseURL: 'https://.../cs.exe',
 	username: 'Admin',
 	password: '******'
@@ -54,7 +53,7 @@ const response = await session.get('/api/v1/nodes/2000')
 Authenticate with an `OTCSTicket`:
 
 ```js
-const session = new CSREST.Session({
+const session = new Session({
 	baseURL: 'https://.../cs.exe',
 	otcsticket: '<token>'
 })
