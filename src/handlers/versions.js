@@ -24,9 +24,8 @@ module.exports = session => ({
 				...options
 			}
 
-			// formData.append('file', f, name)
-			// return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
-			
+			// console.log(params)
+
 			return session.postForm(url, params)
 
 		} else {
