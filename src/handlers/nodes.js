@@ -82,6 +82,26 @@ module.exports = session => ({
 
 	delete(dataid) {
 		return session.delete(`api/v1/nodes/${dataid}`)
+	},
+
+	download(dataid, version = 'v1', filePath) {
+		// session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
+		if (process.node) {
+			return session.get(`api/${version}/nodes/${dataid}/content`, { responseType: 'stream' })
+				.then(response => {
+					const fs = require('fs')
+					const writer = fs.createWriteStream(filePath)
+
+					response.data.pipe(writer)
+
+					return new Promise((resolve, reject) => {
+						writer.on('finish', resolve)
+						writer.on('error', reject)
+					})
+				})
+		} else {
+			return Promise.reject('Not implemented yet')
+		}
 	}
 
 })

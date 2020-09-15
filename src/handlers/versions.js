@@ -50,6 +50,12 @@ module.exports = session => ({
 	async list(dataid) {
 		const url = `api/v1/nodes/${dataid}/versions`
 		return session.get(url)
+	},
+
+	async version(dataid, version_number='latest') {
+		// latest not supported in v2
+		const url = `api/v1/nodes/${dataid}/versions/${version_number}`
+		return session.get(url)
 	}
 
 })
