@@ -5,6 +5,7 @@ import babel from '@rollup/plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import replace from '@rollup/plugin-replace'
 
+// https://nolanlawson.com/2017/01/09/how-to-write-a-javascript-package-for-both-node-and-the-browser/
 function replaceStrings(isBrowser = true) {
 	const isNode = !isBrowser
 
