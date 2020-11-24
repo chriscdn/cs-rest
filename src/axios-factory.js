@@ -48,7 +48,7 @@ function axiosFactory(options) {
 				formData.append('username', username)
 				formData.append('password', password)
 
-				let response = process.node ? await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), { headers: formData.getHeaders() }) : await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
+				const response = process.node ? await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), { headers: formData.getHeaders() }) : await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
 
 				request.headers.common['OTCSTicket'] = get(response, 'data.ticket')
 

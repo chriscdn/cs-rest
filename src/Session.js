@@ -1,4 +1,5 @@
-const auth = require('./auth')
+const axiosFactory = require('./axios-factory')
+const auther = require('./handlers/auth.js')
 const nodes = require('./handlers/nodes')
 const workflow = require('./handlers/workflow')
 const rhcore = require('./handlers/rhcore')
@@ -18,7 +19,7 @@ let getCache = {}
 module.exports = class Session {
 
 	constructor(options) {
-		this.axios = auth(options)
+		this.axios = axiosFactory(options)
 	}
 
 	get nodes() {
@@ -28,6 +29,15 @@ module.exports = class Session {
 		}
 
 		return this._nodes
+	}
+
+	get auth() {
+		if (this._auth == null) {
+			this._auth = auther(this)
+			console.log('wtf')
+		}
+
+		return this._auth
 	}
 
 	get workflow() {
