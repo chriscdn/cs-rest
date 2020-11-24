@@ -1,5 +1,5 @@
 const axiosFactory = require('./axios-factory')
-const auther = require('./handlers/auth.js')
+const auth = require('./handlers/auth.js')
 const nodes = require('./handlers/nodes')
 const workflow = require('./handlers/workflow')
 const rhcore = require('./handlers/rhcore')
@@ -33,8 +33,7 @@ module.exports = class Session {
 
 	get auth() {
 		if (this._auth == null) {
-			this._auth = auther(this)
-			console.log('wtf')
+			this._auth = auth(this)
 		}
 
 		return this._auth
