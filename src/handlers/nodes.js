@@ -1,8 +1,9 @@
 const FormDataFactory = require('./form-data-factory')
 
 const SubTypes = {
-	FOLDER: 0,
-	DOCUMENT: 144
+	Folder: 0,
+	Generation: 2,
+	Document: 144
 }
 
 module.exports = session => ({
@@ -17,7 +18,7 @@ module.exports = session => ({
 
 		const formData = FormDataFactory.createFormData()
 
-		formData.append('type', SubTypes.DOCUMENT)
+		formData.append('type', SubTypes.Document)
 		formData.append('parent_id', parent_id)
 
 		if (process.node) {
@@ -72,12 +73,24 @@ module.exports = session => ({
 	},
 
 	addFolder(parent_id, name, params = {}) {
-		return this.addItem(SubTypes.FOLDER, parent_id, name, params)
+		return this.addItem(SubTypes.Folder, parent_id, name, params)
+	},
+
+	addGeneration(parent_id, name, original_id, version_number, params = {}) {
+		return this.addItem(SubTypes.Generation, parent_id, name, {
+			original_id,
+			version_number,
+			...params
+		})
+	},
+
+	nodes(dataid, params = {}) {
+		// https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
+		return session.get(`api/v2/nodes/${dataid}/nodes`, { params })
 	},
 
 	children(dataid, params = {}) {
-		// https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
-		return session.get(`api/v2/nodes/${dataid}/nodes`, { params })
+		return this.nodes(dataid, params)
 	},
 
 	delete(dataid) {
