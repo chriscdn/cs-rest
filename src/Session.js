@@ -8,6 +8,7 @@ const versions = require('./handlers/versions')
 const webreports = require('./handlers/webreports')
 const FormDataFactory = require('./handlers/form-data-factory')
 const isnil = require('lodash.isnil')
+const rpcClient = require('./rpc-client')
 
 const sha1 = require('sha1')
 
@@ -83,6 +84,10 @@ module.exports = class Session {
 
 		return this._versions
 	}
+
+	rpcClient(baseURL='/api/v1/rh/rpc/rhnode/') {
+		return new rpcClient(this, baseURL)	
+	}	
 
 	_isObject(value) {
 		return value && typeof value === 'object' && value.constructor === Object
