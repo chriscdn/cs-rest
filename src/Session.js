@@ -147,6 +147,24 @@ module.exports = class Session {
 		}) : this.patch(url, formData)
 	}
 
+	putBody(url, body) {
+		return this.putForm(url, {
+			body
+		})
+	}
+
+	postBody(url, body) {
+		return this.postForm(url, {
+			body
+		})
+	}
+
+	patchBody(url, body) {
+		return this.patchForm(url, {
+			body
+		})
+	}
+
 	post(...args) {
 		return this.axios.post(...args)
 	}
