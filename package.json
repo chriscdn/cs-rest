@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@chriscdn/promise-semaphore": "^1.0.4",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "form-data": "^3.0.0",
     "is-object": "^1.0.2",
     "lodash.get": "^4.4.2",
@@ -24,12 +24,12 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@babel/runtime-corejs3": "^7.11.2",
-    "@rollup/plugin-babel": "^5.2.1",
-    "@rollup/plugin-commonjs": "^15.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.1",
     "@rollup/plugin-replace": "^2.3.3",
     "rollup-plugin-terser": "^7.0.2"
   },

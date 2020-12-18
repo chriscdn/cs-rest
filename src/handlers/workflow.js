@@ -9,7 +9,9 @@ module.exports = session => ({
 	},
 
 	draftprocesses(workflow_id) {
-		return session.postForm('api/v2/draftprocesses', {workflow_id})
+		return session.postForm('api/v2/draftprocesses', {
+			workflow_id
+		})
 	},
 
 	draftprocesses_update(draftprocess_id) {
@@ -21,7 +23,9 @@ module.exports = session => ({
 	},
 
 	draftprocesses_put(draftprocess_id, body) {
-		return session.putForm(`api/v2/draftprocesses/${draftprocess_id}`, { body })
+		return session.putForm(`api/v2/draftprocesses/${draftprocess_id}`, {
+			body
+		})
 	}
 
 	// draftprocesses_formUpdate(draftprocess_id, values) {
