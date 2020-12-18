@@ -48,7 +48,7 @@ module.exports = session => ({
 	},
 
 	addItem(type, parent_id, name, params = {}) {
-		return session.postForm('api/v2/nodes', {
+		return session.postBody('api/v2/nodes', {
 			type,
 			parent_id,
 			name,
