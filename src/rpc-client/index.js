@@ -5,14 +5,14 @@ const {
 
 const get = require('lodash.get')
 
-const sequence =  {
+// to be tested...
+const sequence = {
 	index: 0,
 	get next() {
 		this.index = this.index + 1
 		return this.index
 	}
 }
-
 
 module.exports = class RPCClient {
 
@@ -61,7 +61,9 @@ module.exports = class RPCClient {
 	async batch() {
 		const queue = this._batchQueue
 		this.resetQueue()
-		const response = await this.session.postBody(this.baseURL, { rpc: queue })
+		const response = await this.session.postBody(this.baseURL, {
+			rpc: queue
+		})
 
 		// data.data is a content server thing
 		return get(response, 'data.data', []).map(item => this.handleResponse(item))
