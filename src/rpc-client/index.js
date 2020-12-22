@@ -1,13 +1,18 @@
 const {
-	v4: uuidv4
-} = require('uuid')
-
-const {
 	CustomError,
 	ErrorCodes
 } = require('./error-codes')
 
 const get = require('lodash.get')
+
+const sequence =  {
+	index: 0,
+	get next() {
+		this.index = this.index + 1
+		return this.index
+	}
+}
+
 
 module.exports = class RPCClient {
 
@@ -37,7 +42,7 @@ module.exports = class RPCClient {
 		}
 	}
 
-	async request(method, params = {}, id = uuidv4()) {
+	async request(method, params = {}, id = sequence.next) {
 		const response = await this.session.postBody(this.baseURL, {
 			rpc: this.requestObject(method, params, id)
 		})
@@ -48,7 +53,7 @@ module.exports = class RPCClient {
 		this._batchQueue = []
 	}
 
-	queue(method, params = {}, id = uuidv4()) {
+	queue(method, params = {}, id = sequence.next) {
 		this._batchQueue.push(this.requestObject(method, params, id))
 		return this
 	}
@@ -56,13 +61,13 @@ module.exports = class RPCClient {
 	async batch() {
 		const queue = this._batchQueue
 		this.resetQueue()
-		const response = await this.session.postBody(this.baseURL, {rpc:queue})
+		const response = await this.session.postBody(this.baseURL, { rpc: queue })
 
 		// data.data is a content server thing
 		return get(response, 'data.data', []).map(item => this.handleResponse(item))
 	}
 
-	rhnode(dataid, method, args = [], id = uuidv4()) {
+	rhnode(dataid, method, args = [], id = sequence.next) {
 		const params = {
 			dataid,
 			args
@@ -71,7 +76,7 @@ module.exports = class RPCClient {
 		return this.request(method, params, id)
 	}
 
-	rhnodeQueue(dataid, method, args = [], id = uuidv4()) {
+	rhnodeQueue(dataid, method, args = [], id = sequence.next) {
 		const params = {
 			dataid,
 			args
