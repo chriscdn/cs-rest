@@ -3,6 +3,7 @@ const auth = require('./handlers/auth.js')
 const nodes = require('./handlers/nodes')
 const workflow = require('./handlers/workflow')
 const rhcore = require('./handlers/rhcore')
+const search = require('./handlers/search')
 const members = require('./handlers/members')
 const versions = require('./handlers/versions')
 const webreports = require('./handlers/webreports')
@@ -65,6 +66,15 @@ module.exports = class Session {
 		}
 
 		return this._members
+	}
+
+	get search() {
+		// this creates a circular reference.. bad?
+		if (this._search == null) {
+			this._search = search(this)
+		}
+
+		return this._search
 	}
 
 	get webreports() {
