@@ -2,7 +2,9 @@ import pkg from './package.json'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
-import { terser } from 'rollup-plugin-terser'
+import {
+	terser
+} from 'rollup-plugin-terser'
 import replace from '@rollup/plugin-replace'
 
 // https://nolanlawson.com/2017/01/09/how-to-write-a-javascript-package-for-both-node-and-the-browser/
@@ -57,14 +59,20 @@ export default [{
 		name: 'CSREST',
 		exports: 'named',
 		sourcemap: true,
-		globals: { axios: 'axios' }
+		globals: {
+			axios: 'axios'
+		}
 	}],
 	external: ['axios'],
 	plugins: [
 		replace(replaceStrings(true)),
-		resolve({ browser: true }),
+		resolve({
+			browser: true
+		}),
 		commonjs(),
-		babel()
+		babel({
+			babelHelpers: 'bundled'
+		})
 		// terser()
 	]
 }, {
@@ -75,14 +83,20 @@ export default [{
 		name: 'CSREST',
 		exports: 'named',
 		sourcemap: true,
-		globals: { axios: 'axios' }
+		globals: {
+			axios: 'axios'
+		}
 	}],
 	external: ['axios'],
 	plugins: [
 		replace(replaceStrings(true)),
-		resolve({ browser: true }),
+		resolve({
+			browser: true
+		}),
 		commonjs(),
-		babel(),
+		babel({
+			babelHelpers: 'bundled'
+		}),
 		terser()
 	]
 }]
