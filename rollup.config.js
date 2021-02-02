@@ -2,6 +2,7 @@ import pkg from './package.json'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
+import json from '@rollup/plugin-json'
 import {
 	terser
 } from 'rollup-plugin-terser'
@@ -33,7 +34,8 @@ export default [{
 		resolve({
 			preferBuiltins: true
 		}),
-		commonjs()
+		commonjs(),
+		json(),
 	]
 }, {
 	input: 'src/index.js',
@@ -48,8 +50,8 @@ export default [{
 	plugins: [
 		replace(replaceStrings(true)),
 		resolve(),
-		commonjs()
-		// babel()
+		commonjs(),
+		json() // babel()
 	]
 }, {
 	input: 'src/index.js',
@@ -70,6 +72,7 @@ export default [{
 			browser: true
 		}),
 		commonjs(),
+		json(),
 		babel({
 			babelHelpers: 'bundled'
 		})
@@ -94,6 +97,7 @@ export default [{
 			browser: true
 		}),
 		commonjs(),
+		json(),
 		babel({
 			babelHelpers: 'bundled'
 		}),

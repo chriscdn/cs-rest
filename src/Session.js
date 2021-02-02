@@ -13,6 +13,8 @@ const rpcClient = require('./rpc-client')
 
 const sha1 = require('sha1')
 
+const dataTypesEnum = require('./data-types-enum.json')
+
 const Semaphore = require('@chriscdn/promise-semaphore')
 const semaphore = new Semaphore()
 
@@ -93,6 +95,10 @@ module.exports = class Session {
 		}
 
 		return this._versions
+	}
+
+	get dataTypesEnum() {
+		return dataTypesEnum
 	}
 
 	rpcClient(baseURL='/api/v1/rh/rpc/rhnode/') {
