@@ -33,7 +33,10 @@ module.exports = session => ({
 			formData.append('file', f, name)
 			formData.append('name', name)
 
-			return session.post(url, formData.getBuffer(), { headers: formData.getHeaders() })
+			return session.post(url, formData.getBuffer(), {
+				headers: formData.getHeaders(),
+				maxBodyLength: Infinity
+			})
 
 		} else {
 			// browser
@@ -57,11 +60,15 @@ module.exports = session => ({
 	},
 
 	node(dataid, params = {}) {
-		return session.getCached(`api/v2/nodes/${dataid}`, { params })
+		return session.getCached(`api/v2/nodes/${dataid}`, {
+			params
+		})
 	},
 
 	ancestors(dataid, params = {}) {
-		return session.get(`api/v1/nodes/${dataid}/ancestors`, { params })
+		return session.get(`api/v1/nodes/${dataid}/ancestors`, {
+			params
+		})
 	},
 
 	volumeInfo(objType) {
@@ -86,7 +93,9 @@ module.exports = session => ({
 
 	nodes(dataid, params = {}) {
 		// https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
-		return session.get(`api/v2/nodes/${dataid}/nodes`, { params })
+		return session.get(`api/v2/nodes/${dataid}/nodes`, {
+			params
+		})
 	},
 
 	children(dataid, params = {}) {
@@ -100,7 +109,9 @@ module.exports = session => ({
 	download(dataid, version = 'v1', filePath) {
 		// session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
 		if (process.node) {
-			return session.get(`api/${version}/nodes/${dataid}/content`, { responseType: 'stream' })
+			return session.get(`api/${version}/nodes/${dataid}/content`, {
+					responseType: 'stream'
+				})
 				.then(response => {
 					const fs = require('fs')
 					const writer = fs.createWriteStream(filePath)
