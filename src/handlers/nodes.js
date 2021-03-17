@@ -60,7 +60,7 @@ module.exports = session => ({
 	},
 
 	node(dataid, params = {}) {
-		return session.getCached(`api/v2/nodes/${dataid}`, {
+		return session.get(`api/v2/nodes/${dataid}`, {
 			params
 		})
 	},
