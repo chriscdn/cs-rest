@@ -181,6 +181,15 @@ module.exports = class Session {
 		}) : this.patch(url, formData)
 	}
 
+	deleteForm(url, params) {
+		// FormData does not working on Delete!!
+		// See here: https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
+		const formData = this.objectToForm(params)
+		return process.node ? this.delete(url, formData.getBuffer(), {
+			headers: formData.getHeaders()
+		}) : this.delete(url, formData)
+	}
+
 	putBody(url, body) {
 		return this.putForm(url, {
 			body
@@ -199,6 +208,12 @@ module.exports = class Session {
 		})
 	}
 
+	deleteBody(url, body) {
+		return this.deleteForm(url, {
+			body
+		})
+	}
+
 	post(...args) {
 		return this.axios.post(...args)
 	}
@@ -209,6 +224,18 @@ module.exports = class Session {
 
 	delete(...args) {
 		return this.axios.delete(...args)
+
+		// console.log(args)
+		// console.log(url)
+
+		// return this.axios.delete(URL, {
+		// 	headers: {
+		// 		Authorization: authorizationToken
+		// 	},
+		// 	data: {
+		// 		source: source
+		// 	}
+		// });
 	}
 
 	options(...args) {

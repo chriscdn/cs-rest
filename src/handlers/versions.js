@@ -93,7 +93,8 @@ module.exports = session => ({
 
 		const url = `api/${apiVersion}/nodes/${dataid}/versions/${versionNumber}`
 
-		return session.delete(url, {})
+		// careful with deleteForm or deleteBody
+		return session.delete(url)
 	},
 
 	async purge({
@@ -103,9 +104,13 @@ module.exports = session => ({
 		assert(dataid != null, 'dataid cannot be null')
 		assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
 
+		// delete parameters not supported
+		// https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
+		// number_to_keep is ignored
+
 		const url = `api/v2/nodes/${dataid}/versions`
 
-		return session.delete(url, {
+		return session.deleteForm(url, {
 			number_to_keep
 		})
 	}
