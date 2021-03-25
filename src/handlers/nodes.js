@@ -1,6 +1,7 @@
 const FormDataFactory = require('./form-data-factory')
 const assert = require('assert')
 const SubTypes = require('./subtypes.json')
+const get = require('lodash.get')
 
 module.exports = session => ({
 
@@ -15,7 +16,6 @@ module.exports = session => ({
 		name = null,
 		options = {}
 	}) {
-
 		assert(parent_id != null, 'parent_id cannot be null')
 		assert(fileHandler != null, 'fileHandler cannot be null')
 		assert(['v1', 'v2'].includes(apiVersion), "apiVersion must be in ['v1','v2']")
@@ -61,6 +61,39 @@ module.exports = session => ({
 			return session.postForm(url, params)
 
 		}
+	},
+
+	async addDocumentMajor({
+		parent_id,
+		fileHandler,
+		name = null,
+		description = null,
+		options = {}
+	}) {
+		const response = await this.addDocument({
+			parent_id,
+			fileHandler,
+			name,
+			options: {
+				...options,
+				advanced_versioning: true
+			}
+		})
+
+		const dataid = response.data.id
+
+		await session.versions.promote({
+			dataid,
+			versionNumber: 1,
+			description
+		})
+
+		await session.versions.deleteVersion({
+			dataid,
+			versionNumber: 1
+		})
+
+		return response
 	},
 
 	addItem(type, parent_id, name, params = {}) {

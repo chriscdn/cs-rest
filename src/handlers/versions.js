@@ -77,7 +77,9 @@ module.exports = session => ({
 		const url = `api/v2/nodes/${dataid}/versions/${versionNumber}/promote`
 
 		return session.postBody(url, {
-			description
+			...(!!description && {
+				description
+			}),
 		})
 	},
 
