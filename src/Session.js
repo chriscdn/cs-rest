@@ -101,22 +101,30 @@ module.exports = class Session {
 		return dataTypesEnum
 	}
 
-	rpcClient(baseURL='/api/v1/rh/rpc/rhnode/') {
-		return new rpcClient(this, baseURL)	
-	}	
+	rpcClient(baseURL = '/api/v1/rh/rpc/rhnode/') {
+		return new rpcClient(this, baseURL)
+	}
 
 	_isObject(value) {
 		return value && typeof value === 'object' && value.constructor === Object
 	}
 
-	_objectToForm(obj) {
+	_isString(value) {
+		return (typeof value === 'string' || value instanceof String)
+	}
+
+	_isBoolean(value) {
+		return (typeof value === "boolean")
+	}
+
+	objectToForm(obj) {
 
 		const formData = FormDataFactory.createFormData()
 
 		for (let [key, value] of Object.entries(obj)) {
 			if (value && value.name && value.file) {
 				formData.append(key, value.file, value.name)
-			} else if (Array.isArray(value) || this._isObject(value)) {
+			} else if (Array.isArray(value) || this._isObject(value) || this._isBoolean(value)) {
 				formData.append(key, JSON.stringify(value))
 			} else if (!isnil(value)) {
 				// should empty strings be sent?
@@ -148,21 +156,26 @@ module.exports = class Session {
 	}
 
 	putForm(url, params) {
-		const formData = this._objectToForm(params)
+		const formData = this.objectToForm(params)
 		return process.node ? this.put(url, formData.getBuffer(), {
 			headers: formData.getHeaders()
 		}) : this.put(url, formData)
 	}
 
 	postForm(url, params) {
-		const formData = this._objectToForm(params)
-		return process.node ? this.post(url, formData.getBuffer(), {
-			headers: formData.getHeaders()
-		}) : this.post(url, formData)
+		const formData = this.objectToForm(params)
+		return process.node ?
+			this.post(url, formData.getBuffer(), {
+				headers: formData.getHeaders(),
+				maxBodyLength: Infinity
+			}) :
+			this.post(url, formData, {
+				maxBodyLength: Infinity
+			})
 	}
 
 	patchForm(url, params) {
-		const formData = this._objectToForm(params)
+		const formData = this.objectToForm(params)
 		return process.node ? this.patch(url, formData.getBuffer(), {
 			headers: formData.getHeaders()
 		}) : this.patch(url, formData)

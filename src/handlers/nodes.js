@@ -1,10 +1,6 @@
 const FormDataFactory = require('./form-data-factory')
-
-const SubTypes = {
-	Folder: 0,
-	Generation: 2,
-	Document: 144
-}
+const assert = require('assert')
+const SubTypes = require('./subtypes.json')
 
 module.exports = session => ({
 
@@ -12,41 +8,58 @@ module.exports = session => ({
 		return session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
 	},
 
-	async addDocument(parent_id, fileHandler, fileName = null) {
+	async addDocument({
+		parent_id,
+		fileHandler,
+		apiVersion = 'v1', // v1 or v2
+		name = null,
+		options = {}
+	}) {
 
-		const url = 'api/v1/nodes'
+		assert(parent_id != null, 'parent_id cannot be null')
+		assert(fileHandler != null, 'fileHandler cannot be null')
+		assert(['v1', 'v2'].includes(apiVersion), "apiVersion must be in ['v1','v2']")
 
-		const formData = FormDataFactory.createFormData()
-
-		formData.append('type', SubTypes.Document)
-		formData.append('parent_id', parent_id)
+		const url = `api/${apiVersion}/nodes`
 
 		if (process.node) {
 			// node.js
-
 			const fsp = require('fs').promises
 			const path = require('path')
 
-			let f = await fsp.readFile(fileHandler)
-			let name = fileName || path.basename(fileHandler)
+			const f = await fsp.readFile(fileHandler)
+			const csName = name || path.basename(fileHandler)
 
-			formData.append('file', f, name)
-			formData.append('name', name)
+			const params = {
+				...options,
+				type: SubTypes.Document,
+				name: csName,
+				parent_id,
+				file: {
+					file: f,
+					name: csName
+				},
+			}
 
-			return session.post(url, formData.getBuffer(), {
-				headers: formData.getHeaders(),
-				maxBodyLength: Infinity
-			})
+			return session.postForm(url, params)
 
 		} else {
 			// browser
+			const csName = name || fileHandler.name
 
-			let name = fileName || fileHandler.name
+			const params = {
+				...options,
+				type: SubTypes.Document,
+				name: csName,
+				parent_id,
+				file: {
+					file: fileHandler,
+					name: csName
+				}
+			}
 
-			formData.append('file', fileHandler, name)
-			formData.append('name', name)
+			return session.postForm(url, params)
 
-			return session.post(url, formData)
 		}
 	},
 

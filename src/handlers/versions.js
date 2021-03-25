@@ -1,25 +1,33 @@
 const FormDataFactory = require('./form-data-factory')
+const assert = require('assert')
 
 module.exports = session => ({
 
-	async addVersion(dataid, fileHandler, options = {}) {
+	async addVersion({
+		dataid,
+		fileHandler,
+		apiVersion = 'v1',
+		fileName = null,
+		options = {}
+	}) {
 
-		const url = `api/v1/nodes/${dataid}/versions`
+		assert(dataid != null, 'dataid cannot be null')
+		assert(fileHandler != null, 'fileHandler cannot be null')
 
-		// const formData = FormDataFactory.createFormData()
+		const url = `api/${apiVersion}/nodes/${dataid}/versions`
 
 		if (process.node) {
 			// node.js
 			const fsp = require('fs').promises
 			const path = require('path')
 
-			let f = await fsp.readFile(fileHandler)
-			// let name = fileName || path.basename(fileHandler)
+			const f = await fsp.readFile(fileHandler)
+			const name = fileName || path.basename(fileHandler)
 
 			const params = {
 				file: {
 					file: f,
-					name: path.basename(fileHandler)
+					name
 				},
 				...options
 			}
@@ -30,12 +38,12 @@ module.exports = session => ({
 
 		} else {
 			// browser
-			// let name = fileName || fileHandler.name
+			const name = fileName || fileHandler.name
 
 			const params = {
 				file: {
 					file: fileHandler,
-					name: fileHandler.name
+					name
 				},
 				...options
 			}
@@ -52,10 +60,52 @@ module.exports = session => ({
 		return session.get(url)
 	},
 
-	async version(dataid, version_number='latest') {
+	async version(dataid, version_number = 'latest') {
 		// latest not supported in v2
 		const url = `api/v1/nodes/${dataid}/versions/${version_number}`
 		return session.get(url)
+	},
+
+	async promote({
+		dataid,
+		versionNumber,
+		description = null
+	}) {
+		assert(dataid != null, 'dataid cannot be null')
+		assert(versionNumber != null, 'number_to_keep must be an integer')
+
+		const url = `api/v2/nodes/${dataid}/versions/${versionNumber}/promote`
+
+		return session.postBody(url, {
+			description
+		})
+	},
+
+	async deleteVersion({
+		dataid,
+		versionNumber,
+		apiVersion = 'v1',
+	}) {
+		assert(dataid != null, 'dataid cannot be null')
+		assert(versionNumber != null, 'number_to_keep must be an integer')
+
+		const url = `api/${apiVersion}/nodes/${dataid}/versions/${versionNumber}`
+
+		return session.delete(url, {})
+	},
+
+	async purge({
+		dataid,
+		number_to_keep = 1
+	}) {
+		assert(dataid != null, 'dataid cannot be null')
+		assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
+
+		const url = `api/v2/nodes/${dataid}/versions`
+
+		return session.delete(url, {
+			number_to_keep
+		})
 	}
 
 })

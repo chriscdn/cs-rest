@@ -1,6 +1,6 @@
 {
   "name": "@kweli/cs-rest",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Simple authentication and REST calls for OpenText Content Server.",
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@chriscdn/promise-semaphore": "^1.0.4",
+    "assert": "^2.0.0",
     "axios": "^0.21.1",
     "form-data": "^4.0.0",
     "is-object": "^1.0.2",
