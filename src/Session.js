@@ -15,10 +15,9 @@ const sha1 = require('sha1')
 
 const dataTypesEnum = require('./data-types-enum.json')
 
-const Semaphore = require('@chriscdn/promise-semaphore')
-const semaphore = new Semaphore()
 
-let getCache = {}
+
+// let getCache = {}
 
 module.exports = class Session {
 
@@ -139,21 +138,21 @@ module.exports = class Session {
 		return this.axios.get(...args)
 	}
 
-	async getCached(...args) {
-		const key = sha1(JSON.stringify(args))
+	// async getCached(...args) {
+	// 	const key = sha1(JSON.stringify(args))
 
-		try {
-			await semaphore.acquire(key)
+	// 	try {
+	// 		await semaphore.acquire(key)
 
-			if (!getCache[key]) {
-				getCache[key] = this.get(...args)
-			}
-		} finally {
-			semaphore.release(key)
-		}
+	// 		if (!getCache[key]) {
+	// 			getCache[key] = this.get(...args)
+	// 		}
+	// 	} finally {
+	// 		semaphore.release(key)
+	// 	}
 
-		return getCache[key]
-	}
+	// 	return getCache[key]
+	// }
 
 	putForm(url, params) {
 		const formData = this.objectToForm(params)

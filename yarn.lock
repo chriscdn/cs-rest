@@ -832,11 +832,6 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@chriscdn/promise-semaphore@^1.0.4":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@chriscdn/promise-semaphore/-/promise-semaphore-1.0.6.tgz#14fdca9c596fece9e6c18175235a6f0bcf92e842"
-  integrity sha512-ozTH0MCCiykqF/Vv10/abqCUAzGRrPeGBCyEmzxfLu8ioIIzqv51oInCyKgzLVe8ysqZKIi2U7wh1EpYqbBHBw==
-
 "@rollup/plugin-babel@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz#9cb1c5146ddd6a4968ad96f209c50c62f92f9879"

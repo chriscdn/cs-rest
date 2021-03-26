@@ -14,7 +14,6 @@
     "bump": "versiony package.json --patch"
   },
   "dependencies": {
-    "@chriscdn/promise-semaphore": "^1.0.4",
     "assert": "^2.0.0",
     "axios": "^0.21.1",
     "form-data": "^4.0.0",

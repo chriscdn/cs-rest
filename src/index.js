@@ -1,3 +1,3 @@
 const Session = require('./Session')
 
-module.exports.Session = Session
+module.exports = Session
