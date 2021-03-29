@@ -42,7 +42,7 @@ module.exports = class RPCClient {
 		}
 	}
 
-	async request(method, params = null, id = sequence.next) {
+	async request(method, params = {}, id = sequence.next) {
 		const response = await this.session.postBody(this.baseURL, {
 			rpc: this.requestObject(method, params, id)
 		})
