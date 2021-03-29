@@ -1,10 +1,10 @@
 {
   "name": "@kweli/cs-rest",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Simple authentication and REST calls for OpenText Content Server.",
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
-  "unpkg": "lib/index.min.js",
+  "unpkg": "lib/index.umd.min.js",
   "repository": "https://github.com/chriscdn/cs-rest",
   "author": "Christopher Meyer <chris.meyer@kwe.li> (https://kwe.li/)",
   "license": "MIT",
@@ -19,8 +19,7 @@
     "form-data": "^4.0.0",
     "is-object": "^1.0.2",
     "lodash.get": "^4.4.2",
-    "lodash.isnil": "^4.0.0",
-    "sha1": "^1.1.1"
+    "lodash.isnil": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",

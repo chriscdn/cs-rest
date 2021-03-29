@@ -10,12 +10,7 @@ const webreports = require('./handlers/webreports')
 const FormDataFactory = require('./handlers/form-data-factory')
 const isnil = require('lodash.isnil')
 const rpcClient = require('./rpc-client')
-
-const sha1 = require('sha1')
-
 const dataTypesEnum = require('./data-types-enum.json')
-
-
 
 // let getCache = {}
 
