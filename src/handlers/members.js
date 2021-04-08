@@ -15,7 +15,7 @@ module.exports = session => ({
 	},
 
 	member(id, version = 'v2') {
-		return session.getCached(`api/${version}/members/${id}`)
+		return session.get(`api/${version}/members/${id}`)
 	}
 
 })
