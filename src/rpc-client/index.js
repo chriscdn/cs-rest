@@ -42,7 +42,10 @@ module.exports = class RPCClient {
 		}
 	}
 
-	async request(method, params = {}, id = sequence.next) {
+	// https://www.jsonrpc.org/specification#request_object
+	// params is allowed to be null!
+	// also on queue function below
+	async request(method, params, id = sequence.next) {
 		const response = await this.session.postBody(this.baseURL, {
 			rpc: this.requestObject(method, params, id)
 		})
@@ -53,7 +56,7 @@ module.exports = class RPCClient {
 		this._batchQueue = []
 	}
 
-	queue(method, params = {}, id = sequence.next) {
+	queue(method, params, id = sequence.next) {
 		this._batchQueue.push(this.requestObject(method, params, id))
 		return this
 	}
