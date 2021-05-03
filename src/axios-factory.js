@@ -2,11 +2,9 @@ const axios = require('axios')
 const get = require('lodash.get')
 const FormDataFactory = require('./handlers/form-data-factory')
 
-function getInstance(baseURL) {
+function getInstance(options) {
 
-	const instance = axios.create({
-		baseURL
-	})
+	const instance = axios.create(options)
 
 	instance.interceptors.response.use(response => {
 		const otcsticket = get(response, 'headers.otcsticket')
@@ -23,7 +21,7 @@ function getInstance(baseURL) {
 }
 
 function axiosFactory(options) {
-	const instance = getInstance(options.baseURL)
+	const instance = getInstance(options)
 
 	const username = get(options, 'username')
 	const password = get(options, 'password')
