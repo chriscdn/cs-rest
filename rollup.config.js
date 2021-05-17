@@ -13,6 +13,7 @@ function replaceStrings(isBrowser = true) {
 	const isNode = !isBrowser
 
 	return {
+		preventAssignment: true,
 		'process.browser': isBrowser.toString(),
 		'process.node': isNode.toString()
 	}

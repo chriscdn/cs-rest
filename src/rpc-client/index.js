@@ -61,15 +61,24 @@ module.exports = class RPCClient {
 		return this
 	}
 
-	async batch() {
+	async batch(throwOnError = false) {
 		const queue = this._batchQueue
 		this.resetQueue()
 		const response = await this.session.postBody(this.baseURL, {
 			rpc: queue
 		})
 
-		// data.data is a content server thing
-		return get(response, 'data.data', []).map(item => this.handleResponse(item))
+		return get(response, 'data.data', []).map(item => {
+			if (throwOnError) {
+				return this.handleResponse(item)
+			} else {
+				try {
+					return this.handleResponse(item)
+				} catch (e) {
+					return e
+				}
+			}
+		})
 	}
 
 	rhnode(dataid, method, args = [], id = sequence.next) {
