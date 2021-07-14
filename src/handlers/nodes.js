@@ -156,8 +156,8 @@ module.exports = session => ({
 		// session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
 		if (process.node) {
 			return session.get(`api/${version}/nodes/${dataid}/content`, {
-				responseType: 'stream'
-			})
+					responseType: 'stream'
+				})
 				.then(response => {
 					const fs = require('fs')
 					const writer = fs.createWriteStream(filePath)
@@ -172,6 +172,14 @@ module.exports = session => ({
 		} else {
 			return Promise.reject('Not implemented yet')
 		}
+	},
+
+	audit({
+		dataid,
+		apiVersion = 'v2',
+		params = {}
+	}) {
+		return session.get(`api/${apiVersion}/nodes/${dataid}/audit`, {params})
 	}
 
 })
