@@ -55,6 +55,37 @@ module.exports = session => ({
 		}
 	},
 
+	async download({
+		dataid,
+		version,
+		filePath
+	}) {
+
+		assert(dataid != null, 'dataid cannot be null')
+		assert(version != null, 'version cannot be null')
+		assert(filePath != null, 'filePath cannot be null')
+
+		if (process.node) {
+			return session.get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
+					responseType: 'stream'
+				})
+				.then(response => {
+					const fs = require('fs')
+					const writer = fs.createWriteStream(filePath)
+
+					response.data.pipe(writer)
+
+					return new Promise((resolve, reject) => {
+						writer.on('finish', resolve)
+						writer.on('error', reject)
+					})
+				})
+		} else {
+			return Promise.reject('Not implemented yet')
+		}
+
+	},
+
 	async list(dataid) {
 		const url = `api/v1/nodes/${dataid}/versions`
 		return session.get(url)

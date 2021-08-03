@@ -152,10 +152,10 @@ module.exports = session => ({
 		return session.delete(`api/v1/nodes/${dataid}`)
 	},
 
-	download(dataid, version = 'v1', filePath) {
+	download({dataid, apiVersion = 'v1', filePath}) {
 		// session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
 		if (process.node) {
-			return session.get(`api/${version}/nodes/${dataid}/content`, {
+			return session.get(`api/${apiVersion}/nodes/${dataid}/content`, {
 					responseType: 'stream'
 				})
 				.then(response => {
