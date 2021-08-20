@@ -1,4 +1,4 @@
-const FormDataFactory = require('./form-data-factory')
+// const FormDataFactory = require('./form-data-factory')
 const assert = require('assert')
 const SubTypes = require('./subtypes.json')
 const get = require('lodash.get')
