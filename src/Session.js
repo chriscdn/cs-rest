@@ -15,229 +15,232 @@ const dataTypesEnum = require('./data-types-enum.json')
 // let getCache = {}
 
 module.exports = class Session {
+  constructor (options) {
+    this.axios = axiosFactory(options)
+  }
 
-	constructor(options) {
-		this.axios = axiosFactory(options)
-	}
+  get nodes () {
+    // this creates a circular reference.. bad?
+    if (this._nodes == null) {
+      this._nodes = nodes(this)
+    }
 
-	get nodes() {
-		// this creates a circular reference.. bad?
-		if (this._nodes == null) {
-			this._nodes = nodes(this)
-		}
+    return this._nodes
+  }
 
-		return this._nodes
-	}
+  get auth () {
+    if (this._auth == null) {
+      this._auth = auth(this)
+    }
 
-	get auth() {
-		if (this._auth == null) {
-			this._auth = auth(this)
-		}
+    return this._auth
+  }
 
-		return this._auth
-	}
+  get workflow () {
+    // this creates a circular reference.. bad?
+    if (this._workflow == null) {
+      this._workflow = workflow(this)
+    }
 
-	get workflow() {
-		// this creates a circular reference.. bad?
-		if (this._workflow == null) {
-			this._workflow = workflow(this)
-		}
+    return this._workflow
+  }
 
-		return this._workflow
-	}
+  get rhcore () {
+    // this creates a circular reference.. bad?
+    if (this._rhcore == null) {
+      this._rhcore = rhcore(this)
+    }
 
-	get rhcore() {
-		// this creates a circular reference.. bad?
-		if (this._rhcore == null) {
-			this._rhcore = rhcore(this)
-		}
+    return this._rhcore
+  }
 
-		return this._rhcore
-	}
+  get members () {
+    // this creates a circular reference.. bad?
+    if (this._members == null) {
+      this._members = members(this)
+    }
 
-	get members() {
-		// this creates a circular reference.. bad?
-		if (this._members == null) {
-			this._members = members(this)
-		}
+    return this._members
+  }
 
-		return this._members
-	}
+  get search () {
+    // this creates a circular reference.. bad?
+    if (this._search == null) {
+      this._search = search(this)
+    }
 
-	get search() {
-		// this creates a circular reference.. bad?
-		if (this._search == null) {
-			this._search = search(this)
-		}
+    return this._search
+  }
 
-		return this._search
-	}
+  get webreports () {
+    // this creates a circular reference.. bad?
+    if (this._webreports == null) {
+      this._webreports = webreports(this)
+    }
 
-	get webreports() {
-		// this creates a circular reference.. bad?
-		if (this._webreports == null) {
-			this._webreports = webreports(this)
-		}
+    return this._webreports
+  }
 
-		return this._webreports
-	}
+  get versions () {
+    // this creates a circular reference.. bad?
+    if (this._versions == null) {
+      this._versions = versions(this)
+    }
 
-	get versions() {
-		// this creates a circular reference.. bad?
-		if (this._versions == null) {
-			this._versions = versions(this)
-		}
+    return this._versions
+  }
 
-		return this._versions
-	}
+  get dataTypesEnum () {
+    return dataTypesEnum
+  }
 
-	get dataTypesEnum() {
-		return dataTypesEnum
-	}
+  rpcClient (baseURL = '/api/v1/rh/rpc/rhnode/') {
+    return new rpcClient(this, baseURL)
+  }
 
-	rpcClient(baseURL = '/api/v1/rh/rpc/rhnode/') {
-		return new rpcClient(this, baseURL)
-	}
+  _isObject (value) {
+    return value && typeof value === 'object' && value.constructor === Object
+  }
 
-	_isObject(value) {
-		return value && typeof value === 'object' && value.constructor === Object
-	}
+  _isString (value) {
+    return (typeof value === 'string' || value instanceof String)
+  }
 
-	_isString(value) {
-		return (typeof value === 'string' || value instanceof String)
-	}
+  _isBoolean (value) {
+    return (typeof value === 'boolean')
+  }
 
-	_isBoolean(value) {
-		return (typeof value === "boolean")
-	}
+  objectToForm (obj) {
+    const formData = FormDataFactory.createFormData()
 
-	objectToForm(obj) {
+    for (const [key, value] of Object.entries(obj)) {
+      if (value && value.name && value.file) {
+        formData.append(key, value.file, value.name)
+      } else if (Array.isArray(value) || this._isObject(value) || this._isBoolean(value)) {
+        formData.append(key, JSON.stringify(value))
+      } else if (!isnil(value)) {
+        // should empty strings be sent?
+        formData.append(key, value)
+      }
+    }
 
-		const formData = FormDataFactory.createFormData()
+    return formData
+  }
 
-		for (let [key, value] of Object.entries(obj)) {
-			if (value && value.name && value.file) {
-				formData.append(key, value.file, value.name)
-			} else if (Array.isArray(value) || this._isObject(value) || this._isBoolean(value)) {
-				formData.append(key, JSON.stringify(value))
-			} else if (!isnil(value)) {
-				// should empty strings be sent?
-				formData.append(key, value)
-			}
-		}
+  get (...args) {
+    return this.axios.get(...args)
+  }
 
-		return formData
-	}
+  // async getCached(...args) {
+  // 	const key = sha1(JSON.stringify(args))
 
-	get(...args) {
-		return this.axios.get(...args)
-	}
+  // 	try {
+  // 		await semaphore.acquire(key)
 
-	// async getCached(...args) {
-	// 	const key = sha1(JSON.stringify(args))
+  // 		if (!getCache[key]) {
+  // 			getCache[key] = this.get(...args)
+  // 		}
+  // 	} finally {
+  // 		semaphore.release(key)
+  // 	}
 
-	// 	try {
-	// 		await semaphore.acquire(key)
+  // 	return getCache[key]
+  // }
 
-	// 		if (!getCache[key]) {
-	// 			getCache[key] = this.get(...args)
-	// 		}
-	// 	} finally {
-	// 		semaphore.release(key)
-	// 	}
+  putForm (url, params) {
+    const formData = this.objectToForm(params)
+    return process.node
+      ? this.put(url, formData.getBuffer(), {
+        headers: formData.getHeaders()
+      })
+      : this.put(url, formData)
+  }
 
-	// 	return getCache[key]
-	// }
+  postForm (url, params) {
+    const formData = this.objectToForm(params)
+    return process.node
+      ? this.post(url, formData.getBuffer(), {
+        headers: formData.getHeaders(),
+        maxBodyLength: Infinity
+      })
+      : this.post(url, formData, {
+        maxBodyLength: Infinity
+      })
+  }
 
-	putForm(url, params) {
-		const formData = this.objectToForm(params)
-		return process.node ? this.put(url, formData.getBuffer(), {
-			headers: formData.getHeaders()
-		}) : this.put(url, formData)
-	}
+  patchForm (url, params) {
+    const formData = this.objectToForm(params)
+    return process.node
+      ? this.patch(url, formData.getBuffer(), {
+        headers: formData.getHeaders()
+      })
+      : this.patch(url, formData)
+  }
 
-	postForm(url, params) {
-		const formData = this.objectToForm(params)
-		return process.node ?
-			this.post(url, formData.getBuffer(), {
-				headers: formData.getHeaders(),
-				maxBodyLength: Infinity
-			}) :
-			this.post(url, formData, {
-				maxBodyLength: Infinity
-			})
-	}
+  deleteForm (url, params) {
+    // FormData does not working on Delete!!
+    // See here: https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
+    const formData = this.objectToForm(params)
+    return process.node
+      ? this.delete(url, formData.getBuffer(), {
+        headers: formData.getHeaders()
+      })
+      : this.delete(url, formData)
+  }
 
-	patchForm(url, params) {
-		const formData = this.objectToForm(params)
-		return process.node ? this.patch(url, formData.getBuffer(), {
-			headers: formData.getHeaders()
-		}) : this.patch(url, formData)
-	}
+  putBody (url, body) {
+    return this.putForm(url, {
+      body
+    })
+  }
 
-	deleteForm(url, params) {
-		// FormData does not working on Delete!!
-		// See here: https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
-		const formData = this.objectToForm(params)
-		return process.node ? this.delete(url, formData.getBuffer(), {
-			headers: formData.getHeaders()
-		}) : this.delete(url, formData)
-	}
+  postBody (url, body) {
+    return this.postForm(url, {
+      body
+    })
+  }
 
-	putBody(url, body) {
-		return this.putForm(url, {
-			body
-		})
-	}
+  patchBody (url, body) {
+    return this.patchForm(url, {
+      body
+    })
+  }
 
-	postBody(url, body) {
-		return this.postForm(url, {
-			body
-		})
-	}
+  deleteBody (url, body) {
+    return this.deleteForm(url, {
+      body
+    })
+  }
 
-	patchBody(url, body) {
-		return this.patchForm(url, {
-			body
-		})
-	}
+  post (...args) {
+    return this.axios.post(...args)
+  }
 
-	deleteBody(url, body) {
-		return this.deleteForm(url, {
-			body
-		})
-	}
+  put (...args) {
+    return this.axios.put(...args)
+  }
 
-	post(...args) {
-		return this.axios.post(...args)
-	}
+  delete (...args) {
+    return this.axios.delete(...args)
 
-	put(...args) {
-		return this.axios.put(...args)
-	}
+    // console.log(args)
+    // console.log(url)
 
-	delete(...args) {
-		return this.axios.delete(...args)
+    // return this.axios.delete(URL, {
+    // 	headers: {
+    // 		Authorization: authorizationToken
+    // 	},
+    // 	data: {
+    // 		source: source
+    // 	}
+    // });
+  }
 
-		// console.log(args)
-		// console.log(url)
+  options (...args) {
+    return this.axios.options(...args)
+  }
 
-		// return this.axios.delete(URL, {
-		// 	headers: {
-		// 		Authorization: authorizationToken
-		// 	},
-		// 	data: {
-		// 		source: source
-		// 	}
-		// });
-	}
-
-	options(...args) {
-		return this.axios.options(...args)
-	}
-
-	patch(...args) {
-		return this.axios.patch(...args)
-	}
-
+  patch (...args) {
+    return this.axios.patch(...args)
+  }
 }

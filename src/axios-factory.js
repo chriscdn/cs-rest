@@ -2,64 +2,56 @@ const axios = require('axios')
 const get = require('lodash.get')
 const FormDataFactory = require('./handlers/form-data-factory')
 
-function getInstance(options) {
+function getInstance (options) {
+  const instance = axios.create(options)
 
-	const instance = axios.create(options)
+  instance.interceptors.response.use(response => {
+    const otcsticket = get(response, 'headers.otcsticket')
 
-	instance.interceptors.response.use(response => {
-		const otcsticket = get(response, 'headers.otcsticket')
+    if (otcsticket) {
+      instance.defaults.headers.common.OTCSTicket = otcsticket
+    }
+    return response
+  }, error => {
+    return Promise.reject(error)
+  })
 
-		if (otcsticket) {
-			instance.defaults.headers.common['OTCSTicket'] = otcsticket
-		}
-		return response
-	}, error => {
-		return Promise.reject(error)
-	})
-
-	return instance
+  return instance
 }
 
-function axiosFactory(options) {
-	const instance = getInstance(options)
+function axiosFactory (options) {
+  const instance = getInstance(options)
 
-	const username = get(options, 'username')
-	const password = get(options, 'password')
-	const otcsticket = get(options, 'otcsticket')
+  const username = get(options, 'username')
+  const password = get(options, 'password')
+  const otcsticket = get(options, 'otcsticket')
 
-	if (otcsticket) {
+  if (otcsticket) {
+    instance.defaults.headers.common.OTCSTicket = otcsticket
+  } else if (username && password) {
+    instance.interceptors.request.use(async request => {
+      if (request.headers.common.OTCSTicket) {
+        return request
+      } else {
+        const formData = FormDataFactory.createFormData()
 
-		instance.defaults.headers.common['OTCSTicket'] = otcsticket
+        formData.append('username', username)
+        formData.append('password', password)
 
-	} else if (username && password) {
+        const response = process.node
+          ? await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), { headers: formData.getHeaders() })
+          : await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
 
-		instance.interceptors.request.use(async request => {
+        request.headers.common.OTCSTicket = get(response, 'data.ticket')
 
-			if (request.headers.common['OTCSTicket']) {
+        return request
+      }
+    })
+  } else {
+    throw Error('You must provide an otcsticket or username and password.')
+  }
 
-				return request
-
-			} else {
-
-				const formData = FormDataFactory.createFormData()
-
-				formData.append('username', username)
-				formData.append('password', password)
-
-				const response = process.node ?
-					await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), { headers: formData.getHeaders() }) :
-					await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
-
-				request.headers.common['OTCSTicket'] = get(response, 'data.ticket')
-
-				return request
-			}
-		})
-	} else {
-		throw 'You must provide an otcsticket or username and password.'
-	}
-
-	return instance
+  return instance
 }
 
 module.exports = axiosFactory

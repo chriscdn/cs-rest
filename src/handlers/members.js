@@ -1,21 +1,21 @@
 module.exports = session => ({
 
-	USER: 0,
-	GROUP: 1,
+  USER: 0,
+  GROUP: 1,
 
-	userQuery(query, options = {}, version = 'v2') {
-		const params = {
-			limit: 20,
-			where_type: JSON.stringify([this.USER, this.GROUP]),
-			query,
-			...options
-		}
+  userQuery (query, options = {}, version = 'v2') {
+    const params = {
+      limit: 20,
+      where_type: JSON.stringify([this.USER, this.GROUP]),
+      query,
+      ...options
+    }
 
-		return session.get(`api/${version}/members`, { params })
-	},
+    return session.get(`api/${version}/members`, { params })
+  },
 
-	member(id, version = 'v2') {
-		return session.get(`api/${version}/members/${id}`)
-	}
+  member (id, version = 'v2') {
+    return session.get(`api/${version}/members/${id}`)
+  }
 
 })

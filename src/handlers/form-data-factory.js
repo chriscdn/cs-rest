@@ -1,10 +1,10 @@
 module.exports = {
-	createFormData() {
-		 if (process.node) {
-			const klass = require('form-data')
-			return new klass
-		} else {
-			return new FormData()
-		}		
-	}
+  createFormData () {
+    if (process.node) {
+      const Klass = require('form-data')
+      return new Klass()
+    } else {
+      return new FormData()
+    }
+  }
 }
