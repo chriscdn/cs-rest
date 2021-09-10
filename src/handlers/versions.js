@@ -1,5 +1,5 @@
-const FormDataFactory = require('./form-data-factory')
-const assert = require('assert')
+// const FormDataFactory = require('./form-data-factory')
+// const console.assert = require('console.assert')
 
 module.exports = session => ({
 
@@ -10,8 +10,8 @@ module.exports = session => ({
     fileName = null,
     options = {}
   }) {
-    assert(dataid != null, 'dataid cannot be null')
-    assert(fileHandler != null, 'fileHandler cannot be null')
+    console.assert(dataid != null, 'dataid cannot be null')
+    console.assert(fileHandler != null, 'fileHandler cannot be null')
 
     const url = `api/${apiVersion}/nodes/${dataid}/versions`
 
@@ -58,9 +58,9 @@ module.exports = session => ({
     version,
     filePath
   }) {
-    assert(dataid != null, 'dataid cannot be null')
-    assert(version != null, 'version cannot be null')
-    assert(filePath != null, 'filePath cannot be null')
+    console.assert(dataid != null, 'dataid cannot be null')
+    console.assert(version != null, 'version cannot be null')
+    console.assert(filePath != null, 'filePath cannot be null')
 
     if (process.node) {
       return session.get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
@@ -98,8 +98,8 @@ module.exports = session => ({
     versionNumber,
     description = null
   }) {
-    assert(dataid != null, 'dataid cannot be null')
-    assert(versionNumber != null, 'number_to_keep must be an integer')
+    console.assert(dataid != null, 'dataid cannot be null')
+    console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
     const url = `api/v2/nodes/${dataid}/versions/${versionNumber}/promote`
 
@@ -115,8 +115,8 @@ module.exports = session => ({
     versionNumber,
     apiVersion = 'v1'
   }) {
-    assert(dataid != null, 'dataid cannot be null')
-    assert(versionNumber != null, 'number_to_keep must be an integer')
+    console.assert(dataid != null, 'dataid cannot be null')
+    console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
     const url = `api/${apiVersion}/nodes/${dataid}/versions/${versionNumber}`
 
@@ -128,8 +128,8 @@ module.exports = session => ({
     dataid,
     number_to_keep = 1
   }) {
-    assert(dataid != null, 'dataid cannot be null')
-    assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
+    console.assert(dataid != null, 'dataid cannot be null')
+    console.assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
 
     // delete parameters not supported
     // https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers

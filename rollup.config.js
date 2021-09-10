@@ -46,8 +46,7 @@ export default [{
     sourcemap: true
   }],
   external: [
-    // Temporarily disabled for Vite compatibility.
-    // ...Object.keys(pkg.dependencies || {})
+    ...Object.keys(pkg.dependencies || {})
   ],
   plugins: [
     replace(replaceStrings(true)),

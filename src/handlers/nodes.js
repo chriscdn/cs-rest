@@ -1,5 +1,5 @@
 // const FormDataFactory = require('./form-data-factory')
-const assert = require('assert')
+// const assert = require('assert')
 const SubTypes = require('./subtypes.json')
 
 module.exports = session => ({
@@ -15,9 +15,9 @@ module.exports = session => ({
     name = null,
     options = {}
   }) {
-    assert(parent_id != null, 'parent_id cannot be null')
-    assert(fileHandler != null, 'fileHandler cannot be null')
-    assert(['v1', 'v2'].includes(apiVersion), "apiVersion must be in ['v1','v2']")
+    console.assert(parent_id != null, 'parent_id cannot be null')
+    console.assert(fileHandler != null, 'fileHandler cannot be null')
+    console.assert(['v1', 'v2'].includes(apiVersion), "apiVersion must be in ['v1','v2']")
 
     const url = `api/${apiVersion}/nodes`
 

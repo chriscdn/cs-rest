@@ -14,7 +14,6 @@
     "bump": "versiony package.json --patch"
   },
   "dependencies": {
-    "assert": "^2.0.0",
     "axios": "^0.21.4",
     "form-data": "^4.0.0",
     "is-object": "^1.0.2",
