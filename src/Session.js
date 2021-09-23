@@ -9,7 +9,7 @@ const versions = require('./handlers/versions')
 const webreports = require('./handlers/webreports')
 const FormDataFactory = require('./handlers/form-data-factory')
 const isnil = require('lodash.isnil')
-const rpcClient = require('./rpc-client')
+const RPCClient = require('./rpc-client')
 const dataTypesEnum = require('./data-types-enum.json')
 
 // let getCache = {}
@@ -95,7 +95,7 @@ module.exports = class Session {
   }
 
   rpcClient (baseURL = '/api/v1/rh/rpc/rhnode/') {
-    return new rpcClient(this, baseURL)
+    return new RPCClient(this, baseURL)
   }
 
   _isObject (value) {
@@ -131,22 +131,23 @@ module.exports = class Session {
     return this.axios.get(...args)
   }
 
+  /*
   // async getCached(...args) {
-  // 	const key = sha1(JSON.stringify(args))
+  // const key = sha1(JSON.stringify(args))
 
-  // 	try {
-  // 		await semaphore.acquire(key)
+  // try {
+  // await semaphore.acquire(key)
 
-  // 		if (!getCache[key]) {
-  // 			getCache[key] = this.get(...args)
-  // 		}
-  // 	} finally {
-  // 		semaphore.release(key)
-  // 	}
-
-  // 	return getCache[key]
+  // if (!getCache[key]) {
+  // getCache[key] = this.get(...args)
+  // }
+  // } finally {
+  // semaphore.release(key)
   // }
 
+  // return getCache[key]
+  // }
+*/
   putForm (url, params) {
     const formData = this.objectToForm(params)
     return process.node
@@ -227,12 +228,12 @@ module.exports = class Session {
     // console.log(url)
 
     // return this.axios.delete(URL, {
-    // 	headers: {
-    // 		Authorization: authorizationToken
-    // 	},
-    // 	data: {
-    // 		source: source
-    // 	}
+    // headers: {
+    // Authorization: authorizationToken
+    // },
+    // data: {
+    // source: source
+    // }
     // });
   }
 

@@ -30,9 +30,9 @@ module.exports = class RPCClient {
   }
 
   handleResponse (data) {
-    if (data.hasOwnProperty('result')) {
+    if (Object.prototype.hasOwnProperty.call(data, 'result')) {
       return data.result
-    } else if (data.hasOwnProperty('error')) {
+    } else if (Object.prototype.hasOwnProperty.call(data, 'error')) {
       const err = data.error
       throw new CustomError(err.message, err.data, err.code)
     } else {
