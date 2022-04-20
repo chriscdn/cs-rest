@@ -5,16 +5,19 @@ const FormDataFactory = require('./handlers/form-data-factory')
 function getInstance (options) {
   const instance = axios.create(options)
 
-  instance.interceptors.response.use(response => {
-    const otcsticket = get(response, 'headers.otcsticket')
+  instance.interceptors.response.use(
+    (response) => {
+      const otcsticket = get(response, 'headers.otcsticket')
 
-    if (otcsticket) {
-      instance.defaults.headers.common.OTCSTicket = otcsticket
+      if (otcsticket) {
+        instance.defaults.headers.common.OTCSTicket = otcsticket
+      }
+      return response
+    },
+    (error) => {
+      return Promise.reject(error)
     }
-    return response
-  }, error => {
-    return Promise.reject(error)
-  })
+  )
 
   return instance
 }
@@ -29,7 +32,7 @@ function axiosFactory (options) {
   if (otcsticket) {
     instance.defaults.headers.common.OTCSTicket = otcsticket
   } else if (username && password) {
-    instance.interceptors.request.use(async request => {
+    instance.interceptors.request.use(async (request) => {
       if (request.headers.common.OTCSTicket) {
         return request
       } else {

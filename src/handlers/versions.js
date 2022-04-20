@@ -1,15 +1,8 @@
 // const FormDataFactory = require('./form-data-factory')
 // const console.assert = require('console.assert')
 
-module.exports = session => ({
-
-  async addVersion ({
-    dataid,
-    fileHandler,
-    apiVersion = 'v1',
-    fileName = null,
-    options = {}
-  }) {
+module.exports = (session) => ({
+  async addVersion ({ dataid, fileHandler, apiVersion = 'v1', fileName = null, options = {} }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(fileHandler != null, 'fileHandler cannot be null')
 
@@ -53,20 +46,17 @@ module.exports = session => ({
     }
   },
 
-  async download ({
-    dataid,
-    version,
-    filePath
-  }) {
+  async download ({ dataid, version, filePath }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(version != null, 'version cannot be null')
     console.assert(filePath != null, 'filePath cannot be null')
 
     if (process.node) {
-      return session.get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
-        responseType: 'stream'
-      })
-        .then(response => {
+      return session
+        .get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
+          responseType: 'stream'
+        })
+        .then((response) => {
           const fs = require('fs')
           const writer = fs.createWriteStream(filePath)
 
@@ -93,11 +83,7 @@ module.exports = session => ({
     return session.get(url)
   },
 
-  async promote ({
-    dataid,
-    versionNumber,
-    description = null
-  }) {
+  async promote ({ dataid, versionNumber, description = null }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
@@ -110,11 +96,7 @@ module.exports = session => ({
     })
   },
 
-  async deleteVersion ({
-    dataid,
-    versionNumber,
-    apiVersion = 'v1'
-  }) {
+  async deleteVersion ({ dataid, versionNumber, apiVersion = 'v1' }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
@@ -124,10 +106,7 @@ module.exports = session => ({
     return session.delete(url)
   },
 
-  async purge ({
-    dataid,
-    number_to_keep = 1
-  }) {
+  async purge ({ dataid, number_to_keep = 1 }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
 
@@ -141,5 +120,4 @@ module.exports = session => ({
       number_to_keep
     })
   }
-
 })

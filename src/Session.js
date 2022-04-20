@@ -103,11 +103,11 @@ module.exports = class Session {
   }
 
   _isString (value) {
-    return (typeof value === 'string' || value instanceof String)
+    return typeof value === 'string' || value instanceof String
   }
 
   _isBoolean (value) {
-    return (typeof value === 'boolean')
+    return typeof value === 'boolean'
   }
 
   objectToForm (obj) {

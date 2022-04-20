@@ -2,8 +2,7 @@
 // const assert = require('assert')
 const SubTypes = require('./subtypes.json')
 
-module.exports = session => ({
-
+module.exports = (session) => ({
   addablenodetypes (dataid) {
     return session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
   },
@@ -60,13 +59,7 @@ module.exports = session => ({
     }
   },
 
-  async addDocumentMajor ({
-    parent_id,
-    fileHandler,
-    name = null,
-    description = null,
-    options = {}
-  }) {
+  async addDocumentMajor ({ parent_id, fileHandler, name = null, description = null, options = {} }) {
     const response = await this.addDocument({
       parent_id,
       fileHandler,
@@ -152,10 +145,11 @@ module.exports = session => ({
   download ({ dataid, apiVersion = 'v1', filePath }) {
     // session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
     if (process.node) {
-      return session.get(`api/${apiVersion}/nodes/${dataid}/content`, {
-        responseType: 'stream'
-      })
-        .then(response => {
+      return session
+        .get(`api/${apiVersion}/nodes/${dataid}/content`, {
+          responseType: 'stream'
+        })
+        .then((response) => {
           const fs = require('fs')
           const writer = fs.createWriteStream(filePath)
 
@@ -171,12 +165,7 @@ module.exports = session => ({
     }
   },
 
-  audit ({
-    dataid,
-    apiVersion = 'v2',
-    params = {}
-  }) {
+  audit ({ dataid, apiVersion = 'v2', params = {} }) {
     return session.get(`api/${apiVersion}/nodes/${dataid}/audit`, { params })
   }
-
 })

@@ -4,9 +4,7 @@ module.exports = {
     commonjs: true,
     es2021: true
   },
-  extends: [
-    'standard'
-  ],
+  extends: ['standard'],
   parserOptions: {
     ecmaVersion: 12
   },
@@ -14,7 +12,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-unused-vars': [
-      'error', {
+      'error',
+      {
         argsIgnorePattern: '^_'
       }
     ]

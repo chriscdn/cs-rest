@@ -1,5 +1,4 @@
-module.exports = session => ({
-
+module.exports = (session) => ({
   // https://knowledge.opentext.com/knowledge/cs.dll/Open/67789539
 
   search (where, params = {}) {
@@ -12,5 +11,4 @@ module.exports = session => ({
   regions (params = {}) {
     return session.get('api/v1/regions', params)
   }
-
 })

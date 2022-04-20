@@ -1,5 +1,4 @@
-module.exports = session => ({
-
+module.exports = (session) => ({
   USER: 0,
   GROUP: 1,
 
@@ -17,5 +16,4 @@ module.exports = session => ({
   member (id, version = 'v2') {
     return session.get(`api/${version}/members/${id}`)
   }
-
 })

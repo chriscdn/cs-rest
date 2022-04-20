@@ -1,6 +1,4 @@
-const {
-  CustomError
-} = require('./error-codes')
+const { CustomError } = require('./error-codes')
 
 const get = require('lodash.get')
 
@@ -47,6 +45,7 @@ module.exports = class RPCClient {
     const response = await this.session.postBody(this.baseURL, {
       rpc: this.requestObject(method, params, id)
     })
+    // console.log(response)
     return this.handleResponse(response.data)
   }
 
@@ -66,7 +65,7 @@ module.exports = class RPCClient {
       rpc: queue
     })
 
-    return get(response, 'data.data', []).map(item => {
+    return get(response, 'data.data', []).map((item) => {
       if (throwOnError) {
         return this.handleResponse(item)
       } else {

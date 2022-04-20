@@ -1,11 +1,8 @@
-// const get = require('lodash.get')
-
-module.exports = session => ({
-
+module.exports = (session) => ({
   start (map_id) {
     return this.draftprocesses(map_id)
-      .then(response => get(response, 'data.results.draftprocess_id'))
-      .then(draftprocess_id => this.draftprocesses_update(draftprocess_id))
+      .then((response) => get(response, 'data.results.draftprocess_id'))
+      .then((draftprocess_id) => this.draftprocesses_update(draftprocess_id))
   },
 
   draftprocesses (workflow_id) {
@@ -29,12 +26,11 @@ module.exports = session => ({
   }
 
   // draftprocesses_formUpdate(draftprocess_id, values) {
-  // 	const body = {
-  // 		action: "formUpdate",
-  // 		values
-  // 	}
-
-  // 	return this.draftprocesses_put(draftprocess_id, body)
+  // const body = {
+  // action: "formUpdate",
+  // values
   // }
 
+  // return this.draftprocesses_put(draftprocess_id, body)
+  // }
 })
