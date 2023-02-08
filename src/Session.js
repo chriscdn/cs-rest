@@ -12,8 +12,6 @@ const isnil = require('lodash.isnil')
 const RPCClient = require('./rpc-client')
 const dataTypesEnum = require('./data-types-enum.json')
 
-// let getCache = {}
-
 module.exports = class Session {
   constructor (options) {
     this.axios = axiosFactory(options)
@@ -131,23 +129,6 @@ module.exports = class Session {
     return this.axios.get(...args)
   }
 
-  /*
-  // async getCached(...args) {
-  // const key = sha1(JSON.stringify(args))
-
-  // try {
-  // await semaphore.acquire(key)
-
-  // if (!getCache[key]) {
-  // getCache[key] = this.get(...args)
-  // }
-  // } finally {
-  // semaphore.release(key)
-  // }
-
-  // return getCache[key]
-  // }
-*/
   putForm (url, params) {
     const formData = this.objectToForm(params)
     return process.node
@@ -223,18 +204,6 @@ module.exports = class Session {
 
   delete (...args) {
     return this.axios.delete(...args)
-
-    // console.log(args)
-    // console.log(url)
-
-    // return this.axios.delete(URL, {
-    // headers: {
-    // Authorization: authorizationToken
-    // },
-    // data: {
-    // source: source
-    // }
-    // });
   }
 
   options (...args) {
