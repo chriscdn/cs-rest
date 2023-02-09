@@ -1,8 +1,14 @@
 // const FormDataFactory = require('./form-data-factory')
 // const console.assert = require('console.assert')
 
-module.exports = (session) => ({
-  async addVersion ({ dataid, fileHandler, apiVersion = 'v1', fileName = null, options = {} }) {
+export default (session) => ({
+  async addVersion({
+    dataid,
+    fileHandler,
+    apiVersion = 'v1',
+    fileName = null,
+    options = {},
+  }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(fileHandler != null, 'fileHandler cannot be null')
 
@@ -19,9 +25,9 @@ module.exports = (session) => ({
       const params = {
         file: {
           file: f,
-          name
+          name,
         },
-        ...options
+        ...options,
       }
 
       // console.log(params)
@@ -34,9 +40,9 @@ module.exports = (session) => ({
       const params = {
         file: {
           file: fileHandler,
-          name
+          name,
         },
-        ...options
+        ...options,
       }
 
       return session.postForm(url, params)
@@ -46,7 +52,7 @@ module.exports = (session) => ({
     }
   },
 
-  async download ({ dataid, version, filePath }) {
+  async download({ dataid, version, filePath }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(version != null, 'version cannot be null')
     console.assert(filePath != null, 'filePath cannot be null')
@@ -54,7 +60,7 @@ module.exports = (session) => ({
     if (process.node) {
       return session
         .get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
-          responseType: 'stream'
+          responseType: 'stream',
         })
         .then((response) => {
           const fs = require('fs')
@@ -72,18 +78,18 @@ module.exports = (session) => ({
     }
   },
 
-  async list (dataid) {
+  async list(dataid) {
     const url = `api/v1/nodes/${dataid}/versions`
     return session.get(url)
   },
 
-  async version (dataid, version_number = 'latest') {
+  async version(dataid, version_number = 'latest') {
     // latest not supported in v2
     const url = `api/v1/nodes/${dataid}/versions/${version_number}`
     return session.get(url)
   },
 
-  async promote ({ dataid, versionNumber, description = null }) {
+  async promote({ dataid, versionNumber, description = null }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
@@ -91,12 +97,12 @@ module.exports = (session) => ({
 
     return session.postBody(url, {
       ...(!!description && {
-        description
-      })
+        description,
+      }),
     })
   },
 
-  async deleteVersion ({ dataid, versionNumber, apiVersion = 'v1' }) {
+  async deleteVersion({ dataid, versionNumber, apiVersion = 'v1' }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(versionNumber != null, 'number_to_keep must be an integer')
 
@@ -106,7 +112,7 @@ module.exports = (session) => ({
     return session.delete(url)
   },
 
-  async purge ({ dataid, number_to_keep = 1 }) {
+  async purge({ dataid, number_to_keep = 1 }) {
     console.assert(dataid != null, 'dataid cannot be null')
     console.assert(!isNaN(number_to_keep), 'number_to_keep must be an integer')
 
@@ -117,7 +123,7 @@ module.exports = (session) => ({
     const url = `api/v2/nodes/${dataid}/versions`
 
     return session.deleteForm(url, {
-      number_to_keep
+      number_to_keep,
     })
-  }
+  },
 })

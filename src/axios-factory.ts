@@ -1,8 +1,10 @@
-const axios = require('axios')
-const get = require('lodash.get')
-const FormDataFactory = require('./handlers/form-data-factory')
+// const get = require('lodash.get')
+import FormDataFactory from './handlers/form-data-factory'
 
-function getInstance (options) {
+import axios from 'axios'
+import get from 'lodash.get'
+
+function getInstance(options) {
   const instance = axios.create(options)
 
   instance.interceptors.response.use(
@@ -22,7 +24,7 @@ function getInstance (options) {
   return instance
 }
 
-function axiosFactory (options) {
+function axiosFactory(options) {
   const instance = getInstance(options)
 
   const username = get(options, 'username')
@@ -42,7 +44,11 @@ function axiosFactory (options) {
         formData.append('password', password)
 
         const response = process.node
-          ? await axios.post(`${options.baseURL}/api/v1/auth/`, formData.getBuffer(), { headers: formData.getHeaders() })
+          ? await axios.post(
+              `${options.baseURL}/api/v1/auth/`,
+              formData.getBuffer(),
+              { headers: formData.getHeaders() }
+            )
           : await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
 
         request.headers.common.OTCSTicket = get(response, 'data.ticket')
@@ -57,4 +63,4 @@ function axiosFactory (options) {
   return instance
 }
 
-module.exports = axiosFactory
+export default axiosFactory

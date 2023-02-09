@@ -1,33 +1,49 @@
-const { CustomError } = require('./error-codes')
+import { CustomError } from './error-codes'
 
-const get = require('lodash.get')
+import get from 'lodash.get'
+import Session from '../Session'
 
 // to be tested...
 const sequence = {
   index: 0,
-  get next () {
+  get next(): number {
     this.index = this.index + 1
     return this.index
-  }
+  },
 }
 
-module.exports = class RPCClient {
-  constructor (session, baseURL) {
+type requestObjectType = {
+  jsonrpc: string
+  method: string
+  id: number
+  params: Record<string, any> | Array<any>
+}
+
+export default class RPCClient {
+  session: Session
+  baseURL: string
+  _batchQueue: Array<requestObjectType>
+
+  constructor(session: Session, baseURL: string) {
     this.session = session
     this.baseURL = baseURL
     this.resetQueue()
   }
 
-  requestObject (method, params, id) {
+  requestObject(
+    method: string,
+    params: Record<string, any> | Array<any>,
+    id: number
+  ): requestObjectType {
     return {
       jsonrpc: '2.0',
       method,
       id,
-      params
+      params,
     }
   }
 
-  handleResponse (data) {
+  handleResponse(data) {
     if (Object.prototype.hasOwnProperty.call(data, 'result')) {
       return data.result
     } else if (Object.prototype.hasOwnProperty.call(data, 'error')) {
@@ -41,28 +57,28 @@ module.exports = class RPCClient {
   // https://www.jsonrpc.org/specification#request_object
   // params is allowed to be null!
   // also on queue function below
-  async request (method, params, id = sequence.next) {
+  async request(method, params, id = sequence.next) {
     const response = await this.session.postBody(this.baseURL, {
-      rpc: this.requestObject(method, params, id)
+      rpc: this.requestObject(method, params, id),
     })
     // console.log(response)
     return this.handleResponse(response.data)
   }
 
-  resetQueue () {
+  resetQueue(): void {
     this._batchQueue = []
   }
 
-  queue (method, params, id = sequence.next) {
+  queue(method: string, params, id: number = sequence.next) {
     this._batchQueue.push(this.requestObject(method, params, id))
     return this
   }
 
-  async batch (throwOnError = false) {
+  async batch(throwOnError: boolean = false) {
     const queue = this._batchQueue
     this.resetQueue()
     const response = await this.session.postBody(this.baseURL, {
-      rpc: queue
+      rpc: queue,
     })
 
     return get(response, 'data.data', []).map((item) => {
@@ -78,19 +94,19 @@ module.exports = class RPCClient {
     })
   }
 
-  rhnode (dataid, method, args = [], id = sequence.next) {
+  rhnode(dataid, method, args = [], id = sequence.next) {
     const params = {
       dataid,
-      args
+      args,
     }
 
     return this.request(method, params, id)
   }
 
-  rhnodeQueue (dataid, method, args = [], id = sequence.next) {
+  rhnodeQueue(dataid, method, args = [], id = sequence.next) {
     const params = {
       dataid,
-      args
+      args,
     }
 
     return this.queue(method, params, id)

@@ -1,32 +1,39 @@
-const isObject = require('is-object')
+import isObject from 'is-object'
 
 const ErrorCodes = {
   PARSEERROR: {
     code: -32700,
-    message: 'Parse error'
+    message: 'Parse error',
   },
   INVALIDREQUEST: {
     code: -32600,
-    message: 'Invalid Request'
+    message: 'Invalid Request',
   },
   METHODNOTFOUND: {
     code: -32601,
-    message: 'Method not found'
+    message: 'Method not found',
   },
   INVALIDPARAMS: {
     code: -32602,
-    message: 'Invalid params'
+    message: 'Invalid params',
   },
   INTERNALERROR: {
     code: -32603,
-    message: 'Internal error'
-  }
+    message: 'Internal error',
+  },
 }
 
 // -32000 to -32099 is reserved!
 
 class CustomError extends Error {
-  constructor (message = ErrorCodes.INTERNALERROR.message, data = null, code = ErrorCodes.INTERNALERROR.code) {
+  code: any
+  data: any
+
+  constructor(
+    message = ErrorCodes.INTERNALERROR.message,
+    data = null,
+    code = ErrorCodes.INTERNALERROR.code
+  ) {
     if (isObject(message)) {
       super(message.message)
       this.code = message.code
@@ -39,7 +46,4 @@ class CustomError extends Error {
   }
 }
 
-module.exports = {
-  CustomError,
-  ErrorCodes
-}
+export { CustomError, ErrorCodes }

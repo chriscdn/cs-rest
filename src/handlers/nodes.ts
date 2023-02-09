@@ -1,22 +1,23 @@
-// const FormDataFactory = require('./form-data-factory')
-// const assert = require('assert')
-const SubTypes = require('./subtypes.json')
+import SubTypes from './subtypes.json'
 
-module.exports = (session) => ({
-  addablenodetypes (dataid) {
+export default (session) => ({
+  addablenodetypes(dataid) {
     return session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
   },
 
-  async addDocument ({
+  async addDocument({
     parent_id,
     fileHandler,
     apiVersion = 'v1', // v1 or v2
     name = null,
-    options = {}
+    options = {},
   }) {
     console.assert(parent_id != null, 'parent_id cannot be null')
     console.assert(fileHandler != null, 'fileHandler cannot be null')
-    console.assert(['v1', 'v2'].includes(apiVersion), "apiVersion must be in ['v1','v2']")
+    console.assert(
+      ['v1', 'v2'].includes(apiVersion),
+      "apiVersion must be in ['v1','v2']"
+    )
 
     const url = `api/${apiVersion}/nodes`
 
@@ -35,8 +36,8 @@ module.exports = (session) => ({
         parent_id,
         file: {
           file: f,
-          name: csName
-        }
+          name: csName,
+        },
       }
 
       return session.postForm(url, params)
@@ -51,23 +52,29 @@ module.exports = (session) => ({
         parent_id,
         file: {
           file: fileHandler,
-          name: csName
-        }
+          name: csName,
+        },
       }
 
       return session.postForm(url, params)
     }
   },
 
-  async addDocumentMajor ({ parent_id, fileHandler, name = null, description = null, options = {} }) {
+  async addDocumentMajor({
+    parent_id,
+    fileHandler,
+    name = null,
+    description = null,
+    options = {},
+  }) {
     const response = await this.addDocument({
       parent_id,
       fileHandler,
       name,
       options: {
         ...options,
-        advanced_versioning: true
-      }
+        advanced_versioning: true,
+      },
     })
 
     const dataid = response.data.id
@@ -75,79 +82,79 @@ module.exports = (session) => ({
     await session.versions.promote({
       dataid,
       versionNumber: 1,
-      description
+      description,
     })
 
     await session.versions.deleteVersion({
       dataid,
-      versionNumber: 1
+      versionNumber: 1,
     })
 
     return response
   },
 
-  addItem (type, parent_id, name, params = {}) {
+  addItem(type, parent_id, name, params = {}) {
     return session.postBody('api/v2/nodes', {
       type,
       parent_id,
       name,
-      ...params
+      ...params,
     })
   },
 
-  node ({ dataid, apiVersion = 'v2', params = {} }) {
+  node({ dataid, apiVersion = 'v2', params = {} }) {
     return session.get(`api/${apiVersion}/nodes/${dataid}`, {
-      params
+      params,
     })
   },
 
-  ancestors (dataid, params = {}) {
+  ancestors(dataid, params = {}) {
     return session.get(`api/v1/nodes/${dataid}/ancestors`, {
-      params
+      params,
     })
   },
 
-  volumeInfo (objType) {
+  volumeInfo(objType) {
     return session.get(`api/v1/volumes/${objType}`)
   },
 
-  volumes () {
+  volumes() {
     return session.get('api/v2/volumes')
   },
 
-  addFolder (parent_id, name, params = {}) {
+  addFolder(parent_id, name, params = {}) {
     return this.addItem(SubTypes.Folder, parent_id, name, params)
   },
 
-  addGeneration (parent_id, name, original_id, version_number, params = {}) {
+  addGeneration(parent_id, name, original_id, version_number, params = {}) {
     return this.addItem(SubTypes.Generation, parent_id, name, {
       original_id,
       version_number,
-      ...params
+      ...params,
     })
   },
 
-  nodes (dataid, params = {}) {
+  nodes(dataid, params = {}) {
     // https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
     return session.get(`api/v2/nodes/${dataid}/nodes`, {
-      params
+      params,
     })
   },
 
-  children (dataid, params = {}) {
+  children(dataid, params = {}) {
     return this.nodes(dataid, params)
   },
 
-  delete (dataid) {
+  delete(dataid) {
     return session.delete(`api/v1/nodes/${dataid}`)
   },
 
-  download ({ dataid, apiVersion = 'v1', filePath }) {
+  download({ dataid, apiVersion = 'v1', filePath }) {
     // session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
     if (process.node) {
       return session
         .get(`api/${apiVersion}/nodes/${dataid}/content`, {
-          responseType: 'stream'
+          responseType: 'stream',
         })
         .then((response) => {
           const fs = require('fs')
@@ -165,7 +172,7 @@ module.exports = (session) => ({
     }
   },
 
-  audit ({ dataid, apiVersion = 'v2', params = {} }) {
+  audit({ dataid, apiVersion = 'v2', params = {} }) {
     return session.get(`api/${apiVersion}/nodes/${dataid}/audit`, { params })
-  }
+  },
 })
