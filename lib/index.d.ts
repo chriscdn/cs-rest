@@ -1,3 +1,117 @@
+import * as axios from 'axios';
+import { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
+
+declare class ServiceAbstract {
+    protected _session: WeakRef<Session>;
+    constructor(session: Session);
+    get session(): Session;
+}
+
+declare class Auth extends ServiceAbstract {
+    auth(): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class Nodes extends ServiceAbstract {
+    addablenodetypes(dataid: any): Promise<axios.AxiosResponse<any, any>>;
+    addDocument({ parent_id, fileHandler, apiVersion, // v1 or v2
+    name, options, }: {
+        parent_id: any;
+        fileHandler: any;
+        apiVersion?: string;
+        name?: any;
+        options?: {};
+    }): Promise<axios.AxiosResponse<any, any>>;
+    addDocumentMajor({ parent_id, fileHandler, name, description, options, }: {
+        parent_id: any;
+        fileHandler: any;
+        name?: any;
+        description?: any;
+        options?: {};
+    }): Promise<axios.AxiosResponse<any, any>>;
+    addItem(type: any, parent_id: any, name: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    node({ dataid, apiVersion, params }: {
+        dataid: any;
+        apiVersion?: string;
+        params?: {};
+    }): Promise<axios.AxiosResponse<any, any>>;
+    ancestors(dataid: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    volumeInfo(objType: any): Promise<axios.AxiosResponse<any, any>>;
+    volumes(): Promise<axios.AxiosResponse<any, any>>;
+    addFolder(parent_id: any, name: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    addGeneration(parent_id: any, name: any, original_id: any, version_number: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    nodes(dataid: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    children(dataid: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    delete(dataid: any): Promise<axios.AxiosResponse<any, any>>;
+    download({ dataid, apiVersion, filePath }: {
+        dataid: any;
+        apiVersion?: string;
+        filePath: any;
+    }): Promise<unknown>;
+    audit({ dataid, apiVersion, params }: {
+        dataid: any;
+        apiVersion?: string;
+        params?: {};
+    }): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class Workflow extends ServiceAbstract {
+    start(map_id: any): Promise<axios.AxiosResponse<any, any>>;
+    draftprocesses(workflow_id: any): Promise<axios.AxiosResponse<any, any>>;
+    draftprocesses_update(draftprocess_id: any): Promise<axios.AxiosResponse<any, any>>;
+    draftprocesses_put(draftprocess_id: any, body: any): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class RHCore extends ServiceAbstract {
+    scriptNode(id: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class Search extends ServiceAbstract {
+    search(where: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    regions(params?: {}): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class Members extends ServiceAbstract {
+    USER: 0;
+    GROUP: 1;
+    userQuery(query: any, options?: {}, version?: string): Promise<axios.AxiosResponse<any, any>>;
+    member(id: any, version?: string): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class Versions extends ServiceAbstract {
+    addVersion({ dataid, fileHandler, apiVersion, fileName, options, }: {
+        dataid: any;
+        fileHandler: any;
+        apiVersion?: string;
+        fileName?: any;
+        options?: {};
+    }): Promise<axios.AxiosResponse<any, any>>;
+    download({ dataid, version, filePath }: {
+        dataid: any;
+        version: any;
+        filePath: any;
+    }): Promise<unknown>;
+    list(dataid: any): Promise<axios.AxiosResponse<any, any>>;
+    version(dataid: any, version_number?: string): Promise<axios.AxiosResponse<any, any>>;
+    promote({ dataid, versionNumber, description }: {
+        dataid: any;
+        versionNumber: any;
+        description?: any;
+    }): Promise<axios.AxiosResponse<any, any>>;
+    deleteVersion({ dataid, versionNumber, apiVersion }: {
+        dataid: any;
+        versionNumber: any;
+        apiVersion?: string;
+    }): Promise<axios.AxiosResponse<any, any>>;
+    purge({ dataid, number_to_keep }: {
+        dataid: any;
+        number_to_keep?: number;
+    }): Promise<axios.AxiosResponse<any, any>>;
+}
+
+declare class WebReports extends ServiceAbstract {
+    run(dataid: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+}
+
 type requestObjectType = {
     jsonrpc: string;
     method: string;
@@ -7,10 +121,10 @@ type requestObjectType = {
 declare class RPCClient {
     session: Session;
     baseURL: string;
-    _batchQueue: Array<requestObjectType>;
+    protected _batchQueue: Array<requestObjectType>;
     constructor(session: Session, baseURL: string);
-    requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
-    handleResponse(data: any): any;
+    protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
+    protected handleResponse(data: any): any;
     request(method: any, params: any, id?: number): Promise<any>;
     resetQueue(): void;
     queue(method: string, params: any, id?: number): this;
@@ -20,24 +134,24 @@ declare class RPCClient {
 }
 
 declare class Session {
-    axios: any;
-    _nodes: any;
-    _auth: any;
-    _workflow: any;
-    _rhcore: any;
-    _members: any;
-    _search: any;
-    _webreports: any;
-    _versions: any;
+    protected readonly axios: AxiosInstance;
+    protected _nodes: Nodes;
+    protected _auth: Auth;
+    protected _workflow: any;
+    protected _rhcore: RHCore;
+    protected _members: Members;
+    protected _search: Search;
+    protected _webreports: WebReports;
+    protected _versions: Versions;
     constructor(options: any);
-    get nodes(): any;
-    get auth(): any;
-    get workflow(): any;
-    get rhcore(): any;
-    get members(): any;
-    get search(): any;
-    get webreports(): any;
-    get versions(): any;
+    get nodes(): Nodes;
+    get auth(): Auth;
+    get workflow(): Workflow;
+    get rhcore(): RHCore;
+    get members(): Members;
+    get search(): Search;
+    get webreports(): WebReports;
+    get versions(): Versions;
     get dataTypesEnum(): {
         AssocType: number;
         BooleanType: number;
@@ -73,20 +187,20 @@ declare class Session {
     _isString(value: any): boolean;
     _isBoolean(value: any): boolean;
     objectToForm(obj: Record<string, any>): any;
-    get(...args: any[]): any;
-    putForm(url: any, params: any): any;
-    postForm(url: any, params: any): any;
-    patchForm(url: any, params: any): any;
-    deleteForm(url: any, params: any): any;
-    putBody(url: any, body: any): any;
-    postBody(url: any, body: any): any;
-    patchBody(url: any, body: any): any;
-    deleteBody(url: any, body: any): any;
-    post(...args: any[]): any;
-    put(...args: any[]): any;
-    delete(...args: any[]): any;
-    options(...args: any[]): any;
-    patch(...args: any[]): any;
+    putForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
+    postForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
+    patchForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
+    deleteForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
+    putBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
+    postBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
+    patchBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
+    deleteBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
+    get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+    post<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
+    put<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
+    patch<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
+    options<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+    delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
 }
 
 export { Session };

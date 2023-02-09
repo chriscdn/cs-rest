@@ -1,9 +1,7 @@
 import { CustomError } from './error-codes'
-
 import get from 'lodash.get'
 import Session from '../Session'
 
-// to be tested...
 const sequence = {
   index: 0,
   get next(): number {
@@ -22,7 +20,7 @@ type requestObjectType = {
 export default class RPCClient {
   session: Session
   baseURL: string
-  _batchQueue: Array<requestObjectType>
+  protected _batchQueue: Array<requestObjectType>
 
   constructor(session: Session, baseURL: string) {
     this.session = session
@@ -30,7 +28,7 @@ export default class RPCClient {
     this.resetQueue()
   }
 
-  requestObject(
+  protected requestObject(
     method: string,
     params: Record<string, any> | Array<any>,
     id: number
@@ -43,7 +41,7 @@ export default class RPCClient {
     }
   }
 
-  handleResponse(data) {
+  protected handleResponse(data) {
     if (Object.prototype.hasOwnProperty.call(data, 'result')) {
       return data.result
     } else if (Object.prototype.hasOwnProperty.call(data, 'error')) {
@@ -61,7 +59,7 @@ export default class RPCClient {
     const response = await this.session.postBody(this.baseURL, {
       rpc: this.requestObject(method, params, id),
     })
-    // console.log(response)
+
     return this.handleResponse(response.data)
   }
 

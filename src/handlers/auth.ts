@@ -1,7 +1,9 @@
-// const FormDataFactory = require('./form-data-factory')
+import ServiceAbstract from './service-abstract'
 
-export default (session) => ({
+class Auth extends ServiceAbstract {
   auth() {
-    return session.get('/api/v1/auth/')
-  },
-})
+    return this.session.get('/api/v1/auth/')
+  }
+}
+
+export default Auth

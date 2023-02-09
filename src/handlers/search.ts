@@ -1,14 +1,16 @@
-export default (session) => ({
-  // https://knowledge.opentext.com/knowledge/cs.dll/Open/67789539
+import ServiceAbstract from './service-abstract'
 
+class Search extends ServiceAbstract {
   search(where, params = {}) {
-    return session.postBody('api/v2/search', {
+    return this.session.postBody('api/v2/search', {
       where,
       ...params,
     })
-  },
+  }
 
   regions(params = {}) {
-    return session.get('api/v1/regions', params)
-  },
-})
+    return this.session.get('api/v1/regions', params)
+  }
+}
+
+export default Search

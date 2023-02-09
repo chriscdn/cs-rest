@@ -1,7 +1,5 @@
-// const get = require('lodash.get')
 import FormDataFactory from './handlers/form-data-factory'
-
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import get from 'lodash.get'
 
 function getInstance(options) {
@@ -24,7 +22,7 @@ function getInstance(options) {
   return instance
 }
 
-function axiosFactory(options) {
+function axiosFactory(options): AxiosInstance {
   const instance = getInstance(options)
 
   const username = get(options, 'username')

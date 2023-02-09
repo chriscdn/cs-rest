@@ -1,6 +1,8 @@
-export default (session) => ({
-  USER: 0,
-  GROUP: 1,
+import ServiceAbstract from './service-abstract'
+
+class Members extends ServiceAbstract {
+  USER: 0
+  GROUP: 1
 
   userQuery(query, options = {}, version = 'v2') {
     const params = {
@@ -10,10 +12,12 @@ export default (session) => ({
       ...options,
     }
 
-    return session.get(`api/${version}/members`, { params })
-  },
+    return this.session.get(`api/${version}/members`, { params })
+  }
 
   member(id, version = 'v2') {
-    return session.get(`api/${version}/members/${id}`)
-  },
-})
+    return this.session.get(`api/${version}/members/${id}`)
+  }
+}
+
+export default Members

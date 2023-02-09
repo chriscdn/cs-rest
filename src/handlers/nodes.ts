@@ -1,9 +1,10 @@
 import SubTypes from './subtypes.json'
+import ServiceAbstract from './service-abstract'
 
-export default (session) => ({
+class Nodes extends ServiceAbstract {
   addablenodetypes(dataid) {
-    return session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
-  },
+    return this.session.get(`api/v1/nodes/${dataid}/addablenodetypes`)
+  }
 
   async addDocument({
     parent_id,
@@ -40,7 +41,7 @@ export default (session) => ({
         },
       }
 
-      return session.postForm(url, params)
+      return this.session.postForm(url, params)
     } else {
       // browser
       const csName = name || fileHandler.name
@@ -56,9 +57,9 @@ export default (session) => ({
         },
       }
 
-      return session.postForm(url, params)
+      return this.session.postForm(url, params)
     }
-  },
+  }
 
   async addDocumentMajor({
     parent_id,
@@ -79,52 +80,52 @@ export default (session) => ({
 
     const dataid = response.data.id
 
-    await session.versions.promote({
+    await this.session.versions.promote({
       dataid,
       versionNumber: 1,
       description,
     })
 
-    await session.versions.deleteVersion({
+    await this.session.versions.deleteVersion({
       dataid,
       versionNumber: 1,
     })
 
     return response
-  },
+  }
 
   addItem(type, parent_id, name, params = {}) {
-    return session.postBody('api/v2/nodes', {
+    return this.session.postBody('api/v2/nodes', {
       type,
       parent_id,
       name,
       ...params,
     })
-  },
+  }
 
   node({ dataid, apiVersion = 'v2', params = {} }) {
-    return session.get(`api/${apiVersion}/nodes/${dataid}`, {
+    return this.session.get(`api/${apiVersion}/nodes/${dataid}`, {
       params,
     })
-  },
+  }
 
   ancestors(dataid, params = {}) {
-    return session.get(`api/v1/nodes/${dataid}/ancestors`, {
+    return this.session.get(`api/v1/nodes/${dataid}/ancestors`, {
       params,
     })
-  },
+  }
 
   volumeInfo(objType) {
-    return session.get(`api/v1/volumes/${objType}`)
-  },
+    return this.session.get(`api/v1/volumes/${objType}`)
+  }
 
   volumes() {
-    return session.get('api/v2/volumes')
-  },
+    return this.session.get('api/v2/volumes')
+  }
 
   addFolder(parent_id, name, params = {}) {
     return this.addItem(SubTypes.Folder, parent_id, name, params)
-  },
+  }
 
   addGeneration(parent_id, name, original_id, version_number, params = {}) {
     return this.addItem(SubTypes.Generation, parent_id, name, {
@@ -132,27 +133,27 @@ export default (session) => ({
       version_number,
       ...params,
     })
-  },
+  }
 
   nodes(dataid, params = {}) {
     // https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s%23!%2Fnodes%2FgetSubnodes_get_15&tab=501
-    return session.get(`api/v2/nodes/${dataid}/nodes`, {
+    return this.session.get(`api/v2/nodes/${dataid}/nodes`, {
       params,
     })
-  },
+  }
 
   children(dataid, params = {}) {
     return this.nodes(dataid, params)
-  },
+  }
 
   delete(dataid) {
-    return session.delete(`api/v1/nodes/${dataid}`)
-  },
+    return this.session.delete(`api/v1/nodes/${dataid}`)
+  }
 
   download({ dataid, apiVersion = 'v1', filePath }) {
-    // session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
+    // this.session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
     if (process.node) {
-      return session
+      return this.session
         .get(`api/${apiVersion}/nodes/${dataid}/content`, {
           responseType: 'stream',
         })
@@ -170,9 +171,13 @@ export default (session) => ({
     } else {
       return Promise.reject('Not implemented yet')
     }
-  },
+  }
 
   audit({ dataid, apiVersion = 'v2', params = {} }) {
-    return session.get(`api/${apiVersion}/nodes/${dataid}/audit`, { params })
-  },
-})
+    return this.session.get(`api/${apiVersion}/nodes/${dataid}/audit`, {
+      params,
+    })
+  }
+}
+
+export default Nodes

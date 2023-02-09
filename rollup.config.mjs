@@ -1,11 +1,9 @@
 import pkg from './package.json' assert { type: 'json' }
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-// import babel from '@rollup/plugin-babel'
 import json from '@rollup/plugin-json'
 import terser from '@rollup/plugin-terser'
+import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
-
+import resolve from '@rollup/plugin-node-resolve'
 import dts from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
 
@@ -50,6 +48,8 @@ export default [
     plugins: [replace(replaceStrings(true)), json(), esbuild()],
   },
 
+  // globals only applicable to umd
+  // https://rollupjs.org/configuration-options/#output-globals
   {
     input,
     output: [
@@ -64,8 +64,18 @@ export default [
         },
       },
     ],
+
     external: ['axios'],
-    plugins: [replace(replaceStrings(true)), json(), esbuild()],
+
+    plugins: [
+      resolve({
+        browser: true,
+      }),
+      replace(replaceStrings(true)),
+      json(),
+      commonjs(),
+      esbuild(),
+    ],
   },
 
   {
@@ -82,8 +92,18 @@ export default [
         },
       },
     ],
+
     external: ['axios'],
-    plugins: [replace(replaceStrings(true)), json(), esbuild(), terser()],
+    plugins: [
+      resolve({
+        browser: true,
+      }),
+      replace(replaceStrings(true)),
+      json(),
+      commonjs(),
+      esbuild(),
+      terser(),
+    ],
   },
 
   {
@@ -92,6 +112,7 @@ export default [
     output: {
       file: pkg.types,
       format: 'es',
+      // globals,
     },
   },
 ]

@@ -1,103 +1,102 @@
-import dataTypesEnum from './data-types-enum.json' // assert { type: 'json' }
+import dataTypesEnum from './data-types-enum.json'
 
-// const dataTypesEnum = {}
 import FormDataFactory from './handlers/form-data-factory'
 import axiosFactory from './axios-factory'
 
-import auth from './handlers/auth.js'
-import nodes from './handlers/nodes'
-import workflow from './handlers/workflow'
-import rhcore from './handlers/rhcore'
-import search from './handlers/search'
-import members from './handlers/members'
-import versions from './handlers/versions'
-import webreports from './handlers/webreports'
+import Auth from './handlers/auth.js'
+import Nodes from './handlers/nodes'
+import Workflow from './handlers/workflow'
+import RHCore from './handlers/rhcore'
+import Search from './handlers/search'
+import Members from './handlers/members'
+import Versions from './handlers/versions'
+import WebReports from './handlers/webreports'
 
 import isnil from 'lodash.isnil'
 import RPCClient from './rpc-client/index'
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-// const FormDataFactory = require('./handlers/form-data-factory')
 export default class Session {
-  axios: any
-  _nodes: any
-  _auth: any
-  _workflow: any
-  _rhcore: any
-  _members: any
-  _search: any
-  _webreports: any
-  _versions: any
+  protected readonly axios: AxiosInstance
+  protected _nodes: Nodes
+  protected _auth: Auth
+  protected _workflow: any
+  protected _rhcore: RHCore
+  protected _members: Members
+  protected _search: Search
+  protected _webreports: WebReports
+  protected _versions: Versions
 
   constructor(options) {
     this.axios = axiosFactory(options)
   }
 
-  get nodes() {
+  get nodes(): Nodes {
     // this creates a circular reference.. bad?
     if (this._nodes == null) {
-      this._nodes = nodes(this)
+      this._nodes = new Nodes(this)
     }
 
     return this._nodes
   }
 
-  get auth() {
+  get auth(): Auth {
     if (this._auth == null) {
-      this._auth = auth(this)
+      this._auth = new Auth(this)
     }
 
     return this._auth
   }
 
-  get workflow() {
+  get workflow(): Workflow {
     // this creates a circular reference.. bad?
     if (this._workflow == null) {
-      this._workflow = workflow(this)
+      this._workflow = new Workflow(this)
     }
 
     return this._workflow
   }
 
-  get rhcore() {
+  get rhcore(): RHCore {
     // this creates a circular reference.. bad?
     if (this._rhcore == null) {
-      this._rhcore = rhcore(this)
+      this._rhcore = new RHCore(this)
     }
 
     return this._rhcore
   }
 
-  get members() {
+  get members(): Members {
     // this creates a circular reference.. bad?
     if (this._members == null) {
-      this._members = members(this)
+      this._members = new Members(this)
     }
 
     return this._members
   }
 
-  get search() {
+  get search(): Search {
     // this creates a circular reference.. bad?
     if (this._search == null) {
-      this._search = search(this)
+      this._search = new Search(this)
     }
 
     return this._search
   }
 
-  get webreports() {
+  get webreports(): WebReports {
     // this creates a circular reference.. bad?
     if (this._webreports == null) {
-      this._webreports = webreports(this)
+      this._webreports = new WebReports(this)
     }
 
     return this._webreports
   }
 
-  get versions() {
+  get versions(): Versions {
     // this creates a circular reference.. bad?
     if (this._versions == null) {
-      this._versions = versions(this)
+      this._versions = new Versions(this)
     }
 
     return this._versions
@@ -144,10 +143,6 @@ export default class Session {
     return formData
   }
 
-  get(...args) {
-    return this.axios.get(...args)
-  }
-
   putForm(url, params) {
     const formData = this.objectToForm(params)
     return process.node
@@ -181,12 +176,16 @@ export default class Session {
   deleteForm(url, params) {
     // FormData does not working on Delete!!
     // See here: https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
-    const formData = this.objectToForm(params)
-    return process.node
+    // const formData = this.objectToForm(params)
+
+    return this.delete(url)
+
+    /* return process.node
       ? this.delete(url, formData.getBuffer(), {
           headers: formData.getHeaders(),
         })
       : this.delete(url, formData)
+      */
   }
 
   putBody(url, body) {
@@ -213,23 +212,72 @@ export default class Session {
     })
   }
 
-  post(...args) {
-    return this.axios.post(...args)
+  get<T = any, R = AxiosResponse<T>>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.get(url, config)
   }
 
-  put(...args) {
-    return this.axios.put(...args)
+  // get(...args) {
+  //   return this.axios.get(...args)
+  // }
+
+  post<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.post(url, data, config)
   }
 
-  delete(...args) {
-    return this.axios.delete(...args)
+  put<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.put(url, data, config)
   }
 
-  options(...args) {
-    return this.axios.options(...args)
+  patch<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.patch(url, data, config)
   }
 
-  patch(...args) {
-    return this.axios.patch(...args)
+  options<T = any, R = AxiosResponse<T>>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.options(url, config)
   }
+
+  delete<T = any, R = AxiosResponse<T>>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    return this.axios.delete(url, config)
+  }
+
+  // post(...args) {
+  //   return this.axios.post(...args)
+  // }
+
+  // put(...args) {
+  //   return this.axios.put(...args)
+  // }
+
+  // delete(...args) {
+  //   return this.axios.delete(...args)
+  // }
+
+  // options(...args) {
+  //   return this.axios.options(...args)
+  // }
+
+  // patch(...args) {
+  //   return this.axios.patch(...args)
+  // }
 }

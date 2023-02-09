@@ -1,7 +1,6 @@
-// const FormDataFactory = require('./form-data-factory')
-// const console.assert = require('console.assert')
+import ServiceAbstract from './service-abstract'
 
-export default (session) => ({
+class Versions extends ServiceAbstract {
   async addVersion({
     dataid,
     fileHandler,
@@ -32,7 +31,7 @@ export default (session) => ({
 
       // console.log(params)
 
-      return session.postForm(url, params)
+      return this.session.postForm(url, params)
     } else {
       // browser
       const name = fileName || fileHandler.name
@@ -45,12 +44,12 @@ export default (session) => ({
         ...options,
       }
 
-      return session.postForm(url, params)
+      return this.session.postForm(url, params)
 
       // formData.append('file', fileHandler, name)
-      // return session.post(url, formData)
+      // return this.session.post(url, formData)
     }
-  },
+  }
 
   async download({ dataid, version, filePath }) {
     console.assert(dataid != null, 'dataid cannot be null')
@@ -58,7 +57,7 @@ export default (session) => ({
     console.assert(filePath != null, 'filePath cannot be null')
 
     if (process.node) {
-      return session
+      return this.session
         .get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
           responseType: 'stream',
         })
@@ -76,18 +75,17 @@ export default (session) => ({
     } else {
       return Promise.reject('Not implemented yet')
     }
-  },
+  }
 
   async list(dataid) {
     const url = `api/v1/nodes/${dataid}/versions`
-    return session.get(url)
-  },
-
+    return this.session.get(url)
+  }
   async version(dataid, version_number = 'latest') {
     // latest not supported in v2
     const url = `api/v1/nodes/${dataid}/versions/${version_number}`
-    return session.get(url)
-  },
+    return this.session.get(url)
+  }
 
   async promote({ dataid, versionNumber, description = null }) {
     console.assert(dataid != null, 'dataid cannot be null')
@@ -95,12 +93,12 @@ export default (session) => ({
 
     const url = `api/v2/nodes/${dataid}/versions/${versionNumber}/promote`
 
-    return session.postBody(url, {
+    return this.session.postBody(url, {
       ...(!!description && {
         description,
       }),
     })
-  },
+  }
 
   async deleteVersion({ dataid, versionNumber, apiVersion = 'v1' }) {
     console.assert(dataid != null, 'dataid cannot be null')
@@ -109,8 +107,8 @@ export default (session) => ({
     const url = `api/${apiVersion}/nodes/${dataid}/versions/${versionNumber}`
 
     // careful with deleteForm or deleteBody
-    return session.delete(url)
-  },
+    return this.session.delete(url)
+  }
 
   async purge({ dataid, number_to_keep = 1 }) {
     console.assert(dataid != null, 'dataid cannot be null')
@@ -122,8 +120,10 @@ export default (session) => ({
 
     const url = `api/v2/nodes/${dataid}/versions`
 
-    return session.deleteForm(url, {
+    return this.session.deleteForm(url, {
       number_to_keep,
     })
-  },
-})
+  }
+}
+
+export default Versions
