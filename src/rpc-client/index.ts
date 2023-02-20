@@ -55,7 +55,11 @@ export default class RPCClient {
   // https://www.jsonrpc.org/specification#request_object
   // params is allowed to be null!
   // also on queue function below
-  async request(method, params, id = sequence.next) {
+  async request(
+    method: string,
+    params: object | Array<any>,
+    id: number = sequence.next
+  ) {
     const response = await this.session.postBody(this.baseURL, {
       rpc: this.requestObject(method, params, id),
     })

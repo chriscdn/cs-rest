@@ -71,8 +71,9 @@ declare class Search extends ServiceAbstract {
 }
 
 declare class Members extends ServiceAbstract {
-    USER: 0;
-    GROUP: 1;
+    readonly USER: number;
+    readonly GROUP: number;
+    constructor(session: Session);
     userQuery(query: any, options?: {}, version?: string): Promise<axios.AxiosResponse<any, any>>;
     member(id: any, version?: string): Promise<axios.AxiosResponse<any, any>>;
 }
@@ -125,7 +126,7 @@ declare class RPCClient {
     constructor(session: Session, baseURL: string);
     protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
     protected handleResponse(data: any): any;
-    request(method: any, params: any, id?: number): Promise<any>;
+    request(method: string, params: object | Array<any>, id?: number): Promise<any>;
     resetQueue(): void;
     queue(method: string, params: any, id?: number): this;
     batch(throwOnError?: boolean): Promise<any>;
