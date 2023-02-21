@@ -19,12 +19,12 @@ type requestObjectType = {
 
 export default class RPCClient {
   session: Session
-  baseURL: string
+  relativePath: string
   protected _batchQueue: Array<requestObjectType>
 
-  constructor(session: Session, baseURL: string) {
+  constructor(session: Session, relativePath: string) {
     this.session = session
-    this.baseURL = baseURL
+    this.relativePath = relativePath
     this.resetQueue()
   }
 
@@ -55,12 +55,8 @@ export default class RPCClient {
   // https://www.jsonrpc.org/specification#request_object
   // params is allowed to be null!
   // also on queue function below
-  async request(
-    method: string,
-    params: object | Array<any>,
-    id: number = sequence.next
-  ) {
-    const response = await this.session.postBody(this.baseURL, {
+  async request(method: string, params: any, id: number = sequence.next) {
+    const response = await this.session.postBody(this.relativePath, {
       rpc: this.requestObject(method, params, id),
     })
 
@@ -79,7 +75,7 @@ export default class RPCClient {
   async batch(throwOnError: boolean = false) {
     const queue = this._batchQueue
     this.resetQueue()
-    const response = await this.session.postBody(this.baseURL, {
+    const response = await this.session.postBody(this.relativePath, {
       rpc: queue,
     })
 

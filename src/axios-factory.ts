@@ -2,8 +2,10 @@ import FormDataFactory from './handlers/form-data-factory'
 import axios, { AxiosInstance } from 'axios'
 import get from 'lodash.get'
 
-function getInstance(options) {
-  const instance = axios.create(options)
+function getInstance(options: CSRestOptions) {
+  const instance = axios.create({
+    baseURL: options.baseUrl,
+  })
 
   instance.interceptors.response.use(
     (response) => {
@@ -22,12 +24,19 @@ function getInstance(options) {
   return instance
 }
 
-function axiosFactory(options): AxiosInstance {
+export interface CSRestOptions {
+  username?: string
+  password?: string
+  otcsticket?: string
+  baseUrl: string
+}
+
+function axiosFactory(options: CSRestOptions): AxiosInstance {
   const instance = getInstance(options)
 
-  const username = get(options, 'username')
-  const password = get(options, 'password')
-  const otcsticket = get(options, 'otcsticket')
+  const username = options.username
+  const password = options.password
+  const otcsticket = options.otcsticket
 
   if (otcsticket) {
     instance.defaults.headers.common.OTCSTicket = otcsticket
@@ -43,11 +52,11 @@ function axiosFactory(options): AxiosInstance {
 
         const response = process.node
           ? await axios.post(
-              `${options.baseURL}/api/v1/auth/`,
+              `${options.baseUrl}/api/v1/auth/`,
               formData.getBuffer(),
               { headers: formData.getHeaders() }
             )
-          : await axios.post(`${options.baseURL}/api/v1/auth/`, formData)
+          : await axios.post(`${options.baseUrl}/api/v1/auth/`, formData)
 
         request.headers.common.OTCSTicket = get(response, 'data.ticket')
 

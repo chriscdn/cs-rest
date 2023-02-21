@@ -1,7 +1,7 @@
 import dataTypesEnum from './data-types-enum.json'
 
 import FormDataFactory from './handlers/form-data-factory'
-import axiosFactory from './axios-factory'
+import axiosFactory, { CSRestOptions } from './axios-factory'
 
 import Auth from './handlers/auth.js'
 import Nodes from './handlers/nodes'
@@ -27,7 +27,7 @@ export default class Session {
   protected _webreports: WebReports
   protected _versions: Versions
 
-  constructor(options) {
+  constructor(options: CSRestOptions) {
     this.axios = axiosFactory(options)
   }
 
@@ -106,8 +106,8 @@ export default class Session {
     return dataTypesEnum
   }
 
-  rpcClient(baseURL = '/api/v1/rh/rpc/rhnode/') {
-    return new RPCClient(this, baseURL)
+  rpcClient(relativePath = '/api/v1/rh/rpc/rhnode/') {
+    return new RPCClient(this, relativePath)
   }
 
   _isObject(value) {

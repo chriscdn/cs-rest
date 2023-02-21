@@ -4,11 +4,15 @@ Simple authentication and REST calls for OpenText Content Server.
 
 ## Features
 
--   Provides a simplified interface for managing authentication with the OpenText Content Server REST API
--   Refreshes the `OTCSTicket` token automatically (minimising token expiration errors)
--   Simplifies POST, PUT, & PATCH requests (since Content Server doesn't support the `application/json` content type)
--   Based on the [axios](https://github.com/axios/axios) HTTP client
--   Works with Node.js and the browser
+- Provides a simplified interface for managing authentication with the OpenText Content Server REST API
+- Refreshes the `OTCSTicket` token automatically (minimising token expiration errors)
+- Simplifies POST, PUT, & PATCH requests (since Content Server doesn't support the `application/json` content type)
+- Based on the [axios](https://github.com/axios/axios) HTTP client
+- Works with Node.js and the browser
+
+## Breaking Changes v2
+
+- The `baseURL` parameter was renamed `baseUrl`.
 
 ## Installing
 
@@ -41,9 +45,9 @@ const { Session } = require('@kweli/cs-rest')
 
 // session wraps an axios instance
 const session = new Session({
-    baseURL: 'https://.../cs.exe',
-    username: 'Admin',
-    password: '******',
+  baseUrl: 'https://.../cs.exe',
+  username: 'Admin',
+  password: '******',
 })
 
 // a Session instance can issue authenticated requests to Content Server
@@ -54,8 +58,8 @@ Authenticate with an `OTCSTicket`:
 
 ```js
 const session = new Session({
-    baseURL: 'https://.../cs.exe',
-    otcsticket: '<token>',
+  baseUrl: 'https://.../cs.exe',
+  otcsticket: '<token>',
 })
 ```
 
@@ -82,9 +86,9 @@ The `Session` class provides a `postForm` (also `putForm` and `patchForm`) metho
 
 ```js
 const response = await session.postForm('api/v2/nodes', {
-    type: 0,
-    parent_id: 2000,
-    name: 'My New Folder',
+  type: 0,
+  parent_id: 2000,
+  name: 'My New Folder',
 })
 ```
 
@@ -108,8 +112,8 @@ const response = await session.nodes.addFolder(2000, 'My New Folder')
 
 A method also exists for uploading a document, where `file` is either:
 
--   a browser [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object (e.g,. from drag and drop); or
--   a local file path, when using Node.js (e.g., `c:/temp/file.pdf`.
+- a browser [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object (e.g,. from drag and drop); or
+- a local file path, when using Node.js (e.g., `c:/temp/file.pdf`.
 
 ```js
 const response = await session.nodes.addDocument(2000, file)
@@ -119,8 +123,8 @@ See the `src/` directory for more examples.
 
 ## Credits
 
--   [OpenText Content Server REST API](https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s&tab=501)
--   [Kwe.li GmbH](https://kwe.li/)
+- [OpenText Content Server REST API](https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s&tab=501)
+- [Kwe.li GmbH](https://kwe.li/)
 
 ## License
 

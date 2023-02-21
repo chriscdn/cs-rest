@@ -23,23 +23,31 @@ const ErrorCodes = {
   },
 }
 
-// -32000 to -32099 is reserved!
+type ErrorMessage = {
+  message: string
+  code: number
+  data: Array<any> | Record<string, any>
+}
 
 class CustomError extends Error {
-  code: any
-  data: any
+  code: number
+  data: Array<any> | Record<string, any>
 
   constructor(
-    message = ErrorCodes.INTERNALERROR.message,
+    message: string | ErrorMessage = ErrorCodes.INTERNALERROR.message,
     data = null,
-    code = ErrorCodes.INTERNALERROR.code
+    code: number = ErrorCodes.INTERNALERROR.code
   ) {
     if (isObject(message)) {
-      super(message.message)
-      this.code = message.code
-      this.data = message.data
+      const messageObj = message as CustomError
+
+      super(messageObj.message)
+
+      this.code = messageObj.code
+      this.data = messageObj.data
     } else {
-      super(message)
+      super(message as string)
+
       this.code = code
       this.data = data
     }

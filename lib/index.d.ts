@@ -1,6 +1,13 @@
 import * as axios from 'axios';
 import { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 
+interface CSRestOptions {
+    username?: string;
+    password?: string;
+    otcsticket?: string;
+    baseUrl: string;
+}
+
 declare class ServiceAbstract {
     protected _session: WeakRef<Session>;
     constructor(session: Session);
@@ -121,12 +128,12 @@ type requestObjectType = {
 };
 declare class RPCClient {
     session: Session;
-    baseURL: string;
+    relativePath: string;
     protected _batchQueue: Array<requestObjectType>;
-    constructor(session: Session, baseURL: string);
+    constructor(session: Session, relativePath: string);
     protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
     protected handleResponse(data: any): any;
-    request(method: string, params: object | Array<any>, id?: number): Promise<any>;
+    request(method: string, params: any, id?: number): Promise<any>;
     resetQueue(): void;
     queue(method: string, params: any, id?: number): this;
     batch(throwOnError?: boolean): Promise<any>;
@@ -144,7 +151,7 @@ declare class Session {
     protected _search: Search;
     protected _webreports: WebReports;
     protected _versions: Versions;
-    constructor(options: any);
+    constructor(options: CSRestOptions);
     get nodes(): Nodes;
     get auth(): Auth;
     get workflow(): Workflow;
@@ -183,7 +190,7 @@ declare class Session {
         VoidType: number;
         WAPIWorkType: number;
     };
-    rpcClient(baseURL?: string): RPCClient;
+    rpcClient(relativePath?: string): RPCClient;
     _isObject(value: any): boolean;
     _isString(value: any): boolean;
     _isBoolean(value: any): boolean;
