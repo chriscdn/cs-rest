@@ -63,16 +63,16 @@ export default class RPCClient {
     return this.handleResponse(response.data)
   }
 
-  resetQueue(): void {
+  private resetQueue(): void {
     this._batchQueue = []
   }
 
-  queue(method: string, params, id: number = sequence.next) {
+  queue(method: string, params: any, id: number = sequence.next): RPCClient {
     this._batchQueue.push(this.requestObject(method, params, id))
     return this
   }
 
-  async batch(throwOnError: boolean = false) {
+  async batch(throwOnError: boolean = false): Promise<any> {
     const queue = this._batchQueue
     this.resetQueue()
     const response = await this.session.postBody(this.relativePath, {

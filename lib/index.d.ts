@@ -134,11 +134,11 @@ declare class RPCClient {
     protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
     protected handleResponse(data: any): any;
     request(method: string, params: any, id?: number): Promise<any>;
-    resetQueue(): void;
-    queue(method: string, params: any, id?: number): this;
+    private resetQueue;
+    queue(method: string, params: any, id?: number): RPCClient;
     batch(throwOnError?: boolean): Promise<any>;
     rhnode(dataid: any, method: any, args?: any[], id?: number): Promise<any>;
-    rhnodeQueue(dataid: any, method: any, args?: any[], id?: number): this;
+    rhnodeQueue(dataid: any, method: any, args?: any[], id?: number): RPCClient;
 }
 
 declare class Session {
