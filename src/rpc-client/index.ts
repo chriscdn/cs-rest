@@ -1,4 +1,4 @@
-import { CustomError } from './error-codes'
+import { RPCError } from './error-codes'
 import get from 'lodash.get'
 import Session from '../Session'
 
@@ -46,7 +46,7 @@ export default class RPCClient {
       return data.result
     } else if (Object.prototype.hasOwnProperty.call(data, 'error')) {
       const err = data.error
-      throw new CustomError(err.message, err.data, err.code)
+      throw new RPCError(err.message, err.data, err.code)
     } else {
       throw Error('The server did not respond correctly.')
     }

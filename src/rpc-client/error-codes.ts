@@ -29,7 +29,7 @@ type ErrorMessage = {
   data: Array<any> | Record<string, any>
 }
 
-class CustomError extends Error {
+class RPCError extends Error {
   code: number
   data: Array<any> | Record<string, any>
 
@@ -39,7 +39,7 @@ class CustomError extends Error {
     code: number = ErrorCodes.INTERNALERROR.code
   ) {
     if (isObject(message)) {
-      const messageObj = message as CustomError
+      const messageObj = message as RPCError
 
       super(messageObj.message)
 
@@ -54,4 +54,4 @@ class CustomError extends Error {
   }
 }
 
-export { CustomError, ErrorCodes }
+export { RPCError, ErrorCodes }
