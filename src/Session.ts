@@ -1,8 +1,6 @@
 import dataTypesEnum from './data-types-enum.json'
-
 import FormDataFactory from './handlers/form-data-factory'
 import axiosFactory, { CSRestOptions } from './axios-factory'
-
 import Auth from './handlers/auth.js'
 import Nodes from './handlers/nodes'
 import Workflow from './handlers/workflow'
@@ -11,7 +9,6 @@ import Search from './handlers/search'
 import Members from './handlers/members'
 import Versions from './handlers/versions'
 import WebReports from './handlers/webreports'
-
 import isnil from 'lodash.isnil'
 import RPCClient from './rpc-client/index'
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -32,7 +29,6 @@ export default class Session {
   }
 
   get nodes(): Nodes {
-    // this creates a circular reference.. bad?
     if (this._nodes == null) {
       this._nodes = new Nodes(this)
     }
@@ -49,7 +45,6 @@ export default class Session {
   }
 
   get workflow(): Workflow {
-    // this creates a circular reference.. bad?
     if (this._workflow == null) {
       this._workflow = new Workflow(this)
     }
@@ -58,7 +53,6 @@ export default class Session {
   }
 
   get rhcore(): RHCore {
-    // this creates a circular reference.. bad?
     if (this._rhcore == null) {
       this._rhcore = new RHCore(this)
     }
@@ -67,7 +61,6 @@ export default class Session {
   }
 
   get members(): Members {
-    // this creates a circular reference.. bad?
     if (this._members == null) {
       this._members = new Members(this)
     }
@@ -76,7 +69,6 @@ export default class Session {
   }
 
   get search(): Search {
-    // this creates a circular reference.. bad?
     if (this._search == null) {
       this._search = new Search(this)
     }
@@ -85,7 +77,6 @@ export default class Session {
   }
 
   get webreports(): WebReports {
-    // this creates a circular reference.. bad?
     if (this._webreports == null) {
       this._webreports = new WebReports(this)
     }
@@ -94,7 +85,6 @@ export default class Session {
   }
 
   get versions(): Versions {
-    // this creates a circular reference.. bad?
     if (this._versions == null) {
       this._versions = new Versions(this)
     }
