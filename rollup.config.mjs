@@ -32,7 +32,7 @@ export default [
       },
     ],
     external: [...Object.keys(pkg.dependencies || [])],
-    plugins: [replace(replaceStrings(true)), json(), esbuild()],
+    plugins: [replace(replaceStrings(false)), json(), esbuild()],
   },
 
   {

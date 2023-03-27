@@ -1,5 +1,4 @@
+import { RPCError } from './rpc-client/error-codes'
 import Session from './Session'
 
-// import { RPCError } from './rpc-client/error-codes'
-
-export { Session }
+export { Session, RPCError }

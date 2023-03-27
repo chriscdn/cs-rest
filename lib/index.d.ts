@@ -1,6 +1,17 @@
 import * as axios from 'axios';
 import { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 
+type ErrorMessage = {
+    message: string;
+    code: number;
+    data: Array<any> | Record<string, any>;
+};
+declare class RPCError extends Error {
+    code: number;
+    data: Array<any> | Record<string, any>;
+    constructor(message?: string | ErrorMessage, data?: any, code?: number);
+}
+
 interface CSRestOptions {
     username?: string;
     password?: string;
@@ -211,4 +222,4 @@ declare class Session {
     delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
 }
 
-export { Session };
+export { RPCError, Session };

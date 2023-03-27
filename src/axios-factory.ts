@@ -41,9 +41,9 @@ function axiosFactory(options: CSRestOptions): AxiosInstance {
   if (otcsticket) {
     instance.defaults.headers.common.OTCSTicket = otcsticket
   } else if (username && password) {
-    instance.interceptors.request.use(async (request) => {
-      if (request.headers.common.OTCSTicket) {
-        return request
+    instance.interceptors.request.use(async (config) => {
+      if (config.headers.common?.OTCSTicket) {
+        return config
       } else {
         const formData = FormDataFactory.createFormData()
 
@@ -58,9 +58,9 @@ function axiosFactory(options: CSRestOptions): AxiosInstance {
             )
           : await axios.post(`${options.baseUrl}/api/v1/auth/`, formData)
 
-        request.headers.common.OTCSTicket = get(response, 'data.ticket')
+        config.headers.OTCSTicket = get(response, 'data.ticket')
 
-        return request
+        return config
       }
     })
   } else {
