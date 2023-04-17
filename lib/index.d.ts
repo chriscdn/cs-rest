@@ -222,4 +222,6 @@ declare class Session {
     delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
 }
 
-export { RPCError, Session };
+declare function isRPCError(e: RPCError | any): e is RPCError;
+
+export { RPCError, Session, isRPCError };
