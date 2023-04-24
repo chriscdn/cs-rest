@@ -80,7 +80,7 @@ declare class Workflow extends ServiceAbstract {
 }
 
 declare class RHCore extends ServiceAbstract {
-    scriptNode(id: any, params?: {}): Promise<axios.AxiosResponse<any, any>>;
+    scriptNode(id: any, body?: {}): Promise<axios.AxiosResponse<any, any>>;
 }
 
 declare class Search extends ServiceAbstract {

@@ -1,11 +1,9 @@
-import ServiceAbstract from './service-abstract'
+import ServiceAbstract from "./service-abstract";
 
 class RHCore extends ServiceAbstract {
-  scriptNode(id, params = {}) {
-    return this.session.get(`api/v1/rhcore/${id}`, {
-      params,
-    })
+  scriptNode(id, body = {}) {
+    return this.session.postForm(`api/v1/rhcore/${id}`, body);
   }
 }
 
-export default RHCore
+export default RHCore;
