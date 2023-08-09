@@ -1,31 +1,76 @@
-import get from 'lodash.get'
-import ServiceAbstract from './service-abstract'
+// import get from "lodash.get";
+import ServiceAbstract from "./service-abstract";
+
+// import {
+//   draftprocesses_DraftProcess_Put,
+//   forms_WorkflowPropertiesFormInfo,
+// } from "../types/cs-rest-types";
+
+import { components } from "../types/cs-rest-types/schema";
+
+type forms_WorkflowPropertiesFormInfo =
+  components["schemas"]["forms_WorkflowPropertiesFormInfo"];
+
+type draftprocesses_DraftProcess_Put =
+  components["schemas"]["draftprocesses_DraftProcess_Put"];
+
+import {
+  TDraftProcess,
+  TWorkflowPut,
+  WorkflowInitiator,
+} from "../utils/workflow-initiator";
 
 class Workflow extends ServiceAbstract {
-  start(map_id) {
-    return this.draftprocesses(map_id)
-      .then((response) => get(response, 'data.results.draftprocess_id'))
-      .then((draftprocess_id) => this.draftprocesses_update(draftprocess_id))
+  workflowInitiator(mapId: number): WorkflowInitiator {
+    return new WorkflowInitiator(this._session.deref(), mapId);
   }
 
-  draftprocesses(workflow_id) {
-    return this.session.postForm('api/v2/draftprocesses', {
-      workflow_id,
-    })
+  start(mapId: number): Promise<forms_WorkflowPropertiesFormInfo> {
+    return this.draftprocesses(mapId)
+      .then((draftProcess) => draftProcess.results.draftprocess_id)
+      .then((draftprocessId: number) =>
+        this.draftprocessesUpdate(draftprocessId)
+      );
   }
 
-  draftprocesses_update(draftprocess_id) {
-    return this.session.get('api/v1/forms/draftprocesses/update', {
-      params: {
-        draftprocess_id,
+  async draftprocesses(workflowId: number): Promise<TDraftProcess> {
+    const { data } = await this.session.postForm(
+      "api/v2/draftprocesses",
+      {
+        workflow_id: workflowId,
       },
-    })
+    );
+
+    return data;
   }
 
-  draftprocesses_put(draftprocess_id, body) {
-    return this.session.putForm(`api/v2/draftprocesses/${draftprocess_id}`, {
-      body,
-    })
+  async draftprocessesUpdate(
+    draftprocessId: number,
+  ): Promise<forms_WorkflowPropertiesFormInfo> {
+    const { data } = await this.session.get(
+      "api/v1/forms/draftprocesses/update",
+      {
+        params: {
+          draftprocess_id: draftprocessId,
+        },
+      },
+    );
+
+    return data;
+  }
+
+  async draftprocessesPut(
+    draftprocessId: number,
+    body: TWorkflowPut,
+  ): Promise<{ results: draftprocesses_DraftProcess_Put }> {
+    const { data } = await this.session.putForm(
+      `api/v2/draftprocesses/${draftprocessId}`,
+      {
+        body,
+      },
+    );
+
+    return data;
   }
 
   // draftprocesses_formUpdate(draftprocess_id, values) {
@@ -34,8 +79,8 @@ class Workflow extends ServiceAbstract {
   // values
   // }
 
-  // return this.draftprocesses_put(draftprocess_id, body)
+  // return this.draftprocessesPut(draftprocess_id, body)
   // }
 }
 
-export default Workflow
+export default Workflow;
