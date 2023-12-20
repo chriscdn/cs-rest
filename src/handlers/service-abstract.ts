@@ -1,15 +1,15 @@
-import type Session from '../Session'
+import type Session from "../Session";
 
 class ServiceAbstract {
-  protected _session: WeakRef<Session>
+  protected _session: WeakRef<Session>;
 
   constructor(session: Session) {
-    this._session = new WeakRef(session)
+    this._session = new WeakRef(session);
   }
 
   get session() {
-    return this._session.deref()
+    return this._session.deref();
   }
 }
 
-export default ServiceAbstract
+export default ServiceAbstract;

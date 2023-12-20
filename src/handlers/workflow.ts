@@ -34,18 +34,15 @@ class Workflow extends ServiceAbstract {
   }
 
   async draftprocesses(workflowId: number): Promise<TDraftProcess> {
-    const { data } = await this.session.postForm(
-      "api/v2/draftprocesses",
-      {
-        workflow_id: workflowId,
-      },
-    );
+    const { data } = await this.session.postForm("api/v2/draftprocesses", {
+      workflow_id: workflowId,
+    });
 
     return data;
   }
 
   async draftprocessesUpdate(
-    draftprocessId: number,
+    draftprocessId: number
   ): Promise<forms_WorkflowPropertiesFormInfo> {
     const { data } = await this.session.get(
       "api/v1/forms/draftprocesses/update",
@@ -53,7 +50,7 @@ class Workflow extends ServiceAbstract {
         params: {
           draftprocess_id: draftprocessId,
         },
-      },
+      }
     );
 
     return data;
@@ -61,13 +58,13 @@ class Workflow extends ServiceAbstract {
 
   async draftprocessesPut(
     draftprocessId: number,
-    body: TWorkflowPut,
+    body: TWorkflowPut
   ): Promise<{ results: draftprocesses_DraftProcess_Put }> {
     const { data } = await this.session.putForm(
       `api/v2/draftprocesses/${draftprocessId}`,
       {
         body,
-      },
+      }
     );
 
     return data;

@@ -41,26 +41,26 @@ Using unpkg CDN:
 Authenticate with a username and password and get the details of a node:
 
 ```js
-const { Session } = require('@kweli/cs-rest')
+const { Session } = require("@kweli/cs-rest");
 
 // session wraps an axios instance
 const session = new Session({
-  baseUrl: 'https://.../cs.exe',
-  username: 'Admin',
-  password: '******',
-})
+  baseUrl: "https://.../cs.exe",
+  username: "Admin",
+  password: "******",
+});
 
 // a Session instance can issue authenticated requests to Content Server
-const response = await session.get('/api/v1/nodes/2000')
+const response = await session.get("/api/v1/nodes/2000");
 ```
 
 Authenticate with an `OTCSTicket`:
 
 ```js
 const session = new Session({
-  baseUrl: 'https://.../cs.exe',
-  otcsticket: '<token>',
-})
+  baseUrl: "https://.../cs.exe",
+  otcsticket: "<token>",
+});
 ```
 
 ## cs-rest API
@@ -74,22 +74,22 @@ Content Server returns a fresh `OTCSTicket` with each successful API call. The `
 The OpenText Content Server REST API doesn't accept requests that use the `application/json` content type. This means POST, PUT, & PATCH requests need to use a content type of `multipart/form-data`, which makes writing a request a little more verbose. For example, to create a new folder:
 
 ```js
-const formData = new FormData()
-formData.append('type', 0)
-formData.append('parent_id', 2000)
-formDAta.append('name', 'My New Folder')
+const formData = new FormData();
+formData.append("type", 0);
+formData.append("parent_id", 2000);
+formDAta.append("name", "My New Folder");
 
-const response = await session.post('api/v2/nodes', formData)
+const response = await session.post("api/v2/nodes", formData);
 ```
 
 The `Session` class provides a `postForm` (also `putForm` and `patchForm`) method to simplify this:
 
 ```js
-const response = await session.postForm('api/v2/nodes', {
+const response = await session.postForm("api/v2/nodes", {
   type: 0,
   parent_id: 2000,
-  name: 'My New Folder',
-})
+  name: "My New Folder",
+});
 ```
 
 #### axios instance
@@ -97,7 +97,7 @@ const response = await session.postForm('api/v2/nodes', {
 The underlying `axios` instance is available if these methods don't suffice:
 
 ```js
-const axios = session.axios
+const axios = session.axios;
 ```
 
 #### Thin Wrapper
@@ -107,7 +107,7 @@ The `Session` class provides a few convenience methods for performing commonly u
 For example, there is a method for creating a new folder:
 
 ```js
-const response = await session.nodes.addFolder(2000, 'My New Folder')
+const response = await session.nodes.addFolder(2000, "My New Folder");
 ```
 
 A method also exists for uploading a document, where `file` is either:
@@ -116,7 +116,7 @@ A method also exists for uploading a document, where `file` is either:
 - a local file path, when using Node.js (e.g., `c:/temp/file.pdf`.
 
 ```js
-const response = await session.nodes.addDocument(2000, file)
+const response = await session.nodes.addDocument(2000, file);
 ```
 
 See the `src/` directory for more examples.

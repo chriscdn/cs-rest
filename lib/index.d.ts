@@ -213,8 +213,7 @@ interface components {
     };
     categories_V2CategoriesApplyResponse: {
       links?: components["schemas"]["categories_V2DataLinks"][];
-      results?:
-        components["schemas"]["categories_V2DataCategoriesApplyResults"][];
+      results?: components["schemas"]["categories_V2DataCategoriesApplyResults"][];
     };
     categories_V2EmptyResponse: {
       links?: components["schemas"]["categories_V2DataLinks"][];
@@ -465,8 +464,7 @@ interface components {
     };
     forms_DestinationData: {
       /** @description Destination-specific data */
-      destination_specific?:
-        components["schemas"]["forms_DestinationSpecific"][];
+      destination_specific?: components["schemas"]["forms_DestinationSpecific"][];
       /** @description Whether the WebReport is set to export if there is no data */
       export_if_no_data?: boolean;
       /** @description The MIMEType that the WebReport output is written in */
@@ -686,14 +684,8 @@ interface components {
       form?: components["schemas"]["forms_PropertiesForm"];
     };
     forms_FileNodeInfoOptionsFields: {
-      filing_destination_id?:
-        components["schemas"][
-          "forms_FileNodeInfoFilingDestinationIDOptionsField"
-        ];
-      filing_classification_id?:
-        components["schemas"][
-          "forms_FileNodeInfoFilingClassificationIDOptionsField"
-        ];
+      filing_destination_id?: components["schemas"]["forms_FileNodeInfoFilingDestinationIDOptionsField"];
+      filing_classification_id?: components["schemas"]["forms_FileNodeInfoFilingClassificationIDOptionsField"];
     };
     forms_FileNodeInfoOptionsField: {
       /** @description True if alpaca field is hidden, false otherwise */
@@ -724,8 +716,7 @@ interface components {
       type_control?: components["schemas"]["file_FilingDestinationIDControl"];
     };
     file_FilingDestinationIDControl: {
-      parameters?:
-        components["schemas"]["file_FilingDestinationIDControlParameters"];
+      parameters?: components["schemas"]["file_FilingDestinationIDControlParameters"];
     };
     file_FilingDestinationIDControlParameters: {
       /** @description The search type (ex. startsWith) */
@@ -752,10 +743,8 @@ interface components {
       type?: string;
     };
     forms_FileNodeInfoSchemaProperties: {
-      filing_destination_id?:
-        components["schemas"]["forms_FilingDestinationIDSchemaProperties"];
-      filing_classification_id?:
-        components["schemas"]["forms_FilingClassificationIDSchemaProperties"];
+      filing_destination_id?: components["schemas"]["forms_FilingDestinationIDSchemaProperties"];
+      filing_classification_id?: components["schemas"]["forms_FilingClassificationIDSchemaProperties"];
     };
     forms_FilingDestinationIDSchemaProperties: {
       /** @description The description of the alpaca field */
@@ -1212,8 +1201,7 @@ interface components {
       /** @description This describes the actions available for items in the data structure */
       definitions?: components["schemas"]["members_ActionDefinitions"][];
       /** @description The order items should be displayed in. These items can be treated as keys to items in definitions_map */
-      definitions_order?:
-        components["schemas"]["members_ActionDefinitionsOrder"][];
+      definitions_order?: components["schemas"]["members_ActionDefinitionsOrder"][];
       /** @description The type of user, group or user-related entity */
       type?: number;
       /** @description The type name of user, group or user-related entity */
@@ -1617,8 +1605,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["members_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["members_DescriptionMultilingual"];
       /** @description Indicates if this item has been favorited by the current user */
       favorite?: boolean;
       /** @description Globally unique id */
@@ -1819,8 +1806,7 @@ interface components {
     };
     members_V2ResponseAccessed: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["members_V2Collection_BrowseMembers"][];
+      collection?: components["schemas"]["members_V2Collection_BrowseMembers"][];
       /** @description Links */
       links?: components["schemas"]["members_V2Links"][];
       /** @description Results */
@@ -1846,8 +1832,7 @@ interface components {
     };
     members_V2ResponseMembersSearch: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["members_V2Collection_BrowseMembers"][];
+      collection?: components["schemas"]["members_V2Collection_BrowseMembers"][];
       /** @description Results */
       results?: components["schemas"]["members_V2ResultMembersSearch"][];
       /** @description Links */
@@ -1855,8 +1840,7 @@ interface components {
     };
     members_V2ResponseBrowseMembersSearch: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["members_V2Collection_BrowseMembers"][];
+      collection?: components["schemas"]["members_V2Collection_BrowseMembers"][];
       /** @description Results */
       results?: components["schemas"]["members_V2ResultMembersSearch"][];
       /** @description Links */
@@ -1876,8 +1860,7 @@ interface components {
     };
     members_V2ResponseCollectionFavorites: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["members_V2Collection_ListFavorites"][];
+      collection?: components["schemas"]["members_V2Collection_ListFavorites"][];
       /** @description Links */
       links?: components["schemas"]["members_V2Links"][];
       /** @description Results */
@@ -2054,10 +2037,8 @@ interface components {
       results?: components["schemas"]["members_V2GetSessionsResults"][];
     };
     members_V2GetSessionsResults: {
-      active_sessions?:
-        components["schemas"]["members_V2SessionsActiveSessions"][];
-      previous_sessions?:
-        components["schemas"]["members_V2SessionsPreviousSessions"][];
+      active_sessions?: components["schemas"]["members_V2SessionsActiveSessions"][];
+      previous_sessions?: components["schemas"]["members_V2SessionsPreviousSessions"][];
     };
     members_V2SessionsActiveSessions: {
       /** @description Whether or not the active session information was successfully retrieved. */
@@ -2065,8 +2046,7 @@ interface components {
       recs?: components["schemas"]["members_V2SessionsActiveSessionsRecs"][];
     };
     /** @description The array of the active session information. */
-    members_V2SessionsActiveSessionsRecs:
-      components["schemas"]["members_V2SessionsActiveSessionsRecsDatePairs"][];
+    members_V2SessionsActiveSessionsRecs: components["schemas"]["members_V2SessionsActiveSessionsRecsDatePairs"][];
     members_V2SessionsActiveSessionsRecsDatePairs: {
       /** @description For how long the current session was active in minutes. */
       duration?: number;
@@ -2140,8 +2120,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["members_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["members_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -2434,8 +2413,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the object */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["nodes_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["nodes_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -2808,8 +2786,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["nodes_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["nodes_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -2888,8 +2865,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["nodes_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["nodes_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -3188,8 +3164,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["nodes_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["nodes_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -3386,13 +3361,9 @@ interface components {
     };
     workflow_Process_TaskListDefinition: {
       /** @description The array contains the attachment details of the workflow instance */
-      attachments?:
-        components["schemas"]["workflow_Process_TaskList_attachments"];
+      attachments?: components["schemas"]["workflow_Process_TaskList_attachments"];
       /** @description The array contains the data packages activated for the workflow map */
-      data_packages?:
-        components["schemas"][
-          "workflow_Process_TaskList_WorkflowDefinitionDataPackage"
-        ][];
+      data_packages?: components["schemas"]["workflow_Process_TaskList_WorkflowDefinitionDataPackage"][];
       step_list?: {
         completed?: components["schemas"]["workFlow_Process_TaskInfo"][];
         current?: components["schemas"]["workFlow_Process_TaskInfo"][];
@@ -3442,18 +3413,12 @@ interface components {
       permissions?: components["schemas"]["workflow_Permissions"];
     };
     workflowstatus_nodeDefinitions: {
-      assignee?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
-      date_initiated?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
-      due_date?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
-      status_key?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
-      step_name?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
-      wf_name?:
-        components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      assignee?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      date_initiated?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      due_date?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      status_key?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      step_name?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
+      wf_name?: components["schemas"]["workflowstatus_nodeDefinitions_properties"];
     };
     workflowstatus_nodeDefinitions_properties: {
       allow_undefined?: boolean;
@@ -3552,8 +3517,7 @@ interface components {
       /** @description Task Status */
       task_status?: string;
       /** @description The array containing the information collected for one task of the workflow */
-      task_assignees?:
-        components["schemas"]["workflow_Process_TaskAssigneeInfoObject"];
+      task_assignees?: components["schemas"]["workflow_Process_TaskAssigneeInfoObject"];
     };
     workflow_Process_TaskAssigneeInfoObject: {
       assignee?: components["schemas"]["workflow_Process_TaskAssigneeInfo"][];
@@ -3598,8 +3562,7 @@ interface components {
     processes_WorkflowActivitiesInfo: {
       /** @description Taken task action */
       action?: string;
-      action_properties?:
-        components["schemas"]["processes_ActionPropertiesInfo"];
+      action_properties?: components["schemas"]["processes_ActionPropertiesInfo"];
       /** @description Comment of task performer */
       comment?: string;
       /**
@@ -3646,8 +3609,7 @@ interface components {
     };
     processes_WorkflowDefinition: {
       /** @description The array contains the data packages activated for the workflow map */
-      data_packages?:
-        components["schemas"]["processes_WorkflowDefinitionDataPackage"][];
+      data_packages?: components["schemas"]["processes_WorkflowDefinitionDataPackage"][];
       /** @description The array contains the tasks available in the workflow map */
       tasks?: components["schemas"]["processes_WorkflowDefinitionTask"][];
       /** @description This is the workflow map id */
@@ -3737,8 +3699,7 @@ interface components {
       data?: components["schemas"]["search_dataResultsData"];
       links?: components["schemas"]["search_linksResultsData"];
       metadata?: string;
-      search_result_metadata?:
-        components["schemas"]["search_searchMetadataResultsData"];
+      search_result_metadata?: components["schemas"]["search_searchMetadataResultsData"];
     };
     search_searchMetadataResultsData: {
       /** @description Indicates if this is a versioned object or not */
@@ -3832,8 +3793,7 @@ interface components {
       create_user_id?: number;
       /** @description A description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["search_descriptionMultilingual"];
+      description_multilingual?: components["schemas"]["search_descriptionMultilingual"];
       /**
        * Format: date
        * @description The external create date
@@ -3985,8 +3945,7 @@ interface components {
       type?: number;
     };
     search_facetsSearchingData: {
-      available?:
-        components["schemas"]["search_availableFacetsSearchingData"][];
+      available?: components["schemas"]["search_availableFacetsSearchingData"][];
     };
     search_availableFacetsSearchingData: {
       count?: number;
@@ -4116,8 +4075,7 @@ interface components {
     };
     search_WorkflowDefinition: {
       /** @description The array contains the data packages activated for the workflow map */
-      data_packages?:
-        components["schemas"]["search_WorkflowDefinitionDataPackage"][];
+      data_packages?: components["schemas"]["search_WorkflowDefinitionDataPackage"][];
       /** @description The array contains the tasks available in the workflow map */
       tasks?: components["schemas"]["search_WorkflowDefinitionTask"][];
       /** @description This is the workflow map id */
@@ -4581,8 +4539,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["versions_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["versions_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -4914,8 +4871,7 @@ interface components {
       /** @description Description of the object */
       description?: string;
       /** @description Locale specific item description */
-      description_multilingual?:
-        components["schemas"]["volumes_DescriptionMultilingual"][];
+      description_multilingual?: components["schemas"]["volumes_DescriptionMultilingual"][];
       /** @description Global unique identifier */
       guid?: string;
       /** @description Path to the type specific icon */
@@ -5015,8 +4971,7 @@ interface components {
     };
     volumes_V2BrowseRecycleBinData: {
       /** @description Properties */
-      properties?:
-        components["schemas"]["volumes_V2BrowseRecycleBinProperties"][];
+      properties?: components["schemas"]["volumes_V2BrowseRecycleBinProperties"][];
     };
     volumes_V2Result: {
       /** @description Data */
@@ -5068,8 +5023,7 @@ interface components {
       create_user_id?: number;
       /** @description Description of the item */
       description?: string;
-      description_multilingual?:
-        components["schemas"]["volumes_DescriptionMultilingual"];
+      description_multilingual?: components["schemas"]["volumes_DescriptionMultilingual"];
       /**
        * Format: date
        * @description External create date
@@ -5161,8 +5115,7 @@ interface components {
     };
     volumes_BrowseRecyleBinResult2: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["volumes_BrowseRecycleBinV2Collection"][];
+      collection?: components["schemas"]["volumes_BrowseRecycleBinV2Collection"][];
       /** @description Links */
       links?: components["schemas"]["volumes_V2DataLinks"][];
       /** @description results */
@@ -5246,8 +5199,7 @@ interface components {
     };
     volumes_V2PurgeRecycleBinFailure: {
       /** @description Failure error messages */
-      errors?:
-        components["schemas"]["volumes_V2PurgeRecycleBinFailureMessage"][];
+      errors?: components["schemas"]["volumes_V2PurgeRecycleBinFailureMessage"][];
       /** @description Failure IDs */
       ids?: number[];
     };
@@ -5327,8 +5279,7 @@ interface components {
     };
     webreports_DestinationData: {
       /** @description Destination-specific data. Note that the keys in this object will vary based on the Destination tab and permission settings for the WebReport */
-      destination_specific?:
-        components["schemas"]["webreports_DestinationSpecific"][];
+      destination_specific?: components["schemas"]["webreports_DestinationSpecific"][];
       /** @description Whether the WebReport is set to export if there is no data */
       export_if_no_data?: boolean;
       /** @description The MIMEType that the WebReport output is written in */
@@ -5350,8 +5301,7 @@ interface components {
     };
     webreports_OutputData: {
       /** @description Destination-specific data. Note that the keys in this object will vary based on the Destination tab and permission settings for the WebReport */
-      destination_specific?:
-        components["schemas"]["webreports_OutputSpecific"][];
+      destination_specific?: components["schemas"]["webreports_OutputSpecific"][];
       /** @description Whether the WebReport is set to export if there is no data */
       export_if_no_data?: boolean;
       /** @description The MIMEType that the WebReport output is written in */
@@ -5940,8 +5890,7 @@ interface components {
     };
     signaturerequests_get: {
       /** @description Collection */
-      collection?:
-        components["schemas"]["members_V2Collection_BrowseMembers"][];
+      collection?: components["schemas"]["members_V2Collection_BrowseMembers"][];
       /** @description Results */
       results?: components["schemas"]["signaturerequests_V2GetResult"][];
       /** @description Links */
@@ -6030,8 +5979,7 @@ interface components {
     };
     signaturerequests_sendnotification: {
       links?: components["schemas"]["categories_V2DataLinks"][];
-      results?:
-        components["schemas"]["signatureRequestsNotification_V2Results"][];
+      results?: components["schemas"]["signatureRequestsNotification_V2Results"][];
     };
     signatureRequestsNotification_V2Results: {
       data?: components["schemas"]["signaturerequestsNotification_V2Data"][];
@@ -6094,7 +6042,7 @@ declare class WorkflowInitiator {
     formUpdate(): Promise<{
         results: draftprocesses_DraftProcess_Put$1;
     }>;
-    initiate({ comment, password }?: {
+    initiate({ comment, password, }?: {
         comment?: string;
         password?: string;
     }): Promise<{
@@ -6198,6 +6146,7 @@ declare class Session {
     protected _search: Search;
     protected _webreports: WebReports;
     protected _versions: Versions;
+    readonly baseUrl: string;
     constructor(options: CSRestOptions);
     get nodes(): Nodes;
     get auth(): Auth;
@@ -6256,6 +6205,7 @@ declare class Session {
     patch<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
     options<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
     delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+    $get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
 }
 
 declare function isRPCError(e: RPCError | any): e is RPCError;
