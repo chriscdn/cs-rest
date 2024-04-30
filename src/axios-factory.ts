@@ -2,7 +2,14 @@ import FormDataFactory from "./handlers/form-data-factory";
 import axios, { AxiosInstance } from "axios";
 import get from "lodash.get";
 
-function getInstance(options: CSRestOptions) {
+export type CSRestOptions = {
+  username?: string;
+  password?: string;
+  otcsticket?: string;
+  baseUrl: string;
+};
+
+const getInstance = (options: CSRestOptions) => {
   const instance = axios.create({
     baseURL: options.baseUrl,
     paramsSerializer: {
@@ -27,16 +34,9 @@ function getInstance(options: CSRestOptions) {
   );
 
   return instance;
-}
+};
 
-export interface CSRestOptions {
-  username?: string;
-  password?: string;
-  otcsticket?: string;
-  baseUrl: string;
-}
-
-function axiosFactory(options: CSRestOptions): AxiosInstance {
+const axiosFactory = (options: CSRestOptions): AxiosInstance => {
   const instance = getInstance(options);
 
   const username = options.username;
@@ -73,6 +73,6 @@ function axiosFactory(options: CSRestOptions): AxiosInstance {
   }
 
   return instance;
-}
+};
 
 export default axiosFactory;

@@ -20,7 +20,9 @@ type requestObjectType = {
 export default class RPCClient {
   session: Session;
   relativePath: string;
-  protected _batchQueue: Array<requestObjectType>;
+
+  /* protected */
+  _batchQueue: Array<requestObjectType>;
 
   constructor(session: Session, relativePath: string) {
     this.session = session;
@@ -28,7 +30,7 @@ export default class RPCClient {
     this.resetQueue();
   }
 
-  protected requestObject(
+  /* protected */ requestObject(
     method: string,
     params: Record<string, any> | Array<any>,
     id: number
@@ -41,7 +43,7 @@ export default class RPCClient {
     };
   }
 
-  protected handleResponse(data) {
+  /* protected */ handleResponse(data) {
     if (Object.prototype.hasOwnProperty.call(data, "result")) {
       return data.result;
     } else if (Object.prototype.hasOwnProperty.call(data, "error")) {
@@ -63,7 +65,8 @@ export default class RPCClient {
     return this.handleResponse(response.data);
   }
 
-  private resetQueue(): void {
+  /* private */
+  resetQueue(): void {
     this._batchQueue = [];
   }
 

@@ -12,12 +12,12 @@ declare class RPCError extends Error {
     constructor(message?: string | ErrorMessage, data?: any, code?: number);
 }
 
-interface CSRestOptions {
+type CSRestOptions = {
     username?: string;
     password?: string;
     otcsticket?: string;
     baseUrl: string;
-}
+};
 
 declare class ServiceAbstract {
     protected _session: WeakRef<Session>;
@@ -6124,12 +6124,12 @@ type requestObjectType = {
 declare class RPCClient {
     session: Session;
     relativePath: string;
-    protected _batchQueue: Array<requestObjectType>;
+    _batchQueue: Array<requestObjectType>;
     constructor(session: Session, relativePath: string);
-    protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
-    protected handleResponse(data: any): any;
+    requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
+    handleResponse(data: any): any;
     request(method: string, params: any, id?: number): Promise<any>;
-    private resetQueue;
+    resetQueue(): void;
     queue(method: string, params: any, id?: number): RPCClient;
     batch(throwOnError?: boolean): Promise<any>;
     rhnode(dataid: any, method: any, args?: any[], id?: number): Promise<any>;
@@ -6208,6 +6208,6 @@ declare class Session {
     $get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
 }
 
-declare function isRPCError(e: RPCError | any): e is RPCError;
+declare const isRPCError: (e: RPCError | any) => e is RPCError;
 
 export { RPCError, Session, isRPCError };

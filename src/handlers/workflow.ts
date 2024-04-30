@@ -1,11 +1,4 @@
-// import get from "lodash.get";
 import ServiceAbstract from "./service-abstract";
-
-// import {
-//   draftprocesses_DraftProcess_Put,
-//   forms_WorkflowPropertiesFormInfo,
-// } from "../types/cs-rest-types";
-
 import { components } from "../types/cs-rest-types/schema";
 
 type forms_WorkflowPropertiesFormInfo =
