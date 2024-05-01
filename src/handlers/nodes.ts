@@ -1,4 +1,4 @@
-import { SubTypesEnum } from "./subtypes-enum";
+import { SubTypesEnum } from "../utils/subtypes-enum";
 import ServiceAbstract from "./service-abstract";
 import { isNode } from "../utils/is-node";
 
@@ -10,17 +10,16 @@ class Nodes extends ServiceAbstract {
   async addDocument({
     parent_id,
     fileHandler,
-    apiVersion = "v1", // v1 or v2
-    name = null,
+    apiVersion = "v1",
+    name = undefined,
     options = {},
+  }: {
+    parent_id: number;
+    fileHandler: File | string;
+    apiVersion?: "v1" | "v2";
+    name?: string;
+    options?: Record<string, any>;
   }) {
-    console.assert(parent_id != null, "parent_id cannot be null");
-    console.assert(fileHandler != null, "fileHandler cannot be null");
-    console.assert(
-      ["v1", "v2"].includes(apiVersion),
-      "apiVersion must be in ['v1','v2']"
-    );
-
     const url = `api/${apiVersion}/nodes`;
 
     if (isNode()) {
@@ -43,7 +42,7 @@ class Nodes extends ServiceAbstract {
       };
 
       return this.session.postForm(url, params);
-    } else {
+    } else if (this.session._isFile(fileHandler)) {
       // browser
       const csName = name || fileHandler.name;
 
@@ -59,15 +58,23 @@ class Nodes extends ServiceAbstract {
       };
 
       return this.session.postForm(url, params);
+    } else {
+      throw new Error("Invalid file.");
     }
   }
 
   async addDocumentMajor({
     parent_id,
     fileHandler,
-    name = null,
-    description = null,
+    name = undefined,
+    description = undefined,
     options = {},
+  }: {
+    parent_id: number;
+    fileHandler: File | string;
+    name?: string;
+    description?: string;
+    options: Record<string, any>;
   }) {
     const response = await this.addDocument({
       parent_id,

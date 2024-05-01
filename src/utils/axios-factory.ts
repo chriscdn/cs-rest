@@ -1,7 +1,7 @@
-import FormDataFactory from "./handlers/form-data-factory";
+import FormDataFactory from "./form-data-factory";
 import axios, { AxiosInstance } from "axios";
 import get from "lodash.get";
-import { isNode } from "./utils/is-node";
+import { isNode } from "./is-node";
 
 export type CSRestOptions = {
   username?: string;
@@ -14,11 +14,10 @@ const getInstance = (options: CSRestOptions) => {
   const instance = axios.create({
     baseURL: options.baseUrl,
     paramsSerializer: {
-      indexes: null, // ensures ?field=A&field=B instead of ?field[]=A&field[]=B
+      // ensures ?field=A&field=B instead of ?field[]=A&field[]=B
+      indexes: null,
     },
   });
-
-  // instance.paramsSerializer = (params) => stringify(params, { indices: false });
 
   instance.interceptors.response.use(
     (response) => {

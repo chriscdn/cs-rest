@@ -1,3 +1,4 @@
+import RPCClient from "./rpc-client";
 import { RPCError } from "./rpc-client/error-codes";
 import Session from "./Session";
 
@@ -8,4 +9,4 @@ const isRPCError = (e: RPCError | any): e is RPCError => {
   );
 };
 
-export { isRPCError, RPCError, Session };
+export { isRPCError, RPCError, Session, RPCClient };

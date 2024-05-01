@@ -15,7 +15,7 @@ import {
 
 class Workflow extends ServiceAbstract {
   workflowInitiator(mapId: number): WorkflowInitiator {
-    return new WorkflowInitiator(this._session.deref(), mapId);
+    return new WorkflowInitiator(this.session, mapId);
   }
 
   start(mapId: number): Promise<forms_WorkflowPropertiesFormInfo> {

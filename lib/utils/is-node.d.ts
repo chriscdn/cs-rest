@@ -3,4 +3,4 @@
  *
  * @returns
  */
-export const isNode = () => typeof window === "undefined";
+export declare const isNode: () => boolean;

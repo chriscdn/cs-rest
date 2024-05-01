@@ -6,8 +6,14 @@ class Versions extends ServiceAbstract {
     dataid,
     fileHandler,
     apiVersion = "v1",
-    fileName = null,
+    fileName = undefined,
     options = {},
+  }: {
+    dataid: number;
+    fileHandler: File | string;
+    apiVersion?: "v1" | "v2";
+    fileName?: string;
+    options?: Record<string, any>;
   }) {
     console.assert(dataid != null, "dataid cannot be null");
     console.assert(fileHandler != null, "fileHandler cannot be null");
@@ -33,7 +39,7 @@ class Versions extends ServiceAbstract {
       // console.log(params)
 
       return this.session.postForm(url, params);
-    } else {
+    } else if (this.session._isFile(fileHandler)) {
       // browser
       const name = fileName || fileHandler.name;
 
@@ -49,6 +55,8 @@ class Versions extends ServiceAbstract {
 
       // formData.append('file', fileHandler, name)
       // return this.session.post(url, formData)
+    } else {
+      throw new Error("Invalid file.");
     }
   }
 
@@ -78,7 +86,7 @@ class Versions extends ServiceAbstract {
     }
   }
 
-  async list(dataid) {
+  async list(dataid: number) {
     const url = `api/v1/nodes/${dataid}/versions`;
     return this.session.get(url);
   }

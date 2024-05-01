@@ -1,6 +1,6 @@
-import { DataTypesEnum } from "./data-types-enum";
-import FormDataFactory from "./handlers/form-data-factory";
-import axiosFactory, { CSRestOptions } from "./axios-factory";
+import { DataTypesEnum } from "./utils/data-types-enum";
+import FormDataFactory from "./utils/form-data-factory";
+import axiosFactory, { CSRestOptions } from "./utils/axios-factory";
 import Auth from "./handlers/auth";
 import Nodes from "./handlers/nodes";
 import Workflow from "./handlers/workflow";
@@ -104,16 +104,20 @@ export default class Session {
     return new RPCClient(this, relativePath);
   }
 
-  _isObject(value) {
+  _isObject(value: unknown): value is Object {
     return value && typeof value === "object" && value.constructor === Object;
   }
 
-  _isString(value) {
+  _isString(value: unknown): value is string {
     return typeof value === "string" || value instanceof String;
   }
 
-  _isBoolean(value): boolean {
+  _isBoolean(value: unknown): value is boolean {
     return typeof value === "boolean";
+  }
+
+  _isFile(value: any): value is File {
+    return typeof value?.name === "string";
   }
 
   objectToForm(obj: Record<string, any>) {

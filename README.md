@@ -19,21 +19,13 @@ Simple authentication and REST calls for OpenText Content Server.
 Using npm:
 
 ```bash
-$ npm install @kweli/cs-rest
+npm install @kweli/cs-rest
 ```
 
 Using yarn:
 
 ```bash
-$ yarn add @kweli/cs-rest
-```
-
-Using unpkg CDN:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://unpkg.com/@kweli/cs-rest"></script>
+yarn add @kweli/cs-rest
 ```
 
 ## Example
@@ -41,7 +33,7 @@ Using unpkg CDN:
 Authenticate with a username and password and get the details of a node:
 
 ```js
-const { Session } = require("@kweli/cs-rest");
+import { Session } from "@kweli/cs-rest";
 
 // session wraps an axios instance
 const session = new Session({
@@ -100,7 +92,7 @@ The underlying `axios` instance is available if these methods don't suffice:
 const axios = session.axios;
 ```
 
-#### Thin Wrapper
+#### Convenience Wrapper
 
 The `Session` class provides a few convenience methods for performing commonly used REST requests. By no means is this complete, and it's possible the API will change in the future.
 
@@ -119,11 +111,9 @@ A method also exists for uploading a document, where `file` is either:
 const response = await session.nodes.addDocument(2000, file);
 ```
 
-See the `src/` directory for more examples.
-
 ## Credits
 
-- [OpenText Content Server REST API](https://developer.opentext.com/webaccess/#url=%2Fawd%2Fresources%2Fapis%2Fcs-rest-api-for-cs-16-s&tab=501)
+- [OpenText Content Server REST API](https://developer.opentext.com/ce/products/extended-ecm/apis/content-server-233-rest-api)
 - [Kwe.li GmbH](https://kwe.li/)
 
 ## License
