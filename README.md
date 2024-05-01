@@ -92,7 +92,7 @@ The underlying `axios` instance is available if these methods don't suffice:
 const axios = session.axios;
 ```
 
-#### Convenience Wrapper
+#### Wrapper
 
 The `Session` class provides a few convenience methods for performing commonly used REST requests. By no means is this complete, and it's possible the API will change in the future.
 
