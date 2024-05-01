@@ -30,7 +30,8 @@ export default class RPCClient {
     this.resetQueue();
   }
 
-  /* protected */ requestObject(
+  /* protected */
+  requestObject(
     method: string,
     params: Record<string, any> | Array<any>,
     id: number
@@ -43,7 +44,8 @@ export default class RPCClient {
     };
   }
 
-  /* protected */ handleResponse(data) {
+  /* protected */
+  handleResponse(data) {
     if (Object.prototype.hasOwnProperty.call(data, "result")) {
       return data.result;
     } else if (Object.prototype.hasOwnProperty.call(data, "error")) {

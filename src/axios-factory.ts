@@ -1,6 +1,7 @@
 import FormDataFactory from "./handlers/form-data-factory";
 import axios, { AxiosInstance } from "axios";
 import get from "lodash.get";
+import { isNode } from "./utils/is-node";
 
 export type CSRestOptions = {
   username?: string;
@@ -55,7 +56,7 @@ const axiosFactory = (options: CSRestOptions): AxiosInstance => {
         formData.append("username", username);
         formData.append("password", password);
 
-        const response = process.node
+        const response = isNode()
           ? await axios.post(
               `${options.baseUrl}/api/v1/auth/`,
               formData.getBuffer(),

@@ -1,13 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-    // "baseUrl": "./src/"
+    "allowSyntheticDefaultImports": true
+    // "declaration": true
   }
-  //
-  // "forceConsistentCasingInFileName": true
-  // "include": ["src/**/*.ts"]
-  // "moduleResolution": true
 }

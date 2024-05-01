@@ -21,7 +21,7 @@ const ErrorCodes = {
     code: -32603,
     message: "Internal error",
   },
-};
+} as const;
 
 type ErrorMessage = {
   message: string;

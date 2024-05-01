@@ -1,3 +1,4 @@
+import { isNode } from "../utils/is-node";
 import ServiceAbstract from "./service-abstract";
 
 class Versions extends ServiceAbstract {
@@ -13,7 +14,7 @@ class Versions extends ServiceAbstract {
 
     const url = `api/${apiVersion}/nodes/${dataid}/versions`;
 
-    if (process.node) {
+    if (isNode()) {
       // node.js
       const fsp = require("fs").promises;
       const path = require("path");
@@ -56,7 +57,7 @@ class Versions extends ServiceAbstract {
     console.assert(version != null, "version cannot be null");
     console.assert(filePath != null, "filePath cannot be null");
 
-    if (process.node) {
+    if (isNode()) {
       return this.session
         .get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
           responseType: "stream",

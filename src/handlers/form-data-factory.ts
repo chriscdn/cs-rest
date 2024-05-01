@@ -1,6 +1,8 @@
+import { isNode } from "../utils/is-node";
+
 export default {
   createFormData() {
-    if (process.node) {
+    if (isNode()) {
       const Klass = require("form-data");
       return new Klass();
     } else {

@@ -1,5 +1,6 @@
-import SubTypes from "./subtypes.json";
+import { SubTypesEnum } from "./subtypes-enum";
 import ServiceAbstract from "./service-abstract";
+import { isNode } from "../utils/is-node";
 
 class Nodes extends ServiceAbstract {
   addablenodetypes(dataid) {
@@ -22,7 +23,7 @@ class Nodes extends ServiceAbstract {
 
     const url = `api/${apiVersion}/nodes`;
 
-    if (process.node) {
+    if (isNode()) {
       // node.js
       const fsp = require("fs").promises;
       const path = require("path");
@@ -32,7 +33,7 @@ class Nodes extends ServiceAbstract {
 
       const params = {
         ...options,
-        type: SubTypes.Document,
+        type: SubTypesEnum.Document,
         name: csName,
         parent_id,
         file: {
@@ -48,7 +49,7 @@ class Nodes extends ServiceAbstract {
 
       const params = {
         ...options,
-        type: SubTypes.Document,
+        type: SubTypesEnum.Document,
         name: csName,
         parent_id,
         file: {
@@ -124,11 +125,11 @@ class Nodes extends ServiceAbstract {
   }
 
   addFolder(parent_id, name, params = {}) {
-    return this.addItem(SubTypes.Folder, parent_id, name, params);
+    return this.addItem(SubTypesEnum.Folder, parent_id, name, params);
   }
 
   addGeneration(parent_id, name, original_id, version_number, params = {}) {
-    return this.addItem(SubTypes.Generation, parent_id, name, {
+    return this.addItem(SubTypesEnum.Generation, parent_id, name, {
       original_id,
       version_number,
       ...params,
@@ -152,7 +153,7 @@ class Nodes extends ServiceAbstract {
 
   download({ dataid, apiVersion = "v1", filePath }) {
     // this.session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
-    if (process.node) {
+    if (isNode()) {
       return this.session
         .get(`api/${apiVersion}/nodes/${dataid}/content`, {
           responseType: "stream",

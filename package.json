@@ -1,17 +1,25 @@
 {
   "name": "@kweli/cs-rest",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Simple authentication and REST calls for OpenText Content Server.",
-  "main": "lib/index.cjs.js",
-  "module": "lib/index.es.js",
-  "unpkg": "lib/index.umd.min.js",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "source": "./src/index.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/cs-rest.cjs",
+    "default": "./dist/cs-rest.modern.js"
+  },
+  "main": "./dist/cs-rest.cjs",
+  "module": "./dist/cs-rest.esm.js",
+  "unpkg": "./dist/cs-rest.umd.js",
+  "types": "./dist/index.d.ts",
   "repository": "https://github.com/chriscdn/cs-rest",
   "author": "Christopher Meyer <chris.meyer@kwe.li> (https://kwe.li/)",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c --watch",
+    "build____": "rm -rf ./dist/ && microbundle --globals lodash.get=get,lodash.isnil=isnil ",
+    "build": "rm -rf ./dist/ && microbundle --format modern,esm,cjs",
+    "watch": "microbundle watch",
     "bump": "versiony package.json --patch"
   },
   "dependencies": {
@@ -22,19 +30,12 @@
     "lodash.isnil": "^4.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
     "@types/lodash.get": "^4.4.9",
     "@types/lodash.isnil": "^4.0.9",
     "@types/node": "^20.12.7",
     "esbuild": "^0.20.2",
+    "microbundle": "^0.15.1",
     "openapi-typescript": "^6.7.5",
-    "rollup": "^4.17.2",
-    "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-esbuild": "^6.1.1",
     "typescript": "^5.4.5",
     "versiony": "^2.0.1"
   },

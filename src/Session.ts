@@ -1,7 +1,7 @@
-import dataTypesEnum from "./data-types-enum.json";
+import { DataTypesEnum } from "./data-types-enum";
 import FormDataFactory from "./handlers/form-data-factory";
 import axiosFactory, { CSRestOptions } from "./axios-factory";
-import Auth from "./handlers/auth.js";
+import Auth from "./handlers/auth";
 import Nodes from "./handlers/nodes";
 import Workflow from "./handlers/workflow";
 import RHCore from "./handlers/rhcore";
@@ -9,9 +9,10 @@ import Search from "./handlers/search";
 import Members from "./handlers/members";
 import Versions from "./handlers/versions";
 import WebReports from "./handlers/webreports";
-import isnil from "lodash.isnil";
+import { default as isnil } from "lodash.isnil";
 import RPCClient from "./rpc-client/index";
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { isNode } from "./utils/is-node";
 
 export default class Session {
   protected readonly axios: AxiosInstance;
@@ -96,7 +97,7 @@ export default class Session {
   }
 
   get dataTypesEnum() {
-    return dataTypesEnum;
+    return DataTypesEnum;
   }
 
   rpcClient(relativePath = "/api/v1/rh/rpc/rhnode/") {
@@ -138,7 +139,7 @@ export default class Session {
 
   putForm(url, params) {
     const formData = this.objectToForm(params);
-    return process.node
+    return isNode()
       ? this.put(url, formData.getBuffer(), {
           headers: formData.getHeaders(),
         })
@@ -147,7 +148,7 @@ export default class Session {
 
   postForm(url, params) {
     const formData = this.objectToForm(params);
-    return process.node
+    return isNode()
       ? this.post(url, formData.getBuffer(), {
           headers: formData.getHeaders(),
           maxBodyLength: Infinity,
@@ -159,7 +160,7 @@ export default class Session {
 
   patchForm(url, params) {
     const formData = this.objectToForm(params);
-    return process.node
+    return isNode()
       ? this.patch(url, formData.getBuffer(), {
           headers: formData.getHeaders(),
         })
@@ -173,7 +174,7 @@ export default class Session {
 
     return this.delete(url);
 
-    /* return process.node
+    /* return isNode()
       ? this.delete(url, formData.getBuffer(), {
           headers: formData.getHeaders(),
         })
