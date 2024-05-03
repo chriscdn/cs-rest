@@ -1,7 +1,5 @@
-import FormDataFactory from "./form-data-factory";
 import axios, { AxiosInstance } from "axios";
-import get from "lodash.get";
-import { isNode } from "./is-node";
+import { components } from "../types/cs-rest-types/schema";
 
 export type CSRestOptions = {
   username?: string;
@@ -21,7 +19,7 @@ const getInstance = (options: CSRestOptions) => {
 
   instance.interceptors.response.use(
     (response) => {
-      const otcsticket = get(response, "headers.otcsticket");
+      const otcsticket = response?.headers.otcsticket;
 
       if (otcsticket) {
         instance.defaults.headers.common.OTCSTicket = otcsticket;
@@ -50,20 +48,22 @@ const axiosFactory = (options: CSRestOptions): AxiosInstance => {
       if (config.headers.common?.OTCSTicket) {
         return config;
       } else {
-        const formData = FormDataFactory.createFormData();
+        const response = await axios.post<
+          components["schemas"]["auth_AuthenticationInfo"]
+        >(
+          `${options.baseUrl}/api/v1/auth/`,
+          {
+            username,
+            password,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-        formData.append("username", username);
-        formData.append("password", password);
-
-        const response = isNode()
-          ? await axios.post(
-              `${options.baseUrl}/api/v1/auth/`,
-              formData.getBuffer(),
-              { headers: formData.getHeaders() }
-            )
-          : await axios.post(`${options.baseUrl}/api/v1/auth/`, formData);
-
-        config.headers.OTCSTicket = get(response, "data.ticket");
+        config.headers.OTCSTicket = response.data.ticket;
 
         return config;
       }

@@ -20,14 +20,20 @@ class Workflow extends ServiceAbstract {
 
   start(mapId: number): Promise<forms_WorkflowPropertiesFormInfo> {
     return this.draftprocesses(mapId)
-      .then((draftProcess) => draftProcess.results.draftprocess_id)
+      .then((draftProcess) => {
+        // this is a bug in the definition
+        // @ts-ignore
+        return draftProcess.results.draftprocess_id as number;
+      })
       .then((draftprocessId: number) =>
         this.draftprocessesUpdate(draftprocessId)
       );
   }
 
-  async draftprocesses(workflowId: number): Promise<TDraftProcess> {
-    const { data } = await this.session.postForm("api/v2/draftprocesses", {
+  async draftprocesses(workflowId: number) {
+    const { data } = await this.session.postForm<
+      components["schemas"]["draftprocesses_DraftProcess_V2EmptyResponse"]
+    >("api/v2/draftprocesses", {
       workflow_id: workflowId,
     });
 

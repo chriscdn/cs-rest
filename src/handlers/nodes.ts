@@ -1,63 +1,65 @@
 import { SubTypesEnum } from "../utils/subtypes-enum";
 import ServiceAbstract from "./service-abstract";
 import { isNode } from "../utils/is-node";
+import { components } from "../types/cs-rest-types/schema";
+
+// type TNewVersionType = components["schemas"]["versions_NewVersionInfo"];
 
 class Nodes extends ServiceAbstract {
-  addablenodetypes(dataid) {
-    return this.session.get(`api/v1/nodes/${dataid}/addablenodetypes`);
+  addablenodetypes(dataid: number) {
+    return this.session.get<components["schemas"]["nodes_AddableTypesInfo"]>(
+      `api/v1/nodes/${dataid}/addablenodetypes`
+    );
   }
 
   async addDocument({
     parent_id,
     fileHandler,
-    apiVersion = "v1",
+    // apiVersion = "v1",
     name = undefined,
+    description = undefined,
     options = {},
   }: {
     parent_id: number;
     fileHandler: File | string;
-    apiVersion?: "v1" | "v2";
+    // apiVersion?: "v1" | "v2";
     name?: string;
+    description?: string;
     options?: Record<string, any>;
   }) {
-    const url = `api/${apiVersion}/nodes`;
+    const url = `api/v1/nodes`;
 
-    if (isNode()) {
+    if (isNode() && this.session._isString(fileHandler)) {
       // node.js
-      const fsp = require("fs").promises;
-      const path = require("path");
-
-      const f = await fsp.readFile(fileHandler);
-      const csName = name || path.basename(fileHandler);
+      const fs = await import("fs");
+      const f = fs.createReadStream(fileHandler);
 
       const params = {
         ...options,
         type: SubTypesEnum.Document,
-        name: csName,
+        name,
         parent_id,
-        file: {
-          file: f,
-          name: csName,
-        },
+        file: f,
       };
 
-      return this.session.postForm(url, params);
+      return this.session.postForm<
+        components["schemas"]["nodes_CreateResponse"]
+      >(url, params);
     } else if (this.session._isFile(fileHandler)) {
       // browser
-      const csName = name || fileHandler.name;
 
       const params = {
         ...options,
         type: SubTypesEnum.Document,
-        name: csName,
+        name,
+        description,
         parent_id,
-        file: {
-          file: fileHandler,
-          name: csName,
-        },
+        file: fileHandler,
       };
 
-      return this.session.postForm(url, params);
+      return this.session.postForm<
+        components["schemas"]["nodes_CreateResponse"]
+      >(url, params);
     } else {
       throw new Error("Invalid file.");
     }
@@ -165,8 +167,8 @@ class Nodes extends ServiceAbstract {
         .get(`api/${apiVersion}/nodes/${dataid}/content`, {
           responseType: "stream",
         })
-        .then((response) => {
-          const fs = require("fs");
+        .then(async (response) => {
+          const fs = await import("fs");
           const writer = fs.createWriteStream(filePath);
 
           response.data.pipe(writer);

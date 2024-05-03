@@ -36,13 +36,12 @@ export default class Session {
     _isString(value: unknown): value is string;
     _isBoolean(value: unknown): value is boolean;
     _isFile(value: any): value is File;
-    objectToForm(obj: Record<string, any>): any;
     putForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
-    postForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
+    postForm<T>(url: any, params: any): Promise<AxiosResponse<T, any>>;
     patchForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
     deleteForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
     putBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
-    postBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
+    postBody<T>(url: any, body: any): Promise<AxiosResponse<T, any>>;
     patchBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
     deleteBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
     get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;

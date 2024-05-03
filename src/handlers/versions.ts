@@ -1,18 +1,21 @@
 import { isNode } from "../utils/is-node";
 import ServiceAbstract from "./service-abstract";
+import { components } from "../types/cs-rest-types/schema";
+
+type TNewVersionType = components["schemas"]["versions_NewVersionInfo"];
 
 class Versions extends ServiceAbstract {
   async addVersion({
     dataid,
     fileHandler,
     apiVersion = "v1",
-    fileName = undefined,
+    // fileName = undefined,
     options = {},
   }: {
     dataid: number;
     fileHandler: File | string;
     apiVersion?: "v1" | "v2";
-    fileName?: string;
+    // fileName?: string;
     options?: Record<string, any>;
   }) {
     console.assert(dataid != null, "dataid cannot be null");
@@ -20,38 +23,29 @@ class Versions extends ServiceAbstract {
 
     const url = `api/${apiVersion}/nodes/${dataid}/versions`;
 
-    if (isNode()) {
+    if (isNode() && this.session._isString(fileHandler)) {
       // node.js
-      const fsp = require("fs").promises;
-      const path = require("path");
-
-      const f = await fsp.readFile(fileHandler);
-      const name = fileName || path.basename(fileHandler);
+      const [fs] = await Promise.all([import("fs"), import("path")]);
+      const f = fs.createReadStream(fileHandler);
 
       const params = {
-        file: {
-          file: f,
-          name,
-        },
+        file: f,
         ...options,
       };
 
       // console.log(params)
 
-      return this.session.postForm(url, params);
+      return this.session.postForm<TNewVersionType>(url, params);
     } else if (this.session._isFile(fileHandler)) {
       // browser
-      const name = fileName || fileHandler.name;
+      // const name = fileName || fileHandler.name;
 
       const params = {
-        file: {
-          file: fileHandler,
-          name,
-        },
+        file: fileHandler,
         ...options,
       };
 
-      return this.session.postForm(url, params);
+      return this.session.postForm<TNewVersionType>(url, params);
 
       // formData.append('file', fileHandler, name)
       // return this.session.post(url, formData)
@@ -70,8 +64,8 @@ class Versions extends ServiceAbstract {
         .get(`api/v1/nodes/${dataid}/versions/${version}/content`, {
           responseType: "stream",
         })
-        .then((response) => {
-          const fs = require("fs");
+        .then(async (response) => {
+          const fs = await import("fs");
           const writer = fs.createWriteStream(filePath);
 
           response.data.pipe(writer);

@@ -1,5 +1,5 @@
 import { RPCError } from "./error-codes";
-import get from "lodash.get";
+
 import Session from "../Session";
 
 const sequence = {
@@ -80,11 +80,11 @@ export default class RPCClient {
   async batch(throwOnError: boolean = false): Promise<any> {
     const queue = this._batchQueue;
     this.resetQueue();
-    const response = await this.session.postBody(this.relativePath, {
+    const response = await this.session.postBody<any>(this.relativePath, {
       rpc: queue,
     });
 
-    return get(response, "data.data", []).map((item) => {
+    return (response.data.data ?? []).map((item) => {
       if (throwOnError) {
         return this.handleResponse(item);
       } else {

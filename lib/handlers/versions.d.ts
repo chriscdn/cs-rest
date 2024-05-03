@@ -1,12 +1,14 @@
 import ServiceAbstract from "./service-abstract";
 declare class Versions extends ServiceAbstract {
-    addVersion({ dataid, fileHandler, apiVersion, fileName, options, }: {
+    addVersion({ dataid, fileHandler, apiVersion, options, }: {
         dataid: number;
         fileHandler: File | string;
         apiVersion?: "v1" | "v2";
-        fileName?: string;
         options?: Record<string, any>;
-    }): Promise<import("axios").AxiosResponse<any, any>>;
+    }): Promise<import("axios").AxiosResponse<{
+        id?: number;
+        version_number?: number;
+    }, any>>;
     download({ dataid, version, filePath }: {
         dataid: any;
         version: any;
@@ -18,7 +20,7 @@ declare class Versions extends ServiceAbstract {
         dataid: any;
         versionNumber: any;
         description?: any;
-    }): Promise<import("axios").AxiosResponse<any, any>>;
+    }): Promise<import("axios").AxiosResponse<unknown, any>>;
     deleteVersion({ dataid, versionNumber, apiVersion }: {
         dataid: any;
         versionNumber: any;

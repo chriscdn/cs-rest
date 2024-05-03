@@ -1,5 +1,4 @@
 import { DataTypesEnum } from "./utils/data-types-enum";
-import FormDataFactory from "./utils/form-data-factory";
 import axiosFactory, { CSRestOptions } from "./utils/axios-factory";
 import Auth from "./handlers/auth";
 import Nodes from "./handlers/nodes";
@@ -9,10 +8,8 @@ import Search from "./handlers/search";
 import Members from "./handlers/members";
 import Versions from "./handlers/versions";
 import WebReports from "./handlers/webreports";
-import { default as isnil } from "lodash.isnil";
 import RPCClient from "./rpc-client/index";
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { isNode } from "./utils/is-node";
 
 export default class Session {
   protected readonly axios: AxiosInstance;
@@ -120,55 +117,29 @@ export default class Session {
     return typeof value?.name === "string";
   }
 
-  objectToForm(obj: Record<string, any>) {
-    const formData = FormDataFactory.createFormData();
-
-    for (const [key, value] of Object.entries(obj)) {
-      if (value && value.name && value.file) {
-        formData.append(key, value.file, value.name);
-      } else if (
-        Array.isArray(value) ||
-        this._isObject(value) ||
-        this._isBoolean(value)
-      ) {
-        formData.append(key, JSON.stringify(value));
-      } else if (!isnil(value)) {
-        // should empty strings be sent?
-        formData.append(key, value);
-      }
-    }
-
-    return formData;
-  }
-
   putForm(url, params) {
-    const formData = this.objectToForm(params);
-    return isNode()
-      ? this.put(url, formData.getBuffer(), {
-          headers: formData.getHeaders(),
-        })
-      : this.put(url, formData);
+    return this.put(url, params, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
-  postForm(url, params) {
-    const formData = this.objectToForm(params);
-    return isNode()
-      ? this.post(url, formData.getBuffer(), {
-          headers: formData.getHeaders(),
-          maxBodyLength: Infinity,
-        })
-      : this.post(url, formData, {
-          maxBodyLength: Infinity,
-        });
+  postForm<T>(url, params) {
+    return this.post<T>(url, params, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      maxBodyLength: Infinity,
+    });
   }
 
   patchForm(url, params) {
-    const formData = this.objectToForm(params);
-    return isNode()
-      ? this.patch(url, formData.getBuffer(), {
-          headers: formData.getHeaders(),
-        })
-      : this.patch(url, formData);
+    return this.patch(url, params, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
   deleteForm(url, params) {
@@ -177,13 +148,6 @@ export default class Session {
     // const formData = this.objectToForm(params)
 
     return this.delete(url);
-
-    /* return isNode()
-      ? this.delete(url, formData.getBuffer(), {
-          headers: formData.getHeaders(),
-        })
-      : this.delete(url, formData)
-      */
   }
 
   putBody(url, body) {
@@ -192,8 +156,8 @@ export default class Session {
     });
   }
 
-  postBody(url, body) {
-    return this.postForm(url, {
+  postBody<T>(url, body) {
+    return this.postForm<T>(url, {
       body,
     });
   }
