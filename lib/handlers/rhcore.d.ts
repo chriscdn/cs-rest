@@ -1,5 +1,5 @@
 import ServiceAbstract from "./service-abstract";
 declare class RHCore extends ServiceAbstract {
-    scriptNode(id: any, body?: {}): Promise<import("axios").AxiosResponse<unknown, any>>;
+    scriptNode<T>(id: any, body?: {}): Promise<import("axios").AxiosResponse<T, any>>;
 }
 export default RHCore;
