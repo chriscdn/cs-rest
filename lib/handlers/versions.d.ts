@@ -13,8 +13,8 @@ declare class Versions extends ServiceAbstract {
         version: any;
         filePath: any;
     }): Promise<unknown>;
-    list(dataid: number): Promise<import("axios").AxiosResponse<unknown, any>>;
-    version(dataid: any, version_number?: string): Promise<import("axios").AxiosResponse<unknown, any>>;
+    list(dataid: number): Promise<import("axios").AxiosResponse<any, any>>;
+    version(dataid: any, version_number?: string): Promise<import("axios").AxiosResponse<any, any>>;
     promote({ dataid, versionNumber, description }: {
         dataid: any;
         versionNumber: any;
@@ -24,10 +24,10 @@ declare class Versions extends ServiceAbstract {
         dataid: any;
         versionNumber: any;
         apiVersion?: string;
-    }): Promise<import("axios").AxiosResponse<unknown, any>>;
+    }): Promise<import("axios").AxiosResponse<any, any>>;
     purge({ dataid, number_to_keep }: {
         dataid: any;
         number_to_keep?: number;
-    }): Promise<import("axios").AxiosResponse<unknown, any>>;
+    }): Promise<import("axios").AxiosResponse<any, any>>;
 }
 export default Versions;

@@ -184,27 +184,27 @@ export default class Session {
     });
   }
 
-  get<T>(url: string, config?: AxiosRequestConfig) {
+  get<T = any>(url: string, config?: AxiosRequestConfig) {
     return this.axios.get<T>(url, config);
   }
 
-  post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     return this.axios.post<T>(url, data, config);
   }
 
-  put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     return this.axios.put<T>(url, data, config);
   }
 
-  patch<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     return this.axios.patch<T>(url, data, config);
   }
 
-  options<T>(url: string, config?: AxiosRequestConfig) {
+  options<T = any>(url: string, config?: AxiosRequestConfig) {
     return this.axios.options<T>(url, config);
   }
 
-  delete<T>(url: string, config?: AxiosRequestConfig) {
+  delete<T = any>(url: string, config?: AxiosRequestConfig) {
     return this.axios.delete<T>(url, config);
   }
 

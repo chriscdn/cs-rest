@@ -88,10 +88,10 @@ declare class Nodes extends ServiceAbstract {
         dataid: any;
         apiVersion?: string;
         params?: {};
-    }): Promise<import("axios").AxiosResponse<unknown, any>>;
-    ancestors(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<unknown, any>>;
+    }): Promise<import("axios").AxiosResponse<any, any>>;
+    ancestors(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<any, any>>;
     volumeInfo(objType: any): Promise<import("axios").AxiosResponse<string, any>>;
-    volumes(): Promise<import("axios").AxiosResponse<unknown, any>>;
+    volumes(): Promise<import("axios").AxiosResponse<any, any>>;
     addFolder(parent_id: any, name: any, params?: {}): Promise<import("axios").AxiosResponse<{
         results?: {
             data?: {
@@ -212,9 +212,9 @@ declare class Nodes extends ServiceAbstract {
             }[];
         }[];
     }, any>>;
-    nodes(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<unknown, any>>;
-    children(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<unknown, any>>;
-    delete(dataid: any): Promise<import("axios").AxiosResponse<unknown, any>>;
+    nodes(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<any, any>>;
+    children(dataid: any, params?: {}): Promise<import("axios").AxiosResponse<any, any>>;
+    delete(dataid: any): Promise<import("axios").AxiosResponse<any, any>>;
     download({ dataid, apiVersion, filePath }: {
         dataid: any;
         apiVersion?: string;
@@ -224,6 +224,6 @@ declare class Nodes extends ServiceAbstract {
         dataid: any;
         apiVersion?: string;
         params?: {};
-    }): Promise<import("axios").AxiosResponse<unknown, any>>;
+    }): Promise<import("axios").AxiosResponse<any, any>>;
 }
 export default Nodes;

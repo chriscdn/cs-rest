@@ -37,19 +37,19 @@ export default class Session {
     putForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
     postForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
     patchForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
-    deleteForm(url: string, params: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
+    deleteForm(url: string, params: Record<string, any>): Promise<AxiosResponse<any, any>>;
     objectToForm(obj: Record<string, any>): {
         [x: string]: any;
     };
     putBody(url: string, body: any): Promise<AxiosResponse<unknown, any>>;
     postBody<T>(url: string, body: Record<string, any>): Promise<AxiosResponse<T, any>>;
     patchBody(url: string, body: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
-    deleteBody(url: string, body: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
-    get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
-    post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
-    put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
-    patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
-    options<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
-    delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    deleteBody(url: string, body: Record<string, any>): Promise<AxiosResponse<any, any>>;
+    get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    options<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
     $get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
 }
