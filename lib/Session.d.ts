@@ -1,4 +1,3 @@
-import { DataTypesEnum } from "./utils/data-types-enum";
 import { CSRestOptions } from "./utils/axios-factory";
 import Auth from "./handlers/auth";
 import Nodes from "./handlers/nodes";
@@ -30,25 +29,27 @@ export default class Session {
     get search(): Search;
     get webreports(): WebReports;
     get versions(): Versions;
-    get dataTypesEnum(): typeof DataTypesEnum;
     rpcClient(relativePath?: string): RPCClient;
     _isObject(value: unknown): value is Object;
     _isString(value: unknown): value is string;
     _isBoolean(value: unknown): value is boolean;
     _isFile(value: any): value is File;
-    putForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
-    postForm<T>(url: any, params: any): Promise<AxiosResponse<T, any>>;
-    patchForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
-    deleteForm(url: any, params: any): Promise<AxiosResponse<any, any>>;
-    putBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
-    postBody<T>(url: any, body: any): Promise<AxiosResponse<T, any>>;
-    patchBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
-    deleteBody(url: any, body: any): Promise<AxiosResponse<any, any>>;
-    get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
-    post<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
-    put<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
-    patch<T = any, R = AxiosResponse<T>>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R>;
-    options<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
-    delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+    putForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
+    postForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
+    patchForm<T>(url: string, params: Record<string, any>): Promise<AxiosResponse<T, any>>;
+    deleteForm(url: string, params: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
+    objectToForm(obj: Record<string, any>): {
+        [x: string]: any;
+    };
+    putBody(url: string, body: any): Promise<AxiosResponse<unknown, any>>;
+    postBody<T>(url: string, body: Record<string, any>): Promise<AxiosResponse<T, any>>;
+    patchBody(url: string, body: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
+    deleteBody(url: string, body: Record<string, any>): Promise<AxiosResponse<unknown, any>>;
+    get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    options<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
+    delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T, any>>;
     $get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
 }

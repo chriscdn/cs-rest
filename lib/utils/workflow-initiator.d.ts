@@ -1,11 +1,6 @@
 import Session from "../Session";
 import { components } from "../types/cs-rest-types/schema";
-type draftprocesses_DraftProcess = components["schemas"]["draftprocesses_DraftProcess"];
 type forms_WorkflowPropertiesFormInfo = components["schemas"]["forms_WorkflowPropertiesFormInfo"];
-type draftprocesses_DraftProcess_Put = components["schemas"]["draftprocesses_DraftProcess_Put"];
-export type TDraftProcess = {
-    results: draftprocesses_DraftProcess;
-};
 export type TWorkflowPut = {
     action: "Initiate" | "formUpdate";
     values?: any;
@@ -36,13 +31,41 @@ declare class WorkflowInitiator {
     get wantAuthentication(): boolean;
     setWorkflowAttribute(attributeName: string, value: any): typeof WorkflowInitiator;
     formUpdate(): Promise<{
-        results: draftprocesses_DraftProcess_Put;
+        links?: {
+            data?: {
+                self?: {
+                    body?: string;
+                    content_type?: string;
+                    href?: string;
+                    method?: string;
+                    name?: string;
+                }[];
+            }[];
+        }[];
+        results?: {
+            custom_message: string;
+            process_id: number;
+        }[];
     }>;
     initiate({ comment, password, }?: {
         comment?: string;
         password?: string;
     }): Promise<{
-        results: draftprocesses_DraftProcess_Put;
+        links?: {
+            data?: {
+                self?: {
+                    body?: string;
+                    content_type?: string;
+                    href?: string;
+                    method?: string;
+                    name?: string;
+                }[];
+            }[];
+        }[];
+        results?: {
+            custom_message: string;
+            process_id: number;
+        }[];
     }>;
 }
 export { WorkflowInitiator };

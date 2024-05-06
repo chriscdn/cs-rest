@@ -1,4 +1,3 @@
-import { DataTypesEnum } from "./utils/data-types-enum";
 import axiosFactory, { CSRestOptions } from "./utils/axios-factory";
 import Auth from "./handlers/auth";
 import Nodes from "./handlers/nodes";
@@ -30,7 +29,7 @@ export default class Session {
   }
 
   get nodes(): Nodes {
-    if (this._nodes == null) {
+    if (this._nodes === undefined) {
       this._nodes = new Nodes(this);
     }
 
@@ -38,7 +37,7 @@ export default class Session {
   }
 
   get auth(): Auth {
-    if (this._auth == null) {
+    if (this._auth === undefined) {
       this._auth = new Auth(this);
     }
 
@@ -46,7 +45,7 @@ export default class Session {
   }
 
   get workflow(): Workflow {
-    if (this._workflow == null) {
+    if (this._workflow === undefined) {
       this._workflow = new Workflow(this);
     }
 
@@ -54,7 +53,7 @@ export default class Session {
   }
 
   get rhcore(): RHCore {
-    if (this._rhcore == null) {
+    if (this._rhcore === undefined) {
       this._rhcore = new RHCore(this);
     }
 
@@ -62,7 +61,7 @@ export default class Session {
   }
 
   get members(): Members {
-    if (this._members == null) {
+    if (this._members === undefined) {
       this._members = new Members(this);
     }
 
@@ -70,7 +69,7 @@ export default class Session {
   }
 
   get search(): Search {
-    if (this._search == null) {
+    if (this._search === undefined) {
       this._search = new Search(this);
     }
 
@@ -78,7 +77,7 @@ export default class Session {
   }
 
   get webreports(): WebReports {
-    if (this._webreports == null) {
+    if (this._webreports === undefined) {
       this._webreports = new WebReports(this);
     }
 
@@ -86,15 +85,11 @@ export default class Session {
   }
 
   get versions(): Versions {
-    if (this._versions == null) {
+    if (this._versions === undefined) {
       this._versions = new Versions(this);
     }
 
     return this._versions;
-  }
-
-  get dataTypesEnum() {
-    return DataTypesEnum;
   }
 
   rpcClient(relativePath = "/api/v1/rh/rpc/rhnode/") {
@@ -117,16 +112,16 @@ export default class Session {
     return typeof value?.name === "string";
   }
 
-  putForm(url, params) {
-    return this.put(url, params, {
+  putForm<T>(url: string, params: Record<string, any>) {
+    return this.put<T>(url, this.objectToForm(params), {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
   }
 
-  postForm<T>(url, params) {
-    return this.post<T>(url, params, {
+  postForm<T>(url: string, params: Record<string, any>) {
+    return this.post<T>(url, this.objectToForm(params), {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -134,15 +129,15 @@ export default class Session {
     });
   }
 
-  patchForm(url, params) {
-    return this.patch(url, params, {
+  patchForm<T>(url: string, params: Record<string, any>) {
+    return this.patch<T>(url, this.objectToForm(params), {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
   }
 
-  deleteForm(url, params) {
+  deleteForm(url: string, params: Record<string, any>) {
     // FormData does not working on Delete!!
     // See here: https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
     // const formData = this.objectToForm(params)
@@ -150,73 +145,67 @@ export default class Session {
     return this.delete(url);
   }
 
-  putBody(url, body) {
+  objectToForm(obj: Record<string, any>) {
+    return Object.entries(obj).reduce(
+      (a: Record<string, any>, [key, value]) => {
+        return {
+          ...a,
+          [key]:
+            Array.isArray(value) || this._isObject(value)
+              ? JSON.stringify(value)
+              : value,
+        };
+      },
+      {}
+    );
+  }
+
+  putBody(url: string, body) {
     return this.putForm(url, {
       body,
     });
   }
 
-  postBody<T>(url, body) {
+  postBody<T>(url: string, body: Record<string, any>) {
     return this.postForm<T>(url, {
       body,
     });
   }
 
-  patchBody(url, body) {
+  patchBody(url: string, body: Record<string, any>) {
     return this.patchForm(url, {
       body,
     });
   }
 
-  deleteBody(url, body) {
+  deleteBody(url: string, body: Record<string, any>) {
     return this.deleteForm(url, {
       body,
     });
   }
 
-  get<T = any, R = AxiosResponse<T>>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.get(url, config);
+  get<T>(url: string, config?: AxiosRequestConfig) {
+    return this.axios.get<T>(url, config);
   }
 
-  post<T = any, R = AxiosResponse<T>>(
-    url: string,
-    data?: T,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.post(url, data, config);
+  post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.post<T>(url, data, config);
   }
 
-  put<T = any, R = AxiosResponse<T>>(
-    url: string,
-    data?: T,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.put(url, data, config);
+  put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.put<T>(url, data, config);
   }
 
-  patch<T = any, R = AxiosResponse<T>>(
-    url: string,
-    data?: T,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.patch(url, data, config);
+  patch<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.patch<T>(url, data, config);
   }
 
-  options<T = any, R = AxiosResponse<T>>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.options(url, config);
+  options<T>(url: string, config?: AxiosRequestConfig) {
+    return this.axios.options<T>(url, config);
   }
 
-  delete<T = any, R = AxiosResponse<T>>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<R> {
-    return this.axios.delete(url, config);
+  delete<T>(url: string, config?: AxiosRequestConfig) {
+    return this.axios.delete<T>(url, config);
   }
 
   async $get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {

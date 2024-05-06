@@ -1,5 +1,3 @@
-import isObject from "is-object";
-
 const ErrorCodes = {
   PARSEERROR: {
     code: -32700,
@@ -28,6 +26,9 @@ type ErrorMessage = {
   code: number;
   data: Array<any> | Record<string, any>;
 };
+
+const isObject = (x: unknown): x is Object =>
+  typeof x === "object" && x !== null;
 
 class RPCError extends Error {
   code: number;

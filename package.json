@@ -1,6 +1,6 @@
 {
   "name": "@kweli/cs-rest",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Simple authentication and REST calls for OpenText Content Server.",
   "type": "module",
   "source": "./src/index.ts",
@@ -21,8 +21,7 @@
     "bump": "versiony package.json --patch"
   },
   "dependencies": {
-    "axios": "^1.6.8",
-    "is-object": "^1.0.2"
+    "axios": "^1.6.8"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

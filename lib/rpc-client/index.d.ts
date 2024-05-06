@@ -8,12 +8,12 @@ type requestObjectType = {
 export default class RPCClient {
     session: Session;
     relativePath: string;
-    _batchQueue: Array<requestObjectType>;
+    protected _batchQueue: Array<requestObjectType>;
     constructor(session: Session, relativePath: string);
-    requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
-    handleResponse(data: any): any;
+    protected requestObject(method: string, params: Record<string, any> | Array<any>, id: number): requestObjectType;
+    protected handleResponse(data: any): any;
     request(method: string, params: any, id?: number): Promise<any>;
-    resetQueue(): void;
+    private resetQueue;
     queue(method: string, params: any, id?: number): RPCClient;
     batch(throwOnError?: boolean): Promise<any>;
     rhnode(dataid: any, method: any, args?: any[], id?: number): Promise<any>;

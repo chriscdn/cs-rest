@@ -42,7 +42,7 @@ class Nodes extends ServiceAbstract {
         file: f,
       };
 
-      return this.session.postForm<
+      return await this.session.postForm<
         components["schemas"]["nodes_CreateResponse"]
       >(url, params);
     } else if (this.session._isFile(fileHandler)) {
@@ -57,7 +57,7 @@ class Nodes extends ServiceAbstract {
         file: fileHandler,
       };
 
-      return this.session.postForm<
+      return await this.session.postForm<
         components["schemas"]["nodes_CreateResponse"]
       >(url, params);
     } else {
@@ -105,7 +105,9 @@ class Nodes extends ServiceAbstract {
   }
 
   addItem(type, parent_id, name, params = {}) {
-    return this.session.postBody("api/v2/nodes", {
+    return this.session.postBody<
+      components["schemas"]["nodes_V2ResponseElementPost"]
+    >("api/v2/nodes", {
       type,
       parent_id,
       name,
@@ -126,7 +128,9 @@ class Nodes extends ServiceAbstract {
   }
 
   volumeInfo(objType) {
-    return this.session.get(`api/v1/volumes/${objType}`);
+    return this.session.get<
+      components["parameters"]["suppress_response_codes"]
+    >(`api/v1/volumes/${objType}`);
   }
 
   volumes() {
@@ -164,7 +168,7 @@ class Nodes extends ServiceAbstract {
     // this.session.nodes.download(1267501, 'v2', '/Users/chris/Downloads/test.pdf')
     if (isNode()) {
       return this.session
-        .get(`api/${apiVersion}/nodes/${dataid}/content`, {
+        .get<any>(`api/${apiVersion}/nodes/${dataid}/content`, {
           responseType: "stream",
         })
         .then(async (response) => {

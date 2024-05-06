@@ -11,22 +11,6 @@ type forms_WorkflowPropertiesFormInfo =
 type draftprocesses_DraftProcess_Put =
   components["schemas"]["draftprocesses_DraftProcess_Put"];
 
-export type TDraftProcess = {
-  // data: {
-  //   links: {
-  //     data: {
-  //       body: string;
-  //       content_type: string;
-  //       href: string;
-  //       method: string;
-  //       name: string;
-  //     };
-  //   };
-  // };
-  // data: categories_V2DataLinks;
-  results: draftprocesses_DraftProcess;
-};
-
 export type TWorkflowPut = {
   action: "Initiate" | "formUpdate";
   values?: any;
@@ -97,7 +81,7 @@ class WorkflowInitiator {
     }
   }
 
-  async formUpdate(): Promise<{ results: draftprocesses_DraftProcess_Put }> {
+  async formUpdate() {
     return await this.session.workflow.draftprocessesPut(this.processId, {
       action: "formUpdate",
       values: this.form.data,
@@ -107,9 +91,7 @@ class WorkflowInitiator {
   async initiate({
     comment,
     password,
-  }: { comment?: string; password?: string } = {}): Promise<{
-    results: draftprocesses_DraftProcess_Put;
-  }> {
+  }: { comment?: string; password?: string } = {}) {
     await this.formUpdate();
 
     const initiateValues = {
@@ -118,11 +100,10 @@ class WorkflowInitiator {
       ...(this.wantAuthentication && { authentication_info: { password } }),
     } as const;
 
-    const response: { results: draftprocesses_DraftProcess_Put } =
-      await this.session.workflow.draftprocessesPut(
-        this.processId,
-        initiateValues
-      );
+    const response = await this.session.workflow.draftprocessesPut(
+      this.processId,
+      initiateValues
+    );
 
     return response;
   }
