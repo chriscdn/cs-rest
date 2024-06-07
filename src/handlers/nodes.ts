@@ -8,7 +8,7 @@ import { components } from "../types/cs-rest-types/schema";
 class Nodes extends ServiceAbstract {
   addablenodetypes(dataid: number) {
     return this.session.get<components["schemas"]["nodes_AddableTypesInfo"]>(
-      `api/v1/nodes/${dataid}/addablenodetypes`
+      `api/v1/nodes/${dataid}/addablenodetypes`,
     );
   }
 
@@ -31,14 +31,16 @@ class Nodes extends ServiceAbstract {
 
     if (isNode() && this.session._isString(fileHandler)) {
       // node.js
-      const fs = await import("fs");
+      const [fs, path] = await Promise.all([import("fs"), import("path")]);
       const f = fs.createReadStream(fileHandler);
 
       const params = {
-        ...options,
-        type: SubTypesEnum.Document,
-        name,
-        parent_id,
+        body: {
+          ...options,
+          type: SubTypesEnum.Document,
+          name: name ?? path.basename(fileHandler),
+          parent_id,
+        },
         file: f,
       };
 
@@ -49,11 +51,13 @@ class Nodes extends ServiceAbstract {
       // browser
 
       const params = {
-        ...options,
-        type: SubTypesEnum.Document,
-        name,
-        description,
-        parent_id,
+        body: {
+          ...options,
+          type: SubTypesEnum.Document,
+          name,
+          description,
+          parent_id,
+        },
         file: fileHandler,
       };
 
